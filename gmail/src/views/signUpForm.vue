@@ -320,7 +320,7 @@ export default {
       gender: "",
       passwordLength: false,
       passwordCapital: false,
-      passwordNumber: false,
+      passwordNumber: false,//asdsad
       passwordsmall: false,
       passwordValid: false,
       isChecked: false,
