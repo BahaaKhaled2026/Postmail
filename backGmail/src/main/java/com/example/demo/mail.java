@@ -5,32 +5,51 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 
 public class mail {
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
+    }
+
+    private boolean isRead=false;
     private ArrayList<String> sentToMails;
     private String date;
     private String title;
     private String sender;
     private String message;
-    private byte[] attachment;
-    private String attType;
+    private ArrayList<attachment>attachments;
+    private int id;
 
-    public String getAttType() {
-        return attType;
+    public int getId() {
+        return id;
     }
 
-    public void setAttType(String attType) {
-        this.attType = attType;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "mail{" +
-                "sentToMails=" + sentToMails +
+                "isRead=" + isRead +
+                ", sentToMails=" + sentToMails +
                 ", date='" + date + '\'' +
                 ", title='" + title + '\'' +
                 ", sender='" + sender + '\'' +
                 ", message='" + message + '\'' +
-                ", attachment=" + attachment +
+                ", attachments=" + attachments +
+                ", id=" + id +
                 '}';
+    }
+
+    public ArrayList<attachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(ArrayList<attachment> attachments) {
+        this.attachments = attachments;
     }
 
     public ArrayList<String> getSentToMails() {
@@ -73,11 +92,5 @@ public class mail {
         this.message = message;
     }
 
-    public byte[] getAttachment() {
-        return attachment;
-    }
 
-    public void setAttachment(byte[] attachment) {
-        this.attachment = attachment;
-    }
 }

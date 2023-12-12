@@ -94,6 +94,7 @@ public class services {
     }
     @PostMapping("/sendMail")
     public ResponseEntity<String> sendMail(@RequestBody mail mailObject) {
+        System.out.println(mailObject.toString());
         try {
             ArrayList<UserData>usersData=userDataService.getUsersData();
             ArrayList<Integer>index=new ArrayList<>();
@@ -102,10 +103,18 @@ public class services {
                 index.add(userDataService.getUserByEmail(sentTo.get(i)).getIndex());
             }
             for(int i=0;i<index.size();i++){
-                usersData.get(index.get(i)).addMailInbox(mailObject);
+                int id=usersData.get(index.get(i)).getMsgId()+1;
+                mail temp=mailObject;
+                temp.setId(id);
+                usersData.get(index.get(i)).addMailInbox(temp);
+                usersData.get(index.get(i)).setMsgId(id);
             }
+            int idSender=userDataService.getUserByEmail(mailObject.getSender()).getMsgId()+1;
+            mail temp=mailObject;
+            temp.setId(idSender);
             UserData sender=userDataService.getUserByEmail(mailObject.getSender());
-            usersData.get(sender.getIndex()).addMailSent(mailObject);
+            usersData.get(sender.getIndex()).addMailSent(temp);
+            usersData.get(sender.getIndex()).setMsgId(idSender);
             userDataService.writeUsersData(usersData);
             return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -116,7 +125,6 @@ public class services {
 
     @PostMapping("/checkExist")
     public boolean checkExist(@RequestBody String email){
-        System.out.println("bhaa bytnak");
         ArrayList<UserData> users =userDataService.getUsersData();
         email=email.replaceAll("\"","");
         for(UserData x:users){
@@ -124,7 +132,6 @@ public class services {
                 return true;
             }
         }
-        System.out.println("ksm pola");
         return false;
     }
 }

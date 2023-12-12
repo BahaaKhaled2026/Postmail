@@ -73,7 +73,15 @@ public class UserData {
     private ArrayList<mail>sent;
     private ArrayList<mail>draft;
     private ArrayList<mail>trash; // add spam
+    private int msgId=0;
 
+    public int getMsgId() {
+        return msgId;
+    }
+
+    public void setMsgId(int msgId) {
+        this.msgId = msgId;
+    }
 
     public void addMailInbox(mail x){
         inbox.add(x);
@@ -155,13 +163,19 @@ public class UserData {
     @Override
     public String toString() {
         return "UserData{" +
-                "email='" + email + '\'' +
+                "index=" + index +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", securityQuestion='" + securityQuestion + '\'' +
                 ", securityAnswer='" + securityAnswer + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", gender='" + gender + '\'' +
+                ", inbox=" + inbox +
+                ", sent=" + sent +
+                ", draft=" + draft +
+                ", trash=" + trash +
+                ", msgId=" + msgId +
                 '}';
     }
 }
