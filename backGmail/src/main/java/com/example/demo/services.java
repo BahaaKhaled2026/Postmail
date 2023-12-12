@@ -3,8 +3,10 @@ package com.example.demo;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -30,9 +32,10 @@ public class services {
         try {
             String hashedPassword = Hashing.getHashedHex(Hashing.getHashedBytes(userData.getPassword()));
             userData.setPassword(hashedPassword);
+            userData.setIndex(usersData.size());
             usersData.add(userData);
             userDataService.writeUsersData(usersData);
-            System.out.println(usersData);
+
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
@@ -68,10 +71,9 @@ public class services {
     }
     @PutMapping("/updatePassword/{email}")
     public void updatePassword(@PathVariable String email, @RequestBody String newPassword) {
-        System.out.println("hi");
+
         newPassword=newPassword.replaceAll("\"","");
         ArrayList<UserData> usersData = userDataService.getUsersData();
-        System.out.println(usersData);
         int x=0;
         for(int i=0;i<usersData.size();i++){
             if(usersData.get(i).getEmail().equals(email)){
@@ -90,20 +92,40 @@ public class services {
             }
 
     }
-//    @PostMapping("/users/login")
-//    public Boolean checkPassword(@RequestBody String userPassword){
-//        ArrayList<UserData> usersData = userDataService.getUsersData();
-//        try {
-//            userPassword = Hashing.getHashedHex(Hashing.getHashedBytes(userPassword));
-//        } catch (NoSuchAlgorithmException e) {
-//            throw new RuntimeException(e);
-//        }
-//        int x=0;
-//        for (int i=0;i<usersData.size();i++){
-//            if(usersData.get(i).getPassword().equals(userPassword))
-//                return true;
-//        }
-//        return false;
-//    }
+    @PostMapping("/sendMail")
+    public ResponseEntity<String> sendMail(@RequestBody mail mailObject) {
+        try {
+            ArrayList<UserData>usersData=userDataService.getUsersData();
+            ArrayList<Integer>index=new ArrayList<>();
+            ArrayList<String>sentTo=mailObject.getSentToMails();
+            for(int i=0;i<mailObject.getSentToMails().size();i++){
+                index.add(userDataService.getUserByEmail(sentTo.get(i)).getIndex());
+            }
+            for(int i=0;i<index.size();i++){
+                usersData.get(index.get(i)).addMailInbox(mailObject);
+            }
+            UserData sender=userDataService.getUserByEmail(mailObject.getSender());
+            usersData.get(sender.getIndex()).addMailSent(mailObject);
+            userDataService.writeUsersData(usersData);
+            return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
+        } catch (Exception e) {
+
+            return new ResponseEntity<>("Failed to send mail", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/checkExist")
+    public boolean checkExist(@RequestBody String email){
+        System.out.println("bhaa bytnak");
+        ArrayList<UserData> users =userDataService.getUsersData();
+        email=email.replaceAll("\"","");
+        for(UserData x:users){
+            if(x.getEmail().equals(email)){
+                return true;
+            }
+        }
+        System.out.println("ksm pola");
+        return false;
+    }
 }
 

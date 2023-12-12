@@ -4,24 +4,88 @@ import javax.crypto.SecretKey;
 import java.util.ArrayList;
 
 public class UserData {
+    public UserData(){
+
+    }
+    public UserData(int index, String email, String password, String securityQuestion, String securityAnswer, String firstName, String lastName, String gender, ArrayList<mail> inbox, ArrayList<mail> sent, ArrayList<mail> draft, ArrayList<mail> trash) {
+        this.index = index;
+        this.email = email;
+        this.password = password;
+        this.securityQuestion = securityQuestion;
+        this.securityAnswer = securityAnswer;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.inbox = inbox;
+        this.sent = sent;
+        this.draft = draft;
+        this.trash = trash;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public ArrayList<mail> getInbox() {
+        return inbox;
+    }
+
+    public void setInbox(ArrayList<mail> inbox) {
+        this.inbox = inbox;
+    }
+
+    public ArrayList<mail> getSent() {
+        return sent;
+    }
+
+    public void setSent(ArrayList<mail> sent) {
+        this.sent = sent;
+    }
+
+    public ArrayList<mail> getDraft() {
+        return draft;
+    }
+
+    public void setDraft(ArrayList<mail> draft) {
+        this.draft = draft;
+    }
+
+    public ArrayList<mail> getTrash() {
+        return trash;
+    }
+
+    public void setTrash(ArrayList<mail> trash) {
+        this.trash = trash;
+    }
+    private int index;
     private String email;
     private String password;
     private String securityQuestion;
     private String securityAnswer;
-    private ArrayList<Integer> favourites;
-    private ArrayList<Integer> watchlist;
     private String firstName;
     private String lastName;
     private String gender;
-    private int id;
-    private String userName;
+    private ArrayList<mail>inbox;
+    private ArrayList<mail>sent;
+    private ArrayList<mail>draft;
+    private ArrayList<mail>trash; // add spam
 
-    public String getUserName() {
-        return userName;
+
+    public void addMailInbox(mail x){
+        inbox.add(x);
     }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void addMailDraft(mail x){
+        draft.add(x);
+    }
+    public void addMailTrash(mail x){
+        trash.add(x);
+    }
+    public void addMailSent(mail x){
+        sent.add(x);
     }
 
     public String getEmail() {
@@ -57,21 +121,7 @@ public class UserData {
         this.securityAnswer = securityAnswer;
     }
 
-    public ArrayList<Integer> getFavourites() {
-        return favourites;
-    }
 
-    public void setFavourites(ArrayList<Integer> favourites) {
-        this.favourites = favourites;
-    }
-
-    public ArrayList<Integer> getWatchlist() {
-        return watchlist;
-    }
-
-    public void setWatchlist(ArrayList<Integer> watchlist) {
-        this.watchlist = watchlist;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -97,13 +147,7 @@ public class UserData {
         this.gender = gender;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
     public void updatePassword(String newPassword) {
         this.password = newPassword;
     }
@@ -115,13 +159,9 @@ public class UserData {
                 ", password='" + password + '\'' +
                 ", securityQuestion='" + securityQuestion + '\'' +
                 ", securityAnswer='" + securityAnswer + '\'' +
-                ", favourites=" + favourites +
-                ", watchlist=" + watchlist +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", gender='" + gender + '\'' +
-                ", id=" + id +
-                ", userName='" + userName + '\'' +
                 '}';
     }
 }

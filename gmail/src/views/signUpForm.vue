@@ -1,10 +1,10 @@
 <template>
   <div class="all">
-    <div
+    <!-- <div
       class="overlay"
       v-show="isChecked & termsDisplay"
       @click="termsDisplay = !termsDisplay"
-    ></div>
+    ></div> -->
     <!--for popup-->
     <section class="d-flex">
       <div class="img"></div>
@@ -177,7 +177,7 @@
               <option class="selectOpt" value="female">female</option>
             </select>
           </div>
-          <div class="row">
+          <!-- <div class="row">
             <div class="check">
               <input
                 type="checkbox"
@@ -288,8 +288,8 @@
             >
               <h5>Accepting terms and conditions is fundamental</h5>
             </div>
-          </div>
-            <button @click="checkMissing" class="btn butn">Submit</button>
+          </div> -->
+            <button class="btn butn">Submit</button>
           <div class="row">
             <router-link to="/login" class="center">
               <h6>Already have an account? Login</h6>
@@ -434,7 +434,6 @@ export default {
         this.firstName.length == 0 ||
         this.lastName.length == 0 ||
         this.email.length == 0 ||
-        this.username.length == 0 ||
         this.password.length == 0 ||
         this.confirmPassword.length == 0 ||
         this.securityQuestion.length == 0 ||
@@ -447,58 +446,62 @@ export default {
       }
     },
     signUp(event) {
-      this.checkMissing();
-      this.submitState = !this.submitState;
-      this.userDuplicate = false;
-      if (
-        !this.checkPassword(this.password) ||
-        !this.matchPassword(this.password, this.confirmPassword) ||
-        !this.isChecked
-      ) {
-        event.preventDefault();
-      } else {
-        let userObj = {
-          index: 0,
-          email: this.email,
-          password: this.password,
-          securityQuestion: this.securityQuestion,
-          securityAnswer: this.securityAnswer,
-          firstName: this.firstName,
-          lastName: this.lastName,
-          gender: this.gender,
-          inbox: [],
-          sent: [],
-          trash: [],
-          draft: [],
-        };
-        fetch(`http://localhost:8080/checkExist`,
-          {
+  this.checkMissing();
+  this.submitState = !this.submitState;
+  this.userDuplicate = false;
+
+  if (
+    !this.checkPassword(this.password) ||
+    !this.matchPassword(this.password, this.confirmPassword)
+  ) {
+    event.preventDefault();
+  } else {
+    let userObj = {
+      index: 0,
+      email: this.email,
+      password: this.password,
+      securityQuestion: this.securityQuestion,
+      securityAnswer: this.securityAnswer,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      gender: this.gender,
+      inbox: [],
+      sent: [],
+      trash: [],
+      draft: [],
+    };
+
+    fetch(`http://localhost:8080/checkExist`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(this.email),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        this.userDuplicate = data;
+
+        if (!this.userDuplicate) {
+          fetch("http://localhost:8080/users/add", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(this.email),
+            body: JSON.stringify(userObj),
           })
-          .then((res) => {
-            this.userDuplicate = res.json();
-            if (!this.userDuplicate) {
-              fetch("http://localhost:8080/users/add", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(userObj),
-              })
-                .then(() => {
-                  console.log("done");
-                  this.$router.push("/login");
-                })
-                .catch((error) => {
-                  console.error("Error during signup:", error);
-                });
-            }
-          })
-          .catch((error) => {
-            console.error("Error during Signup:", error);
-          });
-      }
-    },
+            .then(() => {
+              console.log("done");
+              this.$router.push("/login");
+            })
+            .catch((error) => {
+              console.error("Error during signup:", error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error("Error during Signup:", error);
+      });
+  }
+},
+
   },
 };
 </script>

@@ -102,7 +102,7 @@ export default {
             localStorage.setItem("token", fakeToken);
             $store.commit("setLoginStatus", true);
             $store.commit("setCurrUser", userData);
-            this.$router.push({ name: "home" });
+            this.$router.push({ name: "inbox" });
           } else {
             this.userNotFound = true;
           }
