@@ -9,6 +9,9 @@
     <label>Sender:</label>
     <input v-model="mail.sender" type="text" />
 
+    <label>sent To:</label>
+    <input v-model="sentto" type="text" />
+
     <label>Message:</label>
     <textarea v-model="mail.message"></textarea>
 
@@ -25,8 +28,9 @@ export default {
   data() {
     return {
       selectedFile: null,
+      sentto:'',
       mail: {
-        sentToMails: ["bahaa@gmail.com"],
+        sentToMails: [],
         date: '',
         title: '',
         sender: '',
@@ -40,14 +44,22 @@ export default {
       console.log(this.selectedFile.type);
     },
     async sendMail() {
+      let emails=[];
+      emails = this.sentto.split(',');
+      let attachedfile=null;
+      let attachmenttype=null
+      if(this.selectedFile){
+        attachedfile=await this.convertFileToBase64(this.selectedFile)
+        attachmenttype=this.selectedFile.type;
+      }
       const mailObject = {
-        sentToMails: this.mail.sentToMails,
+        sentToMails: emails,
         date: this.mail.date,
         title: this.mail.title,
         sender: this.mail.sender,
         message: this.mail.message,
-        attachment: await this.convertFileToBase64(this.selectedFile),
-        attType:this.selectedFile.type
+        attachment:attachedfile,
+        attType:attachmenttype
       };
 
       fetch(`http://localhost:8080/sendMail`, {
@@ -93,7 +105,8 @@ export default {
         })
         .then(data => {
           console.log(data);
-          this.downloadAttachment(data[0].sent[0].attachment,"new",data[0].sent[0].attType);
+          console.log(data[0].sent[1].attachment,"new",data[0].sent[1].attType);
+          this.downloadAttachment(data[0].sent[1].attachment,"new",data[0].sent[1].attType);
         })
         .catch(error => {
           console.error('Error:', error.message);
