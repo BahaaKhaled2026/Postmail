@@ -16,7 +16,7 @@
     <textarea v-model="mail.message"></textarea>
 
     <label>Attachment:</label>
-    <input type="file" ref="fileInput" @change="handleFileChange" />
+    <input type="file" multiple ref="fileInput" @change="handleFileChange" />
 
     <button @click="sendMail">Send Mail</button>
     <button @click="getusers">hat</button>
@@ -35,22 +35,36 @@ export default {
         title: '',
         sender: '',
         message: '',
+        id:0
       },
+      attachmentOBJ:[]
     };
   },
   methods: {
-    handleFileChange() {
-      this.selectedFile = this.$refs.fileInput.files[0];
-      console.log(this.selectedFile.type);
+    async handleFileChange() {
+      this.selectedFile = this.$refs.fileInput.files;
+      for(let i=0;i<this.selectedFile.length;i++){
+        let tempOBJ={
+        attachment:await this.convertFileToBase64(this.selectedFile[i]),
+        attType:this.selectedFile[i].type,
+        attName:this.selectedFile[i].name,
+        }
+        this.attachmentOBJ.push(tempOBJ);
+      }
+      console.log(this.attachmentOBJ);
+      console.log(this.selectedFile);
     },
-    async sendMail() {
+     sendMail() {
       let emails=[];
       emails = this.sentto.split(',');
       let attachedfile=null;
-      let attachmenttype=null
-      if(this.selectedFile){
-        attachedfile=await this.convertFileToBase64(this.selectedFile)
-        attachmenttype=this.selectedFile.type;
+      let attachmenttype=null;
+      let attachmentName = null;
+      
+      let SentObj=null;
+      if(this.selectedFile!==null){
+        SentObj=this.attachmentOBJ
+        console.log("yo");
       }
       const mailObject = {
         sentToMails: emails,
@@ -58,10 +72,10 @@ export default {
         title: this.mail.title,
         sender: this.mail.sender,
         message: this.mail.message,
-        attachment:attachedfile,
-        attType:attachmenttype
+        attachments:SentObj,
+        id: this.mail.id
       };
-
+      console.log(mailObject);
       fetch(`http://localhost:8080/sendMail`, {
         method: 'POST',
         headers: {
