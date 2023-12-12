@@ -2,45 +2,26 @@
   <section>
     <ul class="nav flex-column">
       <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#"
-          ><lord-icon
-            src="https://cdn.lordicon.com/lwumwgrp.json"
-            trigger="hover"
-            colors="primary:#9ce5f4,secondary:#30c9e8,tertiary:#ebe6ef"
-            style="width: 70px; height: 70px"
-          >
-          </lord-icon
-        ></a>
+        <router-link class="nav-link active" to="/inbox">
+          <div class="row">
+            
+          </div>
+        </router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/sent" class="nav-link"
-          ><lord-icon
-            src="https://cdn.lordicon.com/tmqaflqo.json"
-            trigger="hover"
-            style="width: 70px; height: 70px"
-          >
-          </lord-icon
-        ></router-link>
+        <router-link class="nav-link" to="/sent">Sent</router-link>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#"
-          ><lord-icon
-            src="https://cdn.lordicon.com/hjbrplwk.json"
-            trigger="hover"
-            style="width: 70px; height: 70px"
-          >
-          </lord-icon
-        ></a>
+        <router-link class="nav-link" to="/draft">Draft</router-link>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#"
-          ><lord-icon
-            src="https://cdn.lordicon.com/jqiewnyd.json"
-            trigger="hover"
-            style="width: 70px; height: 70px"
-          >
-          </lord-icon
-        ></a>
+        <router-link class="nav-link" to="/trash">Trash</router-link>
+      </li>
+      <li class="nav-item">
+        <router-link class="nav-link" to="/newMessage">New Message</router-link>
+      </li>
+      <li class="nav-item">
+        <router-link class="nav-link" to="/security">Security</router-link>
       </li>
     </ul>
   </section>
@@ -56,7 +37,7 @@ export default {
 </script>
 <style>
 .nav {
-  background-color: #53c6ba;
+  background-color: #9eb3b0;
   padding: 10px;
   width: 200px;
   height: 723px;

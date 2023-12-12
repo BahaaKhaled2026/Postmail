@@ -47,9 +47,7 @@
               </div>
             </div>
           </div>
-          <div class="row">
             <button @click="changePasss" class="butn">Submit</button>
-          </div>
         </div>
       </section>
     </div>
@@ -182,7 +180,8 @@ section {
   box-shadow: rgba(0, 0, 0, 0.418) -8px 1px 10px 2px;
 }
 .all {
-  height: 723px;
+  height: 700px;
+  margin-top: -60px;
   background-color: rgb(203, 220, 247);
 }
 img {
@@ -192,9 +191,9 @@ img {
   position: relative;
   background: linear-gradient(to bottom, white, #53c6ba);
   border-radius: 50px;
-  margin-top: 30px;
+  margin-top: 70px;
   padding: 10px 40px;
-  left: 40%;
+  left: 25%;
 }
 .alert {
   margin-top: 10px;

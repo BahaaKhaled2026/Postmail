@@ -115,7 +115,8 @@ section {
 
 }
 .all {
-  height: 723px;
+  height: 650px;
+  margin-top: -60px;
   background-color: rgb(203, 220, 247);
 }
 img {

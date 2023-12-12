@@ -27,9 +27,7 @@
               <h5>Wrong Answer!</h5>
             </div>
           </div>
-          <div class="row">
             <button class="butn">Continue</button>
-          </div>
         </form>
       </div>
     </section>
@@ -101,7 +99,8 @@ section {
 
 }
 .all {
-  height: 723px;
+  height: 700px;
+  margin-top: -60px;
   background-color: rgb(203, 220, 247);
 }
 img {
@@ -111,9 +110,12 @@ img {
   position: relative;
   background: linear-gradient(to bottom, white, #53c6ba);
   border-radius: 50px;
-  margin-top: 30px;
+  margin-top: 70px;
   padding: 10px 40px;
-  left: 40%;
+  left: 25%;
+}
+p{
+  color: rgba(255, 255, 255, 0.623);
 }
 .alert {
   margin-top: 10px;

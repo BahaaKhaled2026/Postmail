@@ -1,10 +1,11 @@
 <template>
   <section class="d-flex">
     <sideBar />
-    <div class="body flex-column">
-      <msgBar />
-      <msgBar />
-      <msgBar />
+    <div v-if="messages.length!==0" class="body flex-column">
+      <msgBar v-for="msg in messages" :key="msg.id" :msg="msg"/>
+    </div>
+    <div v-else class="body flex-column">
+      <h1>No messages</h1>
     </div>
   </section>
 </template>
@@ -18,6 +19,11 @@ export default {
     sideBar,
     msgBar,
   },
+  data() {
+    return {
+      messages: $store.state.currUser.inbox,
+    };
+  },
 };
 </script>
 
@@ -25,5 +31,8 @@ export default {
 .body {
   background-color: #ebe6ef;
   width: 100%;
+}
+.d-flex{
+  margin-top: -60px;
 }
 </style>

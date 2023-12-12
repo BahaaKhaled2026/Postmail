@@ -7,6 +7,7 @@ import newPassword from '../views/newPassword.vue'
 import forgetPassword from '../views/forgetPassword.vue'
 import inbox from '../views/inbox.vue'
 import sent from '../views/sent.vue'
+import messsage from '../views/message.vue'
 const routes = [
   {
     path: '/',
@@ -47,7 +48,13 @@ const routes = [
     path: '/sent',
     name : 'sent',
     component : sent
-  }
+  },
+  {
+    path: '/message/:id',
+    name : 'message',
+    component : messsage,
+    props : true
+  },
 ]
 
 const router = createRouter({
