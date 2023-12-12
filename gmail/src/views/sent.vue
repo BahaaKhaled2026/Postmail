@@ -35,7 +35,8 @@ export default {
         title: '',
         sender: '',
         message: '',
-        id:0
+        id:0,
+        isRead:false,
       },
       attachmentOBJ:[]
     };
