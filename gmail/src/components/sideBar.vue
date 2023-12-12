@@ -13,14 +13,14 @@
         ></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#"
+        <router-link to="/sent" class="nav-link"
           ><lord-icon
             src="https://cdn.lordicon.com/tmqaflqo.json"
             trigger="hover"
             style="width: 70px; height: 70px"
           >
           </lord-icon
-        ></a>
+        ></router-link>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#"

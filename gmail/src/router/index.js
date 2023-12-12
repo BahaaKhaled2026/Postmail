@@ -6,6 +6,7 @@ import securityForm from '../views/securityForm.vue'
 import newPassword from '../views/newPassword.vue'
 import forgetPassword from '../views/forgetPassword.vue'
 import inbox from '../views/inbox.vue'
+import sent from '../views/sent.vue'
 const routes = [
   {
     path: '/',
@@ -41,6 +42,11 @@ const routes = [
     path: '/inbox',
     name : 'inbox',
     component : inbox
+  },
+  {
+    path: '/sent',
+    name : 'sent',
+    component : sent
   }
 ]
 
