@@ -1,28 +1,52 @@
 <template>
-  <div>
-    <label>Title:</label>
-    <input v-model="mail.title" type="text" />
-
-    <label>sent To:</label>
-    <input v-model="sentto" type="text" />
-
-    <label>Message:</label>
-    <textarea v-model="mail.message"></textarea>
-
-    <label>Attachment:</label>
-    <input type="file" multiple ref="fileInput" @change="handleFileChange" />
-
-    <button @click="sendMail">Send Mail</button>
-    <button @click="getusers">hat</button>
+  <div class="all">
+    <section class="d-flex">
+      <sideBar />
+      <div class="body flex-column">
+        <div class="row">
+          <label>Title:</label>
+          <input v-model="mail.title" type="text" />
+        </div>
+        <div class="row">
+          <label>sent To:</label>
+          <input v-model="sentto" type="text" />
+        </div>
+        <div class="row">
+          <label>Message:</label>
+          <textarea v-model="mail.message"></textarea>
+        </div>
+        <div class="d-flex attch">
+          <label><i class="fa-solid fa-paperclip"></i></label>
+          <input
+            type="file"
+            multiple
+            ref="fileInput"
+            @change="handleFileChange"
+          />
+        </div>
+        <button @click="sendMail" class="btn">
+          <i class="fa-brands fa-telegram"></i>
+        </button>
+        <!-- <button @click="getusers">hat</button> -->
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
 import $store from "../store/index.js";
+import sideBar from "@/components/sideBar.vue";
 
 export default {
   created() {
     this.sender = $store.state.currUser.email;
+
+  },
+  mounted() {
+    this.getCurrentDate();
+  },
+  components: {
+    sideBar,
   },
   data() {
     return {
@@ -92,6 +116,7 @@ export default {
           if (!response.ok) {
             throw new Error("Failed to send mail");
           }
+          this.$router.push({ name: "inbox" });
           return response.json();
         })
         .then((data) => {
@@ -170,13 +195,64 @@ export default {
 };
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+.body {
+  background-color: #ebe6ef;
+  width: 100%;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+.all {
+  position: relative;
+  top: 50px;
+  width: 88%;
+  margin: auto;
+  height: 700px;
+}
+.row {
+  margin: 10px;
+}
+label {
+  text-align: left;
+  margin-right: 10px;
+}
+textarea {
+  width: 100%;
+  min-height: 200px;
+  max-height: max-content;
+}
+.fa-brands {
+  margin: 10px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 40px;
+}
+textarea,
+input {
+  margin-right: 5px;
+  display: block;
+  padding: 2px 1px;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #ddd;
+  transition: all 0.1s ease-in;
+  color: black;
+}
+textarea,
+input:focus {
+  border-bottom: 5px solid #ddd;
+  outline: none;
+}
+.attch {
+  margin: 10px;
+  width: max-content;
+}
+.btn {
+  position: relative;
+  margin: 10px;
+  border: none;
+  left: 400px;
+  bottom: -20px;
 }
 </style>

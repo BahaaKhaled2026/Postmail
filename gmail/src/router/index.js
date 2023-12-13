@@ -8,6 +8,8 @@ import forgetPassword from '../views/forgetPassword.vue'
 import inbox from '../views/inbox.vue'
 import sent from '../views/sent.vue'
 import messsage from '../views/message.vue'
+import trash from '../views/trash.vue'
+import draft from '../views/draft.vue'
 const routes = [
   {
     path: '/',
@@ -48,6 +50,16 @@ const routes = [
     path: '/sent',
     name : 'sent',
     component : sent
+  },
+  {
+    path: '/trash',
+    name : 'trash',
+    component : trash
+  },
+  {
+    path: '/draft',
+    name : 'draft',
+    component : draft
   },
   {
     path: '/message/:id',

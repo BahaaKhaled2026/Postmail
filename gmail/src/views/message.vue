@@ -29,6 +29,9 @@ export default {
     );
 
         this.msg = allMessages.find(msg => msg.id == this.$route.params.id)
+    },
+    mounted(){
+        console.log(this.msg)
     }
 
 }
