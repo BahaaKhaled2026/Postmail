@@ -69,6 +69,21 @@ export default {
   components: {
     msgBar,
   },
+  data() {
+    return {
+      messages: {
+        inbox: [],
+        draft: [],
+        sent: [],
+        trash: [],
+      },
+    };
+  },
+  mounted() {
+  setInterval(() => {
+    this.messages = $store.state.currUser.inbox;
+  }, 100);
+},
 };
 </script>
 <style scoped>

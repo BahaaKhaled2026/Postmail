@@ -36,7 +36,7 @@ export default {
     },
     moveToTrash() {
       $store.commit("moveToTrash", this.msg);
-      fetch("http://localhost:8080/updateMessages/" ,{
+      fetch("http://localhost:8080/updateMessages/${$store.state.currUser.email}" ,{
         method: "POST",
         headers: {
           "Content-Type": "application/json",

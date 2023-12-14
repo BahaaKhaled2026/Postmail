@@ -2,6 +2,7 @@
   <section class="d-flex">
     <input type="text" placeholder="search" />
     <button @click="sortMsg">sort</button>
+    <button @click="signOut">signOut</button>
   </section>
 </template>
 
@@ -12,6 +13,13 @@ export default {
     sortMsg() {
       this.$store.commit("sortMsg");
       console.log($store.state.currUser.inbox);
+    },
+    signOut() {
+      localStorage.removeItem("token");
+      localStorage.removeItem("userData");
+      this.$store.commit("setLoginStatus", false);
+      this.$store.commit("setCurrUser", null);
+      this.$router.push({ name: "prehome" });
     },
   },
 };

@@ -22,7 +22,6 @@ public class services {
 
     @GetMapping("/users")
     public ArrayList<UserData> getUsers() {
-
         return userDataService.getUsersData();
     }
 
@@ -74,22 +73,16 @@ public class services {
 
         newPassword=newPassword.replaceAll("\"","");
         ArrayList<UserData> usersData = userDataService.getUsersData();
-        int x=0;
-        for(int i=0;i<usersData.size();i++){
-            if(usersData.get(i).getEmail().equals(email)){
-                x=i;
-                break;
-            }
-        }
-        
+        UserData user = userDataService.getUserByEmail(email) ;
+        int x = user.getIndex();
 
-            try {
-                newPassword = Hashing.getHashedHex(Hashing.getHashedBytes(newPassword));
-                usersData.get(x).updatePassword(newPassword);
-                userDataService.writeUsersData(usersData);
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            newPassword = Hashing.getHashedHex(Hashing.getHashedBytes(newPassword));
+            usersData.get(x).updatePassword(newPassword);
+            userDataService.writeUsersData(usersData);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
 
     }
     @PostMapping("/sendMail")
@@ -134,5 +127,19 @@ public class services {
         }
         return false;
     }
-}
+    @PostMapping("/updateMessages/{email}")
+    public void updateMessage(@PathVariable String email, @RequestBody UserData user) {
+        System.out.println("zbi");
+        ArrayList<UserData> usersData = userDataService.getUsersData();
+        System.out.println(usersData);
+        try {
+            System.out.println("deleted");
+            usersData.remove(user.getIndex()) ;
+            usersData.add(user.getIndex(),user);
+            userDataService.writeUsersData(usersData);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
+    }
+}

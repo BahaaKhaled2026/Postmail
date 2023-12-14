@@ -7,6 +7,7 @@
         <msgBar v-for="msg in messages" :key="msg.id" :msg="msg" />
       </div>
       <div v-else class="body flex-column">
+        <navBar />
         <h1>No messages</h1>
       </div>
     </section>
@@ -24,11 +25,11 @@ export default {
     msgBar,
     navBar,
   },
-  created() {
+  mounted() {
     setInterval(() => {
       this.messages = $store.state.currUser.inbox;
     }, 100);
-},
+  },
   data() {
     return {
       messages: {},
@@ -38,7 +39,7 @@ export default {
 </script>
 
 <style scoped>
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;

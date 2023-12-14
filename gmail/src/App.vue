@@ -1,6 +1,24 @@
 <template>
   <router-view/>
 </template>
+<script>
+import $store from "./store/index.js";
+export default {
+  created() {
+    const userDataString = localStorage.getItem("userData");
+    if (!userDataString) {
+      $store.commit("setLoginStatus", false);
+      $store.commit("setCurrUser", null);
+    } else {
+      $store.commit("setLoginStatus", true);
+      $store.commit("setCurrUser", JSON.parse(userDataString));
+      this.$router.push({ name: "inbox" });
+    }
+    this.loginState = $store.state.loginStatus;
+  },
+}
+</script>
+
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
