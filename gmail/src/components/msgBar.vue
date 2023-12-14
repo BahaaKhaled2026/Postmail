@@ -28,13 +28,15 @@ export default {
   props: ["msg"],
   methods: {
     openMessage() {
+      this.msg.read = true;
+      $store.commit("updateMsg", this.msg);
       this.$router.push({ name: "message", params: { id: this.msg.id } });
     },
-     moveToTrash() {
+    moveToTrash() {
       $store.commit("moveToTrash", this.msg.id);
       //fetch hena el user ely 3ayz a3ml update leh
       //hn3dl fe el data bta3t el user we nrg3 ngebo tany we n3ml update fe el front
-     },
+    },
   },
 };
 </script>

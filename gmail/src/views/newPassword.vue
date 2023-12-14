@@ -126,7 +126,7 @@ export default {
         })
           .then((res) => {
             if (res.ok) {
-              this.$router.push({ name: "home" });
+              this.$router.push("/login");
               return res.json();
             } else if (res.status === 404) {
               throw new Error("User not found");

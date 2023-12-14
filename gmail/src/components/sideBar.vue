@@ -2,7 +2,7 @@
   <section>
     <ul class="nav flex-column">
       <li class="nav-item">
-        <router-link class="nav-link" to="/sent">
+        <router-link class="nav-link" to="/send">
           <button class="butn">+ Send</button>
         </router-link>
       </li>
@@ -14,7 +14,7 @@
             </div>
             <div class="col-6">inbox</div>
             <div class="col-3">
-              {{ $store.state.inbox.length }}
+              {{ $store.state.currUser.inbox.length }}
             </div>
           </div>
         </router-link>
@@ -27,7 +27,20 @@
             </div>
             <div class="col-6">draft</div>
             <div class="col-3">
-              {{ $store.state.draft.length }}
+              {{ $store.state.currUser.draft.length }}
+            </div>
+          </div>
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link class="nav-link" to="/sent">
+          <div class="row">
+            <div class="col-3">
+              <i class="fa-solid fa-envelope-open-text"></i>
+            </div>
+            <div class="col-6">sent</div>
+            <div class="col-3">
+              {{ $store.state.currUser.sent.length }}
             </div>
           </div>
         </router-link>
@@ -40,7 +53,7 @@
             </div>
             <div class="col-6">trash</div>
             <div class="col-3">
-              {{ $store.state.trash.length }}
+              {{ $store.state.currUser.trash.length }}
             </div>
           </div>
         </router-link>
@@ -51,6 +64,7 @@
 
 <script>
 import msgBar from "./msgBar.vue";
+import $store from "../store/index.js";
 export default {
   components: {
     msgBar,

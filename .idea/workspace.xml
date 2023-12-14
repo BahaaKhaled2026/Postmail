@@ -5,15 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1933667c-78b0-4d23-8ffc-6fdaf210a9b4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backGmail/usersData.json" beforeDir="false" afterPath="$PROJECT_DIR$/backGmail/usersData.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gmail/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/gmail/src/App.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gmail/src/components/msgBar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/gmail/src/components/msgBar.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gmail/src/components/sideBar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/gmail/src/components/sideBar.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gmail/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/gmail/src/router/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gmail/src/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/gmail/src/store/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gmail/src/views/draft.vue" beforeDir="false" afterPath="$PROJECT_DIR$/gmail/src/views/draft.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gmail/src/views/inbox.vue" beforeDir="false" afterPath="$PROJECT_DIR$/gmail/src/views/inbox.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gmail/src/views/loginForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/gmail/src/views/loginForm.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gmail/src/views/message.vue" beforeDir="false" afterPath="$PROJECT_DIR$/gmail/src/views/message.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gmail/src/views/sent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/gmail/src/views/sent.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gmail/src/views/trash.vue" beforeDir="false" afterPath="$PROJECT_DIR$/gmail/src/views/trash.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

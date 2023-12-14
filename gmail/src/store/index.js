@@ -18,6 +18,10 @@ export default createStore({
         moveToTrash(state,msg){
             state.currUser.trash.push(msg);
             state.currUser.inbox = state.currUser.inbox.filter(m => m.id !== msg.id);
+        },
+        updateMsg(state, msg){
+            state.currUser.inbox = state.currUser.inbox.filter(m => m.id !== msg.id);
+            state.currUser.inbox.push(msg);
         }
     },
     actions:{

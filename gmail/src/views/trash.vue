@@ -1,6 +1,6 @@
 <template>
   <div class="all">
-    <section class="d-flex">
+    <section class="d-flex window">
       <sideBar />
       <div v-if="messages.length !== 0" class="body flex-column">
         <navBar />
@@ -36,15 +36,33 @@ export default {
 </script>
 
 <style scoped>
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 .body {
   background-color: #ebe6ef;
   width: 100%;
+  height: 635px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: 3px 0px 14px 0px #00000086;
+  overflow-y: scroll;
+
 }
 .all {
-  position: relative;
-  top: 50px;
-  width: 88%;
+  height: 100%;
+  background-color: rgb(203, 220, 247);
+}
+.window {
+  padding-top: 30px;
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  width: 80%;
   margin: auto;
+  border-radius: 50px;
   height: 700px;
 }
 </style>

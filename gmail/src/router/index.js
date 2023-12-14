@@ -6,6 +6,7 @@ import securityForm from '../views/securityForm.vue'
 import newPassword from '../views/newPassword.vue'
 import forgetPassword from '../views/forgetPassword.vue'
 import inbox from '../views/inbox.vue'
+import send from '../views/send.vue'
 import sent from '../views/sent.vue'
 import messsage from '../views/message.vue'
 import trash from '../views/trash.vue'
@@ -47,9 +48,9 @@ const routes = [
     component : inbox
   },
   {
-    path: '/sent',
-    name : 'sent',
-    component : sent
+    path: '/send',
+    name : 'send',
+    component : send
   },
   {
     path: '/trash',
@@ -60,6 +61,11 @@ const routes = [
     path: '/draft',
     name : 'draft',
     component : draft
+  },
+  {
+    path: '/sent',
+    name : 'sent',
+    component : sent
   },
   {
     path: '/message/:id',

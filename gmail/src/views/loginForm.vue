@@ -1,58 +1,54 @@
 <template>
   <div class="all">
-      <section class="d-flex">
-        <div class="img">
-        </div>
-        <div class="form">
-          <form @submit.prevent="logIn">
-            <router-link to="/">
-              <h2>
-                <i
-                  class="fa-solid fa-arrow-left"
-                  style="color: #000000"
-                ></i></h2
-            ></router-link>
-            <h3>Hi Again!</h3>
-            <div
-              v-show="this.missingData"
-              class="alert alert-danger"
-              role="alert"
-            >
-              <h5>Some Data Is Missing</h5>
+    <section class="d-flex">
+      <div class="img"></div>
+      <div class="form">
+        <form @submit.prevent="logIn">
+          <router-link to="/">
+            <h2>
+              <i class="fa-solid fa-arrow-left" style="color: #000000"></i></h2
+          ></router-link>
+          <h3>Hi Again!</h3>
+          <div
+            v-show="this.missingData"
+            class="alert alert-danger"
+            role="alert"
+          >
+            <h5>Some Data Is Missing</h5>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label>Email</label>
+              <input type="email" required v-model="email" />
             </div>
-            <div class="row">
-              <div class="col">
-                <label>Email</label>
-                <input type="email" required v-model="email" />
+          </div>
+          <div class="row">
+            <div class="col">
+              <label>Password</label>
+              <input type="password" required v-model="password" />
+              <div
+                v-show="this.userNotFound"
+                class="alert alert-danger"
+                role="alert"
+              >
+                <h5>Wrong Email Or Paassword</h5>
               </div>
             </div>
-            <div class="row">
-              <div class="col">
-                <label>Password</label>
-                <input type="password" required v-model="password" />
-                <div
-                  v-show="this.userNotFound"
-                  class="alert alert-danger"
-                  role="alert"
-                >
-                  <h5>Wrong Email Or Paassword</h5>
-                </div>
-              </div>
-              <router-link to="/forgetPassword" class="nav-link links">
-                <h6>Forget Your Password</h6>
-              </router-link>
-            </div>
-              <button @click="checkMissingData" class="butn">Login</button>
+            <router-link to="/forgetPassword" class="nav-link links">
+              <h6>Forget Your Password</h6>
+            </router-link>
+          </div>
+          <button @click="checkMissingData" class="butn">Login</button>
 
-            <div class="row">
-              <router-link to="/signup" class="nav-link links">
-                <h6 class="center">Don't have an account? Sign up</h6>
-              </router-link>
-            </div>
-          </form>
-        </div>
-      </section>
-    </div>
+          <div class="row">
+            <router-link to="/signup" class="nav-link links">
+              <h6 class="center">Don't have an account? Sign up</h6>
+            </router-link>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
 </template>
 <script>
 import $store from "../store/index.js";
@@ -102,6 +98,7 @@ export default {
             localStorage.setItem("token", fakeToken);
             $store.commit("setLoginStatus", true);
             $store.commit("setCurrUser", userData);
+            console.log(userData);
             this.$router.push({ name: "inbox" });
           } else {
             this.userNotFound = true;
@@ -143,6 +140,8 @@ export default {
       if (token) {
         const userDataString = localStorage.getItem("userData");
         const userData = JSON.parse(userDataString);
+        $store.commit("setCurrUser", userData);
+        $store.commit("setLoginStatus", true);
       }
     },
     checkMissingData() {
@@ -170,8 +169,7 @@ export default {
   margin: 50px 0px;
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
-    box-shadow: rgba(0, 0, 0, 0.418) 8px 1px 10px 2px;
-
+  box-shadow: rgba(0, 0, 0, 0.418) 8px 1px 10px 2px;
 }
 section {
   display: flex;
@@ -188,12 +186,10 @@ section {
   margin: 50px 0px;
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
-    box-shadow: rgba(0, 0, 0, 0.418) -8px 1px 10px 2px;
-
+  box-shadow: rgba(0, 0, 0, 0.418) -8px 1px 10px 2px;
 }
 .all {
   height: 100%;
-  margin-top: -60px;
   background-color: rgb(203, 220, 247);
 }
 img {
@@ -315,7 +311,7 @@ h6 {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7); 
+  background: rgba(0, 0, 0, 0.7);
   z-index: 1;
 }
 .alert {
@@ -327,7 +323,7 @@ a {
   text-decoration: none;
 }
 
-a:hover{
+a:hover {
   color: white;
 }
 
