@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 @Service
 public class Control {
@@ -15,7 +16,19 @@ public class Control {
 //7ngls'path:"D:\\vue\\Gmail\\backGmail\\usersData.json"
     private static final String JSON_FILE_PATH = "D:\\Visual Studio Code\\connect 4\\Gmail\\backGmail\\usersData.json";
     public ArrayList<UserData> usersData;
-
+    public void cleanTrash(ArrayList<mail>x){
+        Calendar calendar = Calendar.getInstance();
+        int currDay = calendar.get(Calendar.DAY_OF_MONTH);
+        int currMonth = calendar.get(Calendar.MONTH) + 1;
+        for(int i=0;i<x.size();i++){
+            if(x.get(i).getDelDateDay()-currDay>=30 && x.get(i).getDelDateMonth()==currMonth){
+                x.remove(i);
+            }
+            else if(x.get(i).getDelDateMonth()!=currMonth && x.get(i).getDelDateDay()-currDay==0){
+                x.remove(i);
+            }
+        }
+    }
 
 
     public ArrayList<UserData> getUsersData() {

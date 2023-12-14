@@ -21,7 +21,24 @@ public class mail {
     private String message;
     private ArrayList<attachment>attachments;
     private int id;
-    private int priority ;
+    private int delDateDay;
+    private int delDateMonth;
+
+    public int getDelDateDay() {
+        return delDateDay;
+    }
+
+    public void setDelDateDay(int delDateDay) {
+        this.delDateDay = delDateDay;
+    }
+
+    public int getDelDateMonth() {
+        return delDateMonth;
+    }
+
+    public void setDelDateMonth(int delDateMonth) {
+        this.delDateMonth = delDateMonth;
+    }
 
     public int getId() {
         return id;
