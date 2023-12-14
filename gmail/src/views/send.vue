@@ -64,21 +64,24 @@ export default {
     };
   },
   methods: {
-getCurrentDate() {
-  const now = new Date();
-  const timeZone = "Europe/Athens"; 
-  const options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-  };
-  const formatter = new Intl.DateTimeFormat(undefined, { ...options, timeZone });
-  this.mail.date = formatter.format(now);
-  
-  console.log(this.mail.date);
-},
+    getCurrentDate() {
+      const now = new Date();
+      const timeZone = "Europe/Athens";
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      };
+      const formatter = new Intl.DateTimeFormat(undefined, {
+        ...options,
+        timeZone,
+      });
+      this.mail.date = formatter.format(now);
+
+      console.log(this.mail.date);
+    },
 
     async handleFileChange() {
       this.selectedFile = this.$refs.fileInput.files;

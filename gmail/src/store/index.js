@@ -8,6 +8,18 @@ export default createStore({
     mutations:{
         setCurrUser(state, user){
             state.currUser = user;
+            state.currUser.inbox.sort((a,b)=>{
+                return b.id - a.id;
+            })
+            state.currUser.draft.sort((a,b)=>{
+                return b.id - a.id;
+            })
+            state.currUser.trash.sort((a,b)=>{
+                return b.id - a.id;
+            })
+            state.currUser.sent.sort((a,b)=>{
+                return b.id - a.id;
+            })
         },
         setLoginStatus(state, status){
             state.loginStatus = status;
@@ -23,8 +35,31 @@ export default createStore({
             state.currUser.inbox = state.currUser.inbox.filter(m => m.id !== msg.id);
             state.currUser.inbox.push(msg);
         },
-        sortMsg(state){
+        sortMsgAsc(state){
             state.currUser.inbox.sort((a,b) => {
+                return a.id - b.id;
+            });
+            state.currUser.trash.sort((a,b) => {
+                return a.id - b.id;
+            });
+            state.currUser.draft.sort((a,b) => {
+                return a.id - b.id;
+            });
+            state.currUser.sent.sort((a,b) => {
+                return a.id - b.id;
+            });
+        },
+        sortMsgDec(state){
+            state.currUser.inbox.sort((a,b) => {
+                return b.id - a.id;
+            });
+            state.currUser.trash.sort((a,b) => {
+                return b.id - a.id;
+            });
+            state.currUser.draft.sort((a,b) => {
+                return b.id - a.id;
+            });
+            state.currUser.sent.sort((a,b) => {
                 return b.id - a.id;
             });
         }

@@ -11,10 +11,35 @@ export default {
       $store.commit("setCurrUser", null);
     } else {
       $store.commit("setLoginStatus", true);
-      $store.commit("setCurrUser", JSON.parse(userDataString));
+      let em=JSON.parse(userDataString).email;
+      let newData;
+      fetch(
+        `http://localhost:8080/users/${em}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        })
+        .then((userData) => {
+          console.log(userData);
+          newData=userData;
+          $store.commit("setCurrUser", newData);
+
+        })
+        .catch((error) => {
+          console.error("Error during login:", error);
+        });
       this.$router.push({ name: "inbox" });
     }
-    this.loginState = $store.state.loginStatus;
   },
 }
 </script>

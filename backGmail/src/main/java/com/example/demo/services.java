@@ -129,7 +129,6 @@ public class services {
     }
     @PostMapping("/updateMessages/{email}")
     public void updateMessage(@PathVariable String email, @RequestBody UserData user) {
-        System.out.println("zbi");
         ArrayList<UserData> usersData = userDataService.getUsersData();
         System.out.println(usersData);
         try {

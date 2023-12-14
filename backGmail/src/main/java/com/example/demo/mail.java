@@ -21,6 +21,7 @@ public class mail {
     private String message;
     private ArrayList<attachment>attachments;
     private int id;
+    private int priority ;
 
     public int getId() {
         return id;

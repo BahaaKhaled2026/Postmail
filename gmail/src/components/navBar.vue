@@ -1,7 +1,8 @@
 <template>
   <section class="d-flex">
     <input type="text" placeholder="search" />
-    <button @click="sortMsg">sort</button>
+    <button @click="sortMsgAsc">sortDec</button>
+    <button @click="sortMsgDec">sortAsc</button>
     <button @click="signOut">signOut</button>
   </section>
 </template>
@@ -10,8 +11,12 @@
 import $store from "../store/index.js";
 export default {
   methods: {
-    sortMsg() {
-      this.$store.commit("sortMsg");
+    sortMsgAsc() {
+      this.$store.commit("sortMsgAsc");
+      console.log($store.state.currUser.inbox);
+    },
+    sortMsgDec() {
+      this.$store.commit("sortMsgDec");
       console.log($store.state.currUser.inbox);
     },
     signOut() {

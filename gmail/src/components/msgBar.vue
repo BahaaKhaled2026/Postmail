@@ -6,7 +6,11 @@
         <div class="icons">
           <i class="fa-regular fa-star"></i>
           <i class="fa-solid fa-star"></i>
-          <i v-show="inTrash" @click="moveToTrash" class="fa-solid fa-trash"></i>
+          <i
+            v-show="inTrash"
+            @click="moveToTrash"
+            class="fa-solid fa-trash"
+          ></i>
         </div>
       </div>
       <div class="title">
@@ -24,7 +28,7 @@ import $store from "../store/index.js";
 export default {
   data() {
     return {
-      inTrash : !$store.state.currUser.trash.includes(this.msg),
+      inTrash: !$store.state.currUser.trash.includes(this.msg),
     };
   },
   props: ["msg"],
@@ -36,13 +40,16 @@ export default {
     },
     moveToTrash() {
       $store.commit("moveToTrash", this.msg);
-      fetch("http://localhost:8080/updateMessages/${$store.state.currUser.email}" ,{
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify($store.state.currUser),
-      })
+      fetch(
+        `http://localhost:8080/updateMessages/${$store.state.currUser.email}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify($store.state.currUser),
+        }
+      )
         .then((response) => {
           if (response.ok) {
             return response.json();
@@ -57,6 +64,7 @@ export default {
         .catch((error) => {
           console.error("Error during login:", error);
         });
+      $store.commit("setidx", $store.state.idx++);
     },
   },
 };

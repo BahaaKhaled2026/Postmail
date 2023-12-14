@@ -14,7 +14,13 @@
             </div>
             <div class="col-6">inbox</div>
             <div class="col-3">
-              {{ $store.state.currUser.inbox.length }}
+              <div class="col-3">
+                {{
+                  $store.state.currUser && $store.state.currUser.inbox
+                    ? $store.state.currUser.inbox.length
+                    : 0
+                }}
+              </div>
             </div>
           </div>
         </router-link>
@@ -27,7 +33,13 @@
             </div>
             <div class="col-6">draft</div>
             <div class="col-3">
-              {{ $store.state.currUser.draft.length }}
+              <div class="col-3">
+                {{
+                  $store.state.currUser && $store.state.currUser.draft
+                    ? $store.state.currUser.draft.length
+                    : 0
+                }}
+              </div>
             </div>
           </div>
         </router-link>
@@ -40,7 +52,13 @@
             </div>
             <div class="col-6">sent</div>
             <div class="col-3">
-              {{ $store.state.currUser.sent.length }}
+              <div class="col-3">
+                {{
+                  $store.state.currUser && $store.state.currUser.sent
+                    ? $store.state.currUser.sent.length
+                    : 0
+                }}
+              </div>
             </div>
           </div>
         </router-link>
@@ -53,7 +71,13 @@
             </div>
             <div class="col-6">trash</div>
             <div class="col-3">
-              {{ $store.state.currUser.trash.length }}
+              <div class="col-3">
+                {{
+                  $store.state.currUser && $store.state.currUser.trash
+                    ? $store.state.currUser.trash.length
+                    : 0
+                }}
+              </div>
             </div>
           </div>
         </router-link>
@@ -77,13 +101,18 @@ export default {
         sent: [],
         trash: [],
       },
+      currUser: { inbox: [], draft: [], sent: [], trash: [] },
     };
   },
   mounted() {
-  setInterval(() => {
-    this.messages = $store.state.currUser.inbox;
-  }, 100);
-},
+    setInterval(() => {
+      if (this.$store.state.currUser && this.$store.state.currUser.inbox) {
+        this.messages = { ...this.$store.state.currUser };
+      } else {
+        this.messages = { inbox: [], draft: [], sent: [], trash: [] };
+      }
+    }, 100);
+  },
 };
 </script>
 <style scoped>
