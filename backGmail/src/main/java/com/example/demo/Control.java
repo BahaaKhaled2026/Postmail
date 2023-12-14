@@ -14,7 +14,7 @@ import java.util.List;
 public class Control {
     private final ObjectMapper objectMapper = new ObjectMapper();
 //7ngls'path:"D:\\vue\\Gmail\\backGmail\\usersData.json"
-    private static final String JSON_FILE_PATH = "E:\\programming\\Project\\Gmail\\backGmail\\usersData.json";
+    private static final String JSON_FILE_PATH = "D:\\vue\\Gmail\\backGmail\\usersData.json";
     public ArrayList<UserData> usersData;
     public void cleanTrash(ArrayList<mail>x){
         Calendar calendar = Calendar.getInstance();
