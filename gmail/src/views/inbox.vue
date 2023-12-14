@@ -24,9 +24,11 @@ export default {
     msgBar,
     navBar,
   },
-  mounted() {
-    this.messages = $store.state.currUser.inbox;
-  },
+  created() {
+    setInterval(() => {
+      this.messages = $store.state.currUser.inbox;
+    }, 100);
+},
   data() {
     return {
       messages: {},

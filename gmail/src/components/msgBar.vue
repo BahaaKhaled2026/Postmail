@@ -6,7 +6,7 @@
         <div class="icons">
           <i class="fa-regular fa-star"></i>
           <i class="fa-solid fa-star"></i>
-          <i @click="moveToTrash" class="fa-solid fa-trash"></i>
+          <i v-show="inTrash" @click="moveToTrash" class="fa-solid fa-trash"></i>
         </div>
       </div>
       <div class="title">
@@ -23,7 +23,9 @@
 import $store from "../store/index.js";
 export default {
   data() {
-    return {};
+    return {
+      inTrash : !$store.state.currUser.trash.includes(this.msg),
+    };
   },
   props: ["msg"],
   methods: {
@@ -33,9 +35,28 @@ export default {
       this.$router.push({ name: "message", params: { id: this.msg.id } });
     },
     moveToTrash() {
-      $store.commit("moveToTrash", this.msg.id);
-      //fetch hena el user ely 3ayz a3ml update leh
-      //hn3dl fe el data bta3t el user we nrg3 ngebo tany we n3ml update fe el front
+      $store.commit("moveToTrash", this.msg);
+      fetch("http://localhost:8080/updateMessages/" ,{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify($store.state.currUser),
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        })
+        .then((userData) => {
+          $store.commit("setCurrUser", userData);
+          console.log(userData);
+        })
+        .catch((error) => {
+          console.error("Error during login:", error);
+        });
     },
   },
 };

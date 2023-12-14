@@ -1,11 +1,20 @@
 <template>
   <section class="d-flex">
     <input type="text" placeholder="search" />
+    <button @click="sortMsg">sort</button>
   </section>
 </template>
 
 <script>
-export default {};
+import $store from "../store/index.js";
+export default {
+  methods: {
+    sortMsg() {
+      this.$store.commit("sortMsg");
+      console.log($store.state.currUser.inbox);
+    },
+  },
+};
 </script>
 
 <style scoped>

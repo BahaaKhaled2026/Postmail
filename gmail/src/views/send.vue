@@ -40,7 +40,6 @@ import sideBar from "@/components/sideBar.vue";
 export default {
   created() {
     this.sender = $store.state.currUser.email;
-
   },
   mounted() {
     this.getCurrentDate();
@@ -65,12 +64,22 @@ export default {
     };
   },
   methods: {
-    getCurrentDate() {
-      const now = new Date();
-      console.log(now);
-      const options = { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric" };
-      this.mail.date = now.toLocaleDateString(undefined, options);
-    },
+getCurrentDate() {
+  const now = new Date();
+  const timeZone = "Europe/Athens"; 
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  };
+  const formatter = new Intl.DateTimeFormat(undefined, { ...options, timeZone });
+  this.mail.date = formatter.format(now);
+  
+  console.log(this.mail.date);
+},
+
     async handleFileChange() {
       this.selectedFile = this.$refs.fileInput.files;
       for (let i = 0; i < this.selectedFile.length; i++) {
@@ -203,7 +212,6 @@ export default {
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
   overflow-y: scroll;
-
 }
 .all {
   position: relative;

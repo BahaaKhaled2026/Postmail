@@ -27,6 +27,9 @@ export default {
   mounted() {
     this.messages = $store.state.currUser.sent;
   },
+   updated() {
+    this.messages = $store.state.currUser.sent;
+  },
   data() {
     return {
       messages: {},

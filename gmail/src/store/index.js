@@ -22,6 +22,11 @@ export default createStore({
         updateMsg(state, msg){
             state.currUser.inbox = state.currUser.inbox.filter(m => m.id !== msg.id);
             state.currUser.inbox.push(msg);
+        },
+        sortMsg(state){
+            state.currUser.inbox.sort((a,b) => {
+                return b.id - a.id;
+            });
         }
     },
     actions:{
