@@ -27,42 +27,45 @@ export default {
   },
   mounted() {
     setInterval(() => {
-      this.messages =   $store.state.currUser && $store.state.currUser.inbox ? $store.state.currUser.inbox : null
+      this.messages =
+        $store.state.currUser && $store.state.currUser.inbox
+          ? $store.state.currUser.inbox
+          : null;
     }, 50);
     const userDataString = localStorage.getItem("userData");
-          if (!userDataString) {
-            $store.commit("setLoginStatus", false);
-            $store.commit("setCurrUser", null);
+    if (!userDataString) {
+      $store.commit("setLoginStatus", false);
+      $store.commit("setCurrUser", null);
+    } else {
+      $store.commit("setLoginStatus", true);
+      let em = JSON.parse(userDataString).email;
+      let newData;
+      fetch(`http://localhost:8080/users/${em}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
           } else {
-            $store.commit("setLoginStatus", true);
-            let em = JSON.parse(userDataString).email;
-            let newData;
-            fetch(`http://localhost:8080/users/${em}`, {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            })
-              .then((response) => {
-                if (response.ok) {
-                  return response.json();
-                } else {
-                  throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-              })
-              .then((userData) => {
-                console.log(userData);
-                newData = userData;
-                $store.commit("setCurrUser", newData);
-              })
-              .catch((error) => {
-                console.error("Error during login:", error);
-              });
+            throw new Error(`HTTP error! Status: ${response.status}`);
           }
+        })
+        .then((userData) => {
+          console.log(userData);
+          newData = userData;
+          $store.commit("setCurrUser", newData);
+        })
+        .catch((error) => {
+          console.error("Error during login:", error);
+        });
+    }
   },
   data() {
     return {
-      messages: {},
+      messages: [],
     };
   },
 };
