@@ -70,6 +70,15 @@ public class UserData {
     private String firstName;
     private String lastName;
     private String gender;
+
+    public ArrayList<mail> getFavourites() {
+        return favourites;
+    }
+
+    public void setFavourites(ArrayList<mail> favourites) {
+        this.favourites = favourites;
+    }
+
     private ArrayList<mail>inbox;
     private ArrayList<mail>sent;
     private ArrayList<mail>draft;

@@ -23,6 +23,15 @@ public class mail {
     private int id;
     private int delDateDay;
     private int delDateMonth;
+    private int priorityLvl;
+
+    public int getPriorityLvl() {
+        return priorityLvl;
+    }
+
+    public void setPriorityLvl(int priorityLvl) {
+        this.priorityLvl = priorityLvl;
+    }
 
     public int getDelDateDay() {
         return delDateDay;
