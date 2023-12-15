@@ -4,7 +4,7 @@
       <sideBar />
       <div v-if="messages.length !== 0" class="body flex-column">
         <navBar />
-        <msgBar v-for="msg in messages" :key="msg.id" :msg="msg" />
+        <draftMsg @click="goTosend(msg)" v-for="msg in messages" :key="msg.id" :msg="msg" />
       </div>
       <div v-else class="body flex-column">
         <h1>No messages</h1>
@@ -18,15 +18,19 @@ import $store from "../store/index.js";
 import msgBar from "@/components/msgBar.vue";
 import sideBar from "@/components/sideBar.vue";
 import navBar from "@/components/navBar.vue";
+import draftMsg from "./draftMsg.vue";
+
 export default {
   components: {
     sideBar,
     msgBar,
     navBar,
+    draftMsg,
   },
   mounted() {
     setInterval(() => {
-      this.messages =   $store.state.currUser && $store.state.currUser.draft ? $store.state.currUser.draft : null
+      this.messages =
+        $store.state.currUser && $store.state.currUser.draft ? $store.state.currUser.draft : [];
     }, 100);
     const userDataString = localStorage.getItem("userData");
           if (!userDataString) {
@@ -59,9 +63,19 @@ export default {
               });
           }
   },
+  methods: {
+    goTosend(ms){
+      console.log(ms);
+      $store.commit("setCurrMsg",ms);
+      this.$router.push({ name: "send" });
+      $store.commit("setHoldDraft",true);
+      $store.commit("setSelectedMsg",ms.id)
+      console.log(this.messages);
+    }
+  },
   data() {
     return {
-      messages: {},
+      messages: [],
     };
   },
 };

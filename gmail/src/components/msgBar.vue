@@ -64,7 +64,6 @@ export default {
         .catch((error) => {
           console.error("Error during login:", error);
         });
-      $store.commit("setidx", $store.state.idx++);
     },
   },
 };

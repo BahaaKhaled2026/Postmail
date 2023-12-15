@@ -111,7 +111,7 @@ export default {
       } else {
         this.messages = { inbox: [], draft: [], sent: [], trash: [] };
       }
-    }, 100);
+    }, 50);
   },
 };
 </script>

@@ -1,13 +1,27 @@
 import { createStore } from 'vuex'
 export default createStore({
     state:{
-        currUser: null,
+        token: localStorage.getItem('token') || null,
+        currUser: JSON.parse(localStorage.getItem('userData')) || null,
+        isLoggedIn: localStorage.getItem('token') !== null,
         loginStatus: false,
         forgetUser: null,
+        currDraftMsg:{
+            sentToMails: [],
+            date: "",
+            title: "",
+            sender: "",
+            message: "",
+            id: 0,
+            isRead: false,
+        },
+        holdDraft:false,
+        selectedMsg:-1
     },
     mutations:{
         setCurrUser(state, user){
             state.currUser = user;
+            if(state.currUser!==null){
             state.currUser.inbox.sort((a,b)=>{
                 return b.id - a.id;
             })
@@ -20,6 +34,16 @@ export default createStore({
             state.currUser.sent.sort((a,b)=>{
                 return b.id - a.id;
             })
+        }
+        },
+        setCurrMsg(state,status){
+            state.currDraftMsg=status
+        },
+        setHoldDraft(state,status){
+            state.holdDraft=status
+        },
+        setSelectedMsg(state,status){
+            state.selectedMsg=status
         },
         setLoginStatus(state, status){
             state.loginStatus = status;

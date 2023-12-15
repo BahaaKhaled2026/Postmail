@@ -39,24 +39,80 @@ import sideBar from "@/components/sideBar.vue";
 
 export default {
   created() {
+  if ($store.state.currUser) {
     this.sender = $store.state.currUser.email;
-  },
+  }
+},
+
   mounted() {
     this.getCurrentDate();
+    console.log(this.msg)
+      setInterval(() => {
+      this.messages =
+        $store.state.currUser && $store.state.currUser.inbox
+          ? $store.state.currUser.inbox
+          : null;
+    }, 50);
+    const userDataString = localStorage.getItem("userData");
+    if (!userDataString) {
+      $store.commit("setLoginStatus", false);
+      $store.commit("setCurrUser", null);
+    } else {
+      $store.commit("setLoginStatus", true);
+      let em = JSON.parse(userDataString).email;
+      let newData;
+      fetch(`http://localhost:8080/users/${em}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        })
+        .then((userData) => {
+          console.log(userData);
+          newData = userData;
+          $store.commit("setCurrUser", newData);
+        })
+        .catch((error) => {
+          console.error("Error during login:", error);
+        });
+    }
   },
   components: {
     sideBar,
+  },
+  unmounted(){
+    if(!$store.state.holdDraft && $store.state.currUser!==null &&(this.mail.title.length!==0 || this.mail.sentToMails.length!==0 || this.mail.message.length!==0)){
+      this.addToDraft();
+    }
+    let currDraftMsg={
+            sentToMails: [],
+            date: "",
+            title: "",
+            sender: "",
+            message: "",
+            id: 0,
+            isRead: false,
+        }
+  $store.commit("setCurrMsg",currDraftMsg);   
+  $store.commit("setHoldDraft",false);
   },
   data() {
     return {
       selectedFile: null,
       sentto: "",
       mail: {
-        sentToMails: [],
-        date: "",
-        title: "",
-        sender: "",
-        message: "",
+        sentToMails: $store.state.currDraftMsg.sentToMails,
+        date: $store.state.currDraftMsg.date,
+        title: $store.state.currDraftMsg.title,
+        sender: $store.state.currDraftMsg.sender,
+        message: $store.state.currDraftMsg.message,
         id: 0,
         isRead: false,
       },
@@ -130,6 +186,72 @@ export default {
             throw new Error("Failed to send mail");
           }
           this.$router.push({ name: "inbox" });
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Server response:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error.message);
+        });
+        console.log($store.state.selectedMsg);
+        if($store.state.selectedMsg>0){
+          let x=$store.state.selectedMsg;
+        fetch(`http://localhost:8080/removeDraft/${x}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mailObject),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to send mail");
+          }
+          this.$router.push({ name: "inbox" });
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Server response:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error.message);
+        });
+      }
+    },
+    addToDraft() {
+      let emails = [];
+      emails = this.sentto.split(",");
+      let attachedfile = null;
+      let attachmenttype = null;
+      let attachmentName = null;
+
+      let SentObj = null;
+      if (this.selectedFile !== null) {
+        SentObj = this.attachmentOBJ;
+        console.log("yo");
+      }
+      const mailObject = {
+        sentToMails: emails,
+        date: this.mail.date,
+        title: this.mail.title,
+        sender: this.sender,
+        message: this.mail.message,
+        attachments: SentObj,
+        id: this.mail.id,
+      };
+      console.log(mailObject);
+      fetch(`http://localhost:8080/draft`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mailObject),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to send mail");
+          }
           return response.json();
         })
         .then((data) => {

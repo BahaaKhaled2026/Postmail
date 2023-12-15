@@ -2,7 +2,7 @@
   <div class="all">
     <section class="d-flex window">
       <sideBar/>
-      <div class="body d-flex flex-column align-items-start">
+      <div v-if="this.msg" class="body d-flex flex-column align-items-start">
         <h2>{{this.msg.title}}</h2>
         <div class="info d-flex flex-row justify-content-between">
           <h5>{{this.msg.sender}}</h5>
@@ -37,34 +37,6 @@ export default {
   },
   methods: {
     download(attch) {
-      // fetch(`http://localhost:8080/users`, {
-      //   method: "GET",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      // })
-      //   .then((response) => {
-      //     if (!response.ok) {
-      //       throw new Error("Failed to send mail");
-      //     }
-      //     return response.json();
-      //   })
-      //   .then((data) => {
-      //     console.log(data);
-      //     console.log(
-      //       data[0].sent[1].attachment,
-      //       "new",
-      //       data[0].sent[1].attType
-      //     );
-      //     this.downloadAttachment(
-      //       data[0].sent[1].attachment,
-      //       "new",
-      //       data[0].sent[1].attType
-      //     );
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error:", error.message);
-      //   });
       this.downloadAttachment(attch)
     },
 
@@ -95,6 +67,7 @@ export default {
     },
   },
   created() {
+
       console.log($store.state.currUser)
       console.log(this.id)
       const allMessages = [].concat(
@@ -107,6 +80,42 @@ export default {
   },
   mounted(){
       console.log(this.msg)
+      setInterval(() => {
+      this.messages =
+        $store.state.currUser && $store.state.currUser.inbox
+          ? $store.state.currUser.inbox
+          : null;
+    }, 50);
+    const userDataString = localStorage.getItem("userData");
+    if (!userDataString) {
+      $store.commit("setLoginStatus", false);
+      $store.commit("setCurrUser", null);
+    } else {
+      $store.commit("setLoginStatus", true);
+      let em = JSON.parse(userDataString).email;
+      let newData;
+      fetch(`http://localhost:8080/users/${em}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        })
+        .then((userData) => {
+          console.log(userData);
+          newData = userData;
+          $store.commit("setCurrUser", newData);
+        })
+        .catch((error) => {
+          console.error("Error during login:", error);
+        });
+    }
   }
 };
 </script>

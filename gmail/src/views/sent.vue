@@ -2,7 +2,7 @@
   <div class="all">
     <section class="d-flex window">
       <sideBar />
-      <div v-if="messages.length !== 0" class="body flex-column">
+      <div v-if="hasMessages" class="body flex-column">
         <navBar />
         <msgBar v-for="msg in messages" :key="msg.id" :msg="msg" />
       </div>
@@ -64,8 +64,13 @@ export default {
   },
   data() {
     return {
-      messages: {},
+      messages: null,
     };
+  },
+  computed: {
+    hasMessages() {
+      return this.messages && this.messages.length > 0;
+    },
   },
 };
 </script>

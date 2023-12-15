@@ -116,6 +116,39 @@ public class services {
         }
     }
 
+    @PostMapping("/draft")
+    public ResponseEntity<String> addToDraft(@RequestBody mail mailObject) {
+        System.out.println(mailObject.getSender());
+        try {
+            ArrayList<UserData>usersData=userDataService.getUsersData();
+            UserData sender=userDataService.getUserByEmail(mailObject.getSender());
+            mailObject.setId(sender.getMsgId()+1);
+            usersData.get(sender.getIndex()).getDraft().add(mailObject);
+            System.out.println(usersData);
+            userDataService.writeUsersData(usersData);
+            return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
+        } catch (Exception e) {
+
+            return new ResponseEntity<>("Failed to send mail", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/removeDraft/{id}")
+    public ResponseEntity<String> removeDraft(@RequestBody mail mailObject , @PathVariable int id) {
+        System.out.println(mailObject.toString());
+        try {
+
+            ArrayList<UserData>usersData=userDataService.getUsersData();
+            
+            UserData sender=userDataService.getUserByEmail(mailObject.getSender());
+            usersData.get(sender.getIndex()).getDraft().remove(id-1);
+            userDataService.writeUsersData(usersData);
+            return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to send mail", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/checkExist")
     public boolean checkExist(@RequestBody String email){
         ArrayList<UserData> users =userDataService.getUsersData();
