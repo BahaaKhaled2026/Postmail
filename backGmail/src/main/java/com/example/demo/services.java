@@ -126,7 +126,8 @@ public class services {
                     usersData.get(index.get(i)).getContacts().add(sender.getEmail());
                 }
                 if(!sender.getContacts().contains(usersData.get(index.get(i)).getEmail())){
-                    sender.getContacts().add(usersData.get(index.get(i)).getEmail());
+                    usersData.get(sender.getIndex()).getContacts().add(usersData.get(index.get(i)).getEmail());
+                    System.out.println("done");
                 }
             }
             userDataService.writeUsersData(usersData);

@@ -59,8 +59,15 @@ export default {
       this.sender = $store.state.currUser.email;
     }
   },
-
+updated(){
+  if($store.state.selectedMsg===-1){
+      this.sentto=$store.state.wantedContact;
+    }
+},
   mounted() {
+    if($store.state.selectedMsg===-1){
+      this.sentto=$store.state.wantedContact;
+    }
     if($store.state.selectedMsg>0){
       $store.state.currDraftMsg.sentToMails.map((ms,index)=>{
         if($store.state.currDraftMsg.sentToMails.length===1){

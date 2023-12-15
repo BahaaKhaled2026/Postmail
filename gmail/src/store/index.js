@@ -20,9 +20,13 @@ export default createStore({
         search: "",
         searchType:"",
         selectedMsg:-1,
-        sendClicked:false
+        sendClicked:false,
+        wantedContact:""
     },
     mutations: {
+        setWantedContact(state,status){
+            state.wantedContact=status;
+        },
         setCurrUser(state, user) {
             state.currUser = user;
             if (state.currUser !== null) {
