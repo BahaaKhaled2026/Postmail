@@ -379,7 +379,7 @@ export default {
   border-bottom-right-radius: 20px;
   box-shadow: 3px 0px 14px 0px #00000086;
   overflow-y: scroll;
-  overflow-x: hidden;
+
 }
 .all {
   height: 100%;
