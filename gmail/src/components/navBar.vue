@@ -3,6 +3,7 @@
     <input type="text" placeholder="search" />
     <button @click="sortMsgAsc">sortDec</button>
     <button @click="sortMsgDec">sortAsc</button>
+    <button @click="sortMsgPri">sortpriority</button>
     <button @click="signOut">signOut</button>
   </section>
 </template>
@@ -17,6 +18,10 @@ export default {
     },
     sortMsgDec() {
       this.$store.commit("sortMsgDec");
+      console.log($store.state.currUser.inbox);
+    },
+    sortMsgPri() {
+      this.$store.commit("sortMsgPri");
       console.log($store.state.currUser.inbox);
     },
     signOut() {

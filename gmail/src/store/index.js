@@ -39,6 +39,13 @@ export default createStore({
         setCurrMsg(state,status){
             state.currDraftMsg=status
         },
+        updatepriority(state, payload) {
+            const { msg, usersRate } = payload;
+            console.log(usersRate);
+            state.currUser.inbox = state.currUser.inbox.filter((m) => m.id !== msg.id);
+            msg.priorityLvl = usersRate;
+            state.currUser.inbox.push(msg);
+        },
         setHoldDraft(state,status){
             state.holdDraft=status
         },
@@ -86,7 +93,21 @@ export default createStore({
             state.currUser.sent.sort((a,b) => {
                 return b.id - a.id;
             });
-        }
+        },
+        sortMsgPri(state) {
+            state.currUser.inbox.sort((a,b) => {
+                return b.priorityLvl - a.priorityLvl;
+            });
+            state.currUser.trash.sort((a,b) => {
+                return b.priorityLvl - a.priorityLvl;
+            });
+            state.currUser.draft.sort((a,b) => {
+                return b.priorityLvl - a.priorityLvl;
+            });
+            state.currUser.sent.sort((a,b) => {
+                return b.priorityLvl - a.priorityLvl;
+            });
+          },
     },
     actions:{
     },

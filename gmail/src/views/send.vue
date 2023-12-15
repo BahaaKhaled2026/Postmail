@@ -24,10 +24,26 @@
             @change="handleFileChange"
           />
         </div>
-        <button @click="sendMail" class="btn">
-          <i class="fa-brands fa-telegram"></i>
-        </button>
         <!-- <button @click="getusers">hat</button> -->
+        <div class="bttn d-flex flex-row-reverse row">
+          <button @click="sendMail">
+            <p>Send</p>
+            <svg
+              stroke-width="4"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              fill="none"
+              class="h-6 w-6"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+                stroke-linejoin="round"
+                stroke-linecap="round"
+              ></path>
+            </svg>
+          </button>
+        </div>
       </div>
     </section>
   </div>
@@ -39,15 +55,15 @@ import sideBar from "@/components/sideBar.vue";
 
 export default {
   created() {
-  if ($store.state.currUser) {
-    this.sender = $store.state.currUser.email;
-  }
-},
+    if ($store.state.currUser) {
+      this.sender = $store.state.currUser.email;
+    }
+  },
 
   mounted() {
     this.getCurrentDate();
-    console.log(this.msg)
-      setInterval(() => {
+    console.log(this.msg);
+    setInterval(() => {
       this.messages =
         $store.state.currUser && $store.state.currUser.inbox
           ? $store.state.currUser.inbox
@@ -87,21 +103,27 @@ export default {
   components: {
     sideBar,
   },
-  unmounted(){
-    if(!$store.state.holdDraft && $store.state.currUser!==null &&(this.mail.title.length!==0 || this.mail.sentToMails.length!==0 || this.mail.message.length!==0)){
+  unmounted() {
+    if (
+      !$store.state.holdDraft &&
+      $store.state.currUser !== null &&
+      (this.mail.title.length !== 0 ||
+        this.mail.sentToMails.length !== 0 ||
+        this.mail.message.length !== 0)
+    ) {
       this.addToDraft();
     }
-    let currDraftMsg={
-            sentToMails: [],
-            date: "",
-            title: "",
-            sender: "",
-            message: "",
-            id: 0,
-            isRead: false,
-        }
-  $store.commit("setCurrMsg",currDraftMsg);   
-  $store.commit("setHoldDraft",false);
+    let currDraftMsg = {
+      sentToMails: [],
+      date: "",
+      title: "",
+      sender: "",
+      message: "",
+      id: 0,
+      isRead: false,
+    };
+    $store.commit("setCurrMsg", currDraftMsg);
+    $store.commit("setHoldDraft", false);
   },
   data() {
     return {
@@ -194,29 +216,29 @@ export default {
         .catch((error) => {
           console.error("Error:", error.message);
         });
-        console.log($store.state.selectedMsg);
-        if($store.state.selectedMsg>0){
-          let x=$store.state.selectedMsg;
+      console.log($store.state.selectedMsg);
+      if ($store.state.selectedMsg > 0) {
+        let x = $store.state.selectedMsg;
         fetch(`http://localhost:8080/removeDraft/${x}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(mailObject),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to send mail");
-          }
-          this.$router.push({ name: "inbox" });
-          return response.json();
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(mailObject),
         })
-        .then((data) => {
-          console.log("Server response:", data);
-        })
-        .catch((error) => {
-          console.error("Error:", error.message);
-        });
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to send mail");
+            }
+            this.$router.push({ name: "inbox" });
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Server response:", data);
+          })
+          .catch((error) => {
+            console.error("Error:", error.message);
+          });
       }
     },
     addToDraft() {
@@ -366,6 +388,7 @@ textarea {
 }
 textarea,
 input {
+  border-radius: 10px;
   margin-right: 5px;
   display: block;
   padding: 2px 1px;
@@ -384,11 +407,73 @@ input:focus {
   margin: 10px;
   width: max-content;
 }
-.btn {
-  position: relative;
-  margin: 10px;
+.bttn{
+  max-width: 80px;
+}
+button {
+  padding: 0;
+  margin: 0;
   border: none;
-  left: 400px;
-  bottom: -20px;
+  background: none;
+}
+
+button {
+  --primary-color: #111;
+  --hovered-color: #c84747;
+  position: relative;
+  display: flex;
+  font-weight: 600;
+  font-size: 20px;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+button p {
+  margin: 0;
+  position: relative;
+  font-size: 20px;
+  color: var(--primary-color)
+}
+
+button::after {
+  position: absolute;
+  content: "";
+  width: 0;
+  left: 0;
+  bottom: -7px;
+  background: var(--hovered-color);
+  height: 2px;
+  transition: 0.3s ease-out;
+}
+
+button p::before {
+  position: absolute;
+  content: "Send";
+  width: 0%;
+  inset: 0;
+  color: var(--hovered-color);
+  overflow: hidden;
+  transition: 0.3s ease-out;
+}
+
+button:hover::after {
+  width: 100%;
+}
+
+button:hover p::before {
+  width: 100%;
+}
+
+button:hover svg {
+  transform: translateX(4px);
+  color: var(--hovered-color)
+}
+
+button svg {
+  color: var(--primary-color);
+  transition: 0.2s;
+  position: relative;
+  width: 15px;
+  transition-delay: 0.2s;
 }
 </style>

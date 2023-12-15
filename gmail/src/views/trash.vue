@@ -3,7 +3,6 @@
     <section class="d-flex window">
       <sideBar />
       <div v-if="hasMessages" class="body flex-column">
-        <navBar />
         <msgBar v-for="msg in messages" :key="msg.id" :msg="msg" />
       </div>
       <div v-else class="body flex-column">
@@ -17,12 +16,10 @@
 import $store from "../store/index.js";
 import msgBar from "@/components/msgBar.vue";
 import sideBar from "@/components/sideBar.vue";
-import navBar from "@/components/navBar.vue";
 export default {
   components: {
     sideBar,
     msgBar,
-    navBar,
   },
   mounted() {
     setInterval(() => {
@@ -101,5 +98,9 @@ export default {
   margin: auto;
   border-radius: 50px;
   height: 700px;
+}
+.body > *{
+  margin : 2px ;
+  margin-top: 5px;
 }
 </style>
