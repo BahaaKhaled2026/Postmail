@@ -106,7 +106,7 @@
       <li class="nav-item2">
         <div class="row">
           <div class="col-12">
-            <div class="col-12">
+            <div class="col-9">
               <div class="group">
                 <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
                   <g>
@@ -115,7 +115,21 @@
                     ></path>
                   </g>
                 </svg>
-                <input placeholder="Search" type="search" class="input" />
+                <input
+                  placeholder="Search"
+                  type="search"
+                  class="input"
+                  v-model="search"
+                  @input="searchMsg"
+                />
+                <div class="col-2">
+                  <select v-model="searchType">
+                    <option value="title">title</option>
+                    <option value="date">date</option>
+                    <option value="sender">sender</option>
+                    <option value="message">message</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -168,9 +182,15 @@ export default {
         trash: [],
       },
       currUser: { inbox: [], draft: [], sent: [], trash: [] },
+      search: "",
+      searchType: "",
     };
   },
   mounted() {
+    $store.commit("setSearch", localStorage.getItem("search"));
+    this.search = $store.state.search;
+    $store.commit("setSearchType", localStorage.getItem("searchType"));
+    this.searchType = $store.state.searchType;
     setInterval(() => {
       if (this.$store.state.currUser && this.$store.state.currUser.inbox) {
         this.messages = { ...this.$store.state.currUser };
@@ -198,6 +218,45 @@ export default {
       this.$store.commit("setLoginStatus", false);
       this.$store.commit("setCurrUser", null);
       this.$router.push({ name: "prehome" });
+    },
+    searchMsg() {
+      const userDataString = localStorage.getItem("userData");
+      if (!userDataString) {
+        $store.commit("setLoginStatus", false);
+        $store.commit("setCurrUser", null);
+      } else {
+        $store.commit("setLoginStatus", true);
+        let em = JSON.parse(userDataString).email;
+        let newData;
+        fetch(`http://localhost:8080/users/${em}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+          })
+          .then((userData) => {
+            console.log(userData);
+            newData = userData;
+            $store.commit("setSearch", this.search);
+            $store.commit("setSearchType", this.searchType);
+            const fakeToken = "your-fake-token";
+            localStorage.setItem("search", $store.state.search);
+            localStorage.setItem("searchType", $store.state.searchType);
+            localStorage.setItem("token", fakeToken);
+            $store.commit("setCurrUser", newData);
+            $store.commit("searchMsg", localStorage.getItem("search"));
+          })
+          .catch((error) => {
+            console.error("Error during login:", error);
+          });
+      }
     },
   },
 };

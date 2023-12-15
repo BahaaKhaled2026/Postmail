@@ -53,6 +53,11 @@ export default {
         .then((userData) => {
           console.log(userData);
           newData = userData;
+          $store.commit("setSearch", localStorage.getItem("search"));
+          $store.commit("setSearchType", localStorage.getItem("searchType"));
+          setTimeout(() => {
+            $store.commit("searchMsg", $store.state.search);
+          }, 0);
           $store.commit("setCurrUser", newData);
         })
         .catch((error) => {
@@ -103,8 +108,8 @@ export default {
   border-radius: 50px;
   height: 700px;
 }
-.body > *{
-  margin : 2px ;
+.body > * {
+  margin: 2px;
   margin-top: 5px;
 }
 </style>
