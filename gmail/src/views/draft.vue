@@ -4,7 +4,7 @@
       <sideBar />
       <div v-if="messages.length !== 0" class="body flex-column">
         <draftMsg
-          @click="goTosend(msg)"
+          
           v-for="msg in messages"
           :key="msg.id"
           :msg="msg"
@@ -73,20 +73,6 @@ export default {
     }
   },
   methods: {
-    goTosend(ms) {
-      console.log(ms);
-      $store.state.currDraftMsg.sentToMails = ms.sentToMails;
-
-      $store.commit("setCurrMsg", ms);
-
-      this.$router.push({ name: "send" });
-      $store.commit("setHoldDraft", true);
-      let x = $store.state.currDraftMsg.id;
-      console.log(x);
-      $store.commit("setSelectedMsg", x);
-      console.log($store.state.selectedMsg);
-      console.log(this.messages);
-    },
   },
   data() {
     return {

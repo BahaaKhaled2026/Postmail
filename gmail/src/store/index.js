@@ -126,6 +126,18 @@ export default createStore({
                 return b.priorityLvl - a.priorityLvl;
             });
         },
+        restore(state, msg) {
+            state.currUser.trash = state.currUser.trash.filter(m => m.id !== msg.id);
+            if(msg.sender===state.currUser.email){
+                state.currUser.sent.push(msg);
+            }
+            else{
+                state.currUser.inbox.push(msg);
+            }
+        },
+        deleteMsg(state, msg) {
+            state.currUser.draft = state.currUser.draft.filter(m => m !== msg);
+        },
         searchMsg(state, search) {
             if(state.searchType=="title"){
             state.currUser.inbox = state.currUser.inbox.filter((m) => m.title.includes(search));

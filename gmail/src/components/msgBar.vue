@@ -4,7 +4,7 @@
       <div class="sender d-flex justify-content-between">
         <p @click="openMessage">{{ msg.title }}</p>
         <div class="actions d-flex">
-          <div class="yourrate">
+          <div v-show="inTrash" class="yourrate">
             <i
               class="fa-solid fa-star"
               @mousedown="mousedown(1)"
@@ -87,6 +87,9 @@
               </svg>
             </button>
           </div>
+          <div v-show="!inTrash" class="trashbtn">
+            <button @click="restore">restore</button>
+          </div>
         </div>
       </div>
       <div class="title">
@@ -148,6 +151,33 @@ export default {
       this.usersRate = index;
       this.clicked = true;
       this.updatepriority();
+    },
+    restore() {
+      $store.commit("restore", this.msg);
+      fetch(
+        `http://localhost:8080/updateMessages/${$store.state.currUser.email}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify($store.state.currUser),
+        }
+      )
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        })
+        .then((userData) => {
+          $store.commit("setCurrUser", userData);
+          console.log(userData);
+        })
+        .catch((error) => {
+          console.error("Error during login:", error);
+        });
     },
     updatepriority() {
       $store.commit("updatepriority", {

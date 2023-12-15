@@ -27,7 +27,7 @@ export default {
         $store.state.currUser && $store.state.currUser.trash
           ? $store.state.currUser.trash
           : null;
-    }, 100);
+    }, 50);
     const userDataString = localStorage.getItem("userData");
     if (!userDataString) {
       $store.commit("setLoginStatus", false);

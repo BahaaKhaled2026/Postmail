@@ -2,12 +2,15 @@
   <div class="msg">
     <div class="row msgBody flex-column">
       <div class="sender d-flex justify-content-between">
-        <p @click="openMessage">{{ msg.title }}</p>
+        <p @click="goTosend(msg)">{{ msg.title }}</p>
         <div class="title">
-          <p @click="openMessage">{{ sentTo }}</p>
+          <p @click="goTosend(msg)">{{ sentTo }}</p>
         </div>
         <div class="date">
-          <p @click="openMessage">{{ msg.date }}</p>
+          <p @click="goTosend(msg)">{{ msg.date }}</p>
+        </div>
+        <div class="delete">
+          <button @click="deleteMsg">delete</button>
         </div>
       </div>
     </div>
@@ -25,21 +28,18 @@ import $store from "../store/index.js";
 export default {
   props: ["msg"],
   mounted() {
-    if($store.state.selectedMsg>0){
-      $store.state.currDraftMsg.sentToMails.map((ms,index)=>{
-        if($store.state.currDraftMsg.sentToMails.length===1){
-          this.sentto+=ms
-        }
-        else{
-          if($store.state.currDraftMsg.sentToMails.length-1===index){
-            this.sentto+=ms
+    if ($store.state.selectedMsg > 0) {
+      $store.state.currDraftMsg.sentToMails.map((ms, index) => {
+        if ($store.state.currDraftMsg.sentToMails.length === 1) {
+          this.sentto += ms;
+        } else {
+          if ($store.state.currDraftMsg.sentToMails.length - 1 === index) {
+            this.sentto += ms;
+          } else {
+            this.sentto += ms + ",";
           }
-          else{
-            this.sentto+=ms+','
-          }
-          
         }
-      })
+      });
     }
   },
   data() {
@@ -47,6 +47,49 @@ export default {
       messages: this.msg,
       sentTo: "",
     };
+  },
+  methods: {
+    goTosend(ms) {
+      console.log(ms);
+      $store.state.currDraftMsg.sentToMails = ms.sentToMails;
+
+      $store.commit("setCurrMsg", ms);
+
+      this.$router.push({ name: "send" });
+      $store.commit("setHoldDraft", true);
+      let x = $store.state.currDraftMsg.id;
+      console.log(x);
+      $store.commit("setSelectedMsg", x);
+      console.log($store.state.selectedMsg);
+      console.log(this.messages);
+    },
+    deleteMsg() {
+      $store.commit("deleteMsg", this.msg);
+      fetch(
+        `http://localhost:8080/updateMessages/${$store.state.currUser.email}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify($store.state.currUser),
+        }
+      )
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        })
+        .then((userData) => {
+          $store.commit("setCurrUser", userData);
+          console.log(userData);
+        })
+        .catch((error) => {
+          console.error("Error during login:", error);
+        });
+    },
   },
 };
 </script>
