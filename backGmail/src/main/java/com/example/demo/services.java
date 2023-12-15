@@ -135,13 +135,14 @@ public class services {
 
     @PostMapping("/removeDraft/{id}")
     public ResponseEntity<String> removeDraft(@RequestBody mail mailObject , @PathVariable int id) {
-        System.out.println(mailObject.toString());
+        System.out.println("draftttt"+mailObject.toString());
         try {
 
             ArrayList<UserData>usersData=userDataService.getUsersData();
-            
+
             UserData sender=userDataService.getUserByEmail(mailObject.getSender());
-            usersData.get(sender.getIndex()).getDraft().remove(id-1);
+            int z=userDataService.getMsgIndByID(usersData.get(sender.getIndex()).getDraft(),id);
+            usersData.get(sender.getIndex()).getDraft().remove(z);
             userDataService.writeUsersData(usersData);
             return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
         } catch (Exception e) {

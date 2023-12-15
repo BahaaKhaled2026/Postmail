@@ -61,6 +61,22 @@ export default {
   },
 
   mounted() {
+    if($store.state.selectedMsg>0){
+      $store.state.currDraftMsg.sentToMails.map((ms,index)=>{
+        if($store.state.currDraftMsg.sentToMails.length===1){
+          this.sentto+=ms
+        }
+        else{
+          if($store.state.currDraftMsg.sentToMails.length-1===index){
+            this.sentto+=ms
+          }
+          else{
+            this.sentto+=ms+','
+          }
+          
+        }
+      })
+    }
     this.getCurrentDate();
     console.log(this.msg);
     setInterval(() => {
@@ -219,6 +235,8 @@ export default {
       console.log($store.state.selectedMsg);
       if ($store.state.selectedMsg > 0) {
         let x = $store.state.selectedMsg;
+        console.log(x);
+        mailObject.id=x;
         fetch(`http://localhost:8080/removeDraft/${x}`, {
           method: "POST",
           headers: {

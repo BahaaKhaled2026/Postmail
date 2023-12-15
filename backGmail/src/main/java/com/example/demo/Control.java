@@ -14,7 +14,7 @@ import java.util.List;
 public class Control {
     private final ObjectMapper objectMapper = new ObjectMapper();
 //7ngls'path:"D:\\vue\\Gmail\\backGmail\\usersData.json"
-    private static final String JSON_FILE_PATH = "D:\\Visual Studio Code\\connect 4\\Gmail\\backGmail\\usersData.json";
+    private static final String JSON_FILE_PATH = "D:\\vue\\Gmail\\backGmail\\usersData.json";
     public ArrayList<UserData> usersData;
     public void cleanTrash(ArrayList<mail>x){
         Calendar calendar = Calendar.getInstance();
@@ -29,7 +29,14 @@ public class Control {
             }
         }
     }
-
+    public int getMsgIndByID(ArrayList<mail>x,int id){
+        for(int i=0;i<x.size();i++){
+            if(id==x.get(i).getId()){
+                return i;
+            }
+        }
+        return -1;
+    }
 
     public ArrayList<UserData> getUsersData() {
         try {

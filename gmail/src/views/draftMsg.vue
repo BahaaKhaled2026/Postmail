@@ -4,7 +4,7 @@
       <div class="sender d-flex justify-content-between">
         <p @click="openMessage">{{ msg.title }}</p>
         <div class="title">
-          <p @click="openMessage">{{ msg.sender }}</p>
+          <p @click="openMessage">{{ sentTo }}</p>
         </div>
         <div class="date">
           <p @click="openMessage">{{ msg.date }}</p>
@@ -21,12 +21,26 @@
 </template>
 
 <script>
+import $store from "../store/index.js";
 export default {
   props: ["msg"],
   mounted() {
-    this.messages.sentToMails.map((mail) => {
-      this.sentTo = this.sentTo + mail + ",";
-    });
+    if($store.state.selectedMsg>0){
+      $store.state.currDraftMsg.sentToMails.map((ms,index)=>{
+        if($store.state.currDraftMsg.sentToMails.length===1){
+          this.sentto+=ms
+        }
+        else{
+          if($store.state.currDraftMsg.sentToMails.length-1===index){
+            this.sentto+=ms
+          }
+          else{
+            this.sentto+=ms+','
+          }
+          
+        }
+      })
+    }
   },
   data() {
     return {

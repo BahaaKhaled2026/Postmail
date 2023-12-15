@@ -47,7 +47,7 @@
             ></i>
           </div>
           <div class="trashbtn">
-            <button class="button" @click="moveToTrash">
+            <button v-show="inTrash" class="button" @click="moveToTrash">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

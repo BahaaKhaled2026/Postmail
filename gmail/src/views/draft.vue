@@ -63,10 +63,16 @@ export default {
   methods: {
     goTosend(ms){
       console.log(ms);
+      $store.state.currDraftMsg.sentToMails=ms.sentToMails;
+      
       $store.commit("setCurrMsg",ms);
+
       this.$router.push({ name: "send" });
       $store.commit("setHoldDraft",true);
-      $store.commit("setSelectedMsg",ms.id)
+      let x=$store.state.currDraftMsg.id
+      console.log(x);
+      $store.commit("setSelectedMsg",x)
+      console.log($store.state.selectedMsg);
       console.log(this.messages);
     }
   },
