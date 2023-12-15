@@ -3,7 +3,7 @@
     <section class="d-flex">
       <div class="img"></div>
       <div class="form">
-        <form @submit.prevent="logIn">
+        <form @submit.prevent="logIn" class="container">
           <router-link to="/">
             <h2>
               <i class="fa-solid fa-arrow-left" style="color: #000000"></i></h2
@@ -17,38 +17,42 @@
             <h5>Some Data Is Missing</h5>
           </div>
           <div class="row">
-            <form class="container" action="">
-              <div class="input-container">
-                <div class="input-content">
-                  <div class="input-dist">
-                    <div class="input-type">
-                      <input class="input-is" type="email" required v-model="email" placeholder="Email" />
-                      <input
-                        class="input-is"
-                        type="password"
-                        required=""
-                        placeholder="Password"
-                        v-model="password"
-                      />
-                    </div>
+            <div class="input-container">
+              <div class="input-content">
+                <div class="input-dist">
+                  <div class="input-type">
+                    <input
+                      class="input-is"
+                      type="email"
+                      required
+                      v-model="email"
+                      placeholder="Email"
+                    />
+                    <input
+                      class="input-is"
+                      type="password"
+                      required=""
+                      placeholder="Password"
+                      v-model="password"
+                    />
                   </div>
                 </div>
               </div>
-              <div
+            </div>
+            <div
               v-show="this.userNotFound"
               class="alert alert-danger"
               role="alert"
             >
               <h5>Wrong Email Or Paassword</h5>
             </div>
-              
-            </form>
-            
             <router-link to="/forgetPassword" class="nav-link links">
               <h6>Forget Your Password</h6>
             </router-link>
           </div>
-          <button @click="checkMissingData" class="submit-button">Log in</button>
+          <button @click="checkMissingData" class="submit-button">
+            Log in
+          </button>
           <div class="row">
             <router-link to="/signup" class="nav-link links">
               <h6 class="center">Don't have an account? Sign up</h6>
@@ -359,7 +363,6 @@ in other input type*/
   flex-wrap: nowrap;
   flex-direction: column;
   gap: 1em;
-  
 }
 
 .input-container {
@@ -610,6 +613,5 @@ in other input type*/
       drop-shadow(-55px -40px 28px #9e30a9);
   }
 }
-
 </style>
 
