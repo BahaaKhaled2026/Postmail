@@ -470,6 +470,7 @@ export default {
       trash: [],
       draft: [],
       msgId:0,
+      contacts:[],
     };
 
     fetch(`http://localhost:8080/checkExist`, {

@@ -19,6 +19,8 @@ export default createStore({
         selectedMsg: -1,
         search: "",
         searchType:"",
+        selectedMsg:-1,
+        sendClicked:false
     },
     mutations: {
         setCurrUser(state, user) {
@@ -40,6 +42,9 @@ export default createStore({
         },
         setSearch(state, search) {
             state.search = search;
+        },
+        setSendClicked(state,status){
+            state.sendClicked=status
         },
         setSearchType(state,searchType){
             state.searchType = searchType

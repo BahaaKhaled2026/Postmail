@@ -70,6 +70,15 @@ public class UserData {
     private String firstName;
     private String lastName;
     private String gender;
+    private ArrayList<String>contacts;
+
+    public ArrayList<String> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(ArrayList<String> contacts) {
+        this.contacts = contacts;
+    }
 
     public ArrayList<mail> getFavourites() {
         return favourites;

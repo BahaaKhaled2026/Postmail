@@ -125,7 +125,7 @@ export default {
       $store.state.currUser !== null &&
       (this.mail.title.length !== 0 ||
         this.mail.sentToMails.length !== 0 ||
-        this.mail.message.length !== 0)
+        this.mail.message.length !== 0) && !$store.state.sendClicked
     ) {
       this.addToDraft();
     }
@@ -258,6 +258,9 @@ export default {
             console.error("Error:", error.message);
           });
       }
+      $store.commit("setSendClicked",true)
+      $store.commit("setSelectedMsg",-1);
+      console.log($store.state.selectedMsg);
     },
     addToDraft() {
       let emails = [];

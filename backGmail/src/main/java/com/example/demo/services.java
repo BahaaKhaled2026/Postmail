@@ -89,25 +89,46 @@ public class services {
     public ResponseEntity<String> sendMail(@RequestBody mail mailObject) {
         System.out.println(mailObject.toString());
         try {
+            UserData sender=userDataService.getUserByEmail(mailObject.getSender());
             ArrayList<UserData>usersData=userDataService.getUsersData();
             ArrayList<Integer>index=new ArrayList<>();
             ArrayList<String>sentTo=mailObject.getSentToMails();
+            System.out.println("2bl el for");
             for(int i=0;i<mailObject.getSentToMails().size();i++){
                 index.add(userDataService.getUserByEmail(sentTo.get(i)).getIndex());
+                System.out.println(i);
             }
+            System.out.println(index.size());
             for(int i=0;i<index.size();i++){
                 int id=usersData.get(index.get(i)).getMsgId()+1;
                 mail temp=mailObject;
                 temp.setId(id);
                 usersData.get(index.get(i)).addMailInbox(temp);
                 usersData.get(index.get(i)).setMsgId(id);
+                System.out.println((usersData.get(index.get(i)).getContacts().contains(sender.getEmail())));
+
+                System.out.println(sender.getContacts());
             }
             int idSender=userDataService.getUserByEmail(mailObject.getSender()).getMsgId()+1;
             mail temp=mailObject;
             temp.setId(idSender);
-            UserData sender=userDataService.getUserByEmail(mailObject.getSender());
             usersData.get(sender.getIndex()).addMailSent(temp);
             usersData.get(sender.getIndex()).setMsgId(idSender);
+            ArrayList<String> senderContacts=sender.getContacts();
+            int ind;
+            //hms7 el sender mn el sent to lw mwgood
+            if(mailObject.getSentToMails().contains(sender.getEmail())){
+                index.remove(mailObject.getSentToMails().indexOf(sender.getEmail()));
+            }
+
+            for(int i=0;i<index.size();i++){
+                if(!usersData.get(index.get(i)).getContacts().contains(sender.getEmail())){
+                    usersData.get(index.get(i)).getContacts().add(sender.getEmail());
+                }
+                if(!sender.getContacts().contains(usersData.get(index.get(i)).getEmail())){
+                    sender.getContacts().add(usersData.get(index.get(i)).getEmail());
+                }
+            }
             userDataService.writeUsersData(usersData);
             return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
         } catch (Exception e) {
