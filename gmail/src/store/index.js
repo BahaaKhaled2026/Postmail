@@ -58,7 +58,6 @@ export default createStore({
         },
         updatepriority(state, payload) {
             const { msg, usersRate } = payload;
-            console.log(usersRate);
             state.currUser.inbox = state.currUser.inbox.filter((m) => m.id !== msg.id);
             msg.priorityLvl = usersRate;
             state.currUser.inbox.push(msg);
@@ -163,6 +162,10 @@ export default createStore({
                 state.currUser.draft = state.currUser.draft.filter((m) => m.sender.includes(search));
                 state.currUser.sent = state.currUser.sent.filter((m) => m.sender.includes(search));
             }
+        },
+        createfolder(state, newfolder) {
+            console.log(newfolder);
+            state.currUser.folders.push(newfolder);
         },
     },
     actions: {

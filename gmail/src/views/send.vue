@@ -384,7 +384,7 @@ updated(){
 .body {
   background-color: #ebe6ef;
   width: 100%;
-  height: 635px;
+  height: 650px;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
   box-shadow: 3px 0px 14px 0px #00000086;

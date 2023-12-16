@@ -87,12 +87,12 @@ export default {
 .body {
   background-color: #ebe6ef;
   width: 100%;
-  height: 635px;
+  height: 650px;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
   box-shadow: 3px 0px 14px 0px #00000086;
   overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-x: scroll;
 }
 .all {
   height: 100%;
@@ -107,6 +107,7 @@ export default {
   margin: auto;
   border-radius: 50px;
   height: 700px;
+  
 }
 .body > * {
   margin: 2px;

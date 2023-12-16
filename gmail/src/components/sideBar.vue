@@ -103,6 +103,25 @@
           </div>
         </router-link>
       </li>
+      <li class="nav-item">
+        <router-link class="nav-link active" to="/allfolders">
+          <div class="row">
+            <div class="col-3">
+              <i class="fa-solid fa-folder"></i>
+            </div>
+            <div class="col-6">Folders</div>
+            <div class="col-3">
+              <div class="col-3">
+                {{
+                  $store.state.currUser && $store.state.currUser.inbox
+                    ? $store.state.currUser.folders.length
+                    : 0
+                }}
+              </div>
+            </div>
+          </div>
+        </router-link>
+      </li>
       <li class="nav-item2">
         <div class="row">
           <div class="col-12">
@@ -122,15 +141,15 @@
                   v-model="search"
                   @input="searchMsg"
                 />
-                <div class="col-2">
-                  <select v-model="searchType">
+              </div>
+              <div class="col-2 dropdown">
+                  <select v-model="searchType" class = "menu">
                     <option value="title">title</option>
                     <option value="date">date</option>
                     <option value="sender">sender</option>
                     <option value="message">message</option>
                   </select>
                 </div>
-              </div>
             </div>
           </div>
         </div>
@@ -139,12 +158,12 @@
         <div class="container">
           <form>
             <label>
-              <input type="radio" name="radio" checked="" @click="sortMsgAsc" />
-              <span>time asc</span>
+              <input type="radio" name="radio" checked="" @click="sortMsgDec" />
+              <span>time desc</span>
             </label>
             <label>
-              <input type="radio" name="radio" @click="sortMsgDec" />
-              <span>time desc</span>
+              <input type="radio" name="radio" @click="sortMsgAsc" />
+              <span>time asc</span>
             </label>
             <label>
               <input type="radio" name="radio" @click="sortMsgPri" />
@@ -259,6 +278,7 @@ export default {
         .catch((error) => {
           console.error("Error during login:", error);
         });
+        this.sortMsgDec ;
     }
   },
   methods: {
@@ -333,7 +353,7 @@ export default {
   background-color: rgb(167, 178, 194);
   padding: 10px;
   width: 220px;
-  height: 634px;
+  height: 650px;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
   box-shadow: -3px 0px 14px 0px #00000086;
@@ -518,7 +538,7 @@ export default {
 }
 
 .input {
-  width: 100%;
+  width: 180px ;  
   height: 40px;
   line-height: 28px;
   padding: 0 1rem;
@@ -820,5 +840,17 @@ input:hover {
   transform: scale(var(--nav-active-scale));
   visibility: visible;
   opacity: 1;
+} 
+
+.dropdown{
+  margin-top : 5px ;
+  margin-left: 5px ;
+}
+.menu{
+  border-radius: 10px ;
+  outline: none;
+  border-color: rgba(234, 76, 137, 0.4);
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgb(234 76 137 / 10%);
 }
 </style>

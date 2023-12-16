@@ -7,7 +7,7 @@ public class UserData {
     public UserData(){
 
     }
-    public UserData(int index, String email, String password, String securityQuestion, String securityAnswer, String firstName, String lastName, String gender, ArrayList<mail> inbox, ArrayList<mail> sent, ArrayList<mail> draft, ArrayList<mail> trash , ArrayList<mail> favourites) {
+    public UserData(int index, String email, String password, String securityQuestion, String securityAnswer, String firstName, String lastName, String gender, ArrayList<mail> inbox, ArrayList<mail> sent, ArrayList<mail> draft, ArrayList<mail> trash , ArrayList<mail> favourites ,ArrayList<folder> folders) {
         this.index = index;
         this.email = email;
         this.password = password;
@@ -21,6 +21,7 @@ public class UserData {
         this.draft = draft;
         this.trash = trash;
         this.favourites = favourites ;
+        this.folders = folders ;
     }
 
     public int getIndex() {
@@ -93,6 +94,16 @@ public class UserData {
     private ArrayList<mail>draft;
     private ArrayList<mail>trash; // add spam
     private ArrayList<mail> favourites ;
+    private ArrayList<folder> folders ;
+
+    public ArrayList<folder> getFolders() {
+        return folders;
+    }
+
+    public void setFolders(ArrayList<folder> folders) {
+        this.folders = folders;
+    }
+
     private int msgId=0;
 
     public int getMsgId() {
