@@ -134,6 +134,8 @@
                     ></path>
                   </g>
                 </svg>
+                <div>
+              <div>
                 <input
                   placeholder="Search"
                   type="search"
@@ -141,6 +143,7 @@
                   v-model="search"
                   @input="searchMsg"
                 />
+              </div>
               </div>
               <div class="col-2 dropdown">
                   <select v-model="searchType" class = "menu">
@@ -150,6 +153,7 @@
                     <option value="message">message</option>
                   </select>
                 </div>
+              </div>
             </div>
           </div>
         </div>
@@ -199,6 +203,11 @@
           </label>
         </div>
       </li>
+      <div class="input-container">
+        <input v-model="contact" placeholder="Add Contact" type="text">
+        <button @click="addContact" class="button">Add</button>
+      </div>
+      
       <li class="nav-item2">
         <div class="row">
           <div class="col-12">
@@ -221,6 +230,7 @@ export default {
   },
   data() {
     return {
+      contact:"",
       messages: {
         inbox: [],
         draft: [],
@@ -282,6 +292,31 @@ export default {
     }
   },
   methods: {
+    addContact(){
+      let userEmail=$store.state.currUser.email;
+      if(this.contact.length!==0){
+        console.log("contact is added");
+      fetch(`http://localhost:8080/addContact/${userEmail}/${this.contact}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to send mail");
+          }
+          this.$router.push({ name: "inbox" });
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Server response:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error.message);
+        });
+      }
+    },
     goSend(x){
       $store.commit("setWantedContact",x);
       console.log(x);
@@ -391,6 +426,9 @@ export default {
   overflow: hidden;
   transition: all 0.5s ease-in-out;
 }
+.flex-column{
+  height: 100vh;
+}
 
 .button:hover {
   box-shadow: 0.5px 0.5px 150px #252525;
@@ -438,6 +476,9 @@ export default {
 
 .type1:hover::before {
   transform: translateY(-50px) scale(0) rotate(120deg);
+}
+.flex-column{
+  width: 300px;
 }
 .animated-button {
   margin-left: 25px;
@@ -852,5 +893,69 @@ input:hover {
   border-color: rgba(234, 76, 137, 0.4);
   background-color: #fff;
   box-shadow: 0 0 0 4px rgb(234 76 137 / 10%);
+}
+
+
+.input-container {
+  display: flex;
+  background: white;
+  border-radius: 1rem;
+  background: linear-gradient(45deg, #c5c5c5 0%, #ffffff 100%);
+  box-shadow: 20px 20px 20px #d8d8d8,-10px -10px 20px #f8f8f8;
+  padding: 0.3rem;
+  gap: 0.3rem;
+}
+
+.input-container input {
+  border-radius: 0.8rem 0 0 0.8rem;
+  background: #e8e8e8;
+  box-shadow: inset 13px 13px 10px #dcdcdc,
+            inset -13px -13px 10px #f4f4f4;
+  width: 100%;
+  flex-basis: 75%;
+  padding: 1rem;
+  border: none;
+  border-left: 2px solid #4998FF;
+  color: #5e5e5e;
+  transition: all 0.2s ease-in-out;
+}
+
+.input-container input:focus {
+  border-left: 2px solid #4998FF;
+  outline: none;
+  box-shadow: inset 13px 13px 10px #BFF0FA,inset -13px -13px 10px #f4f4f4;
+}
+
+.input-container button {
+  flex-basis: 25%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #BFF0FA 0%, #4998FF 100%);
+  font-weight: 900;
+  letter-spacing: 0.3rem;
+  text-transform: uppercase;
+  color: white;
+  border: none;
+  width: 100%;
+  border-radius: 0 1rem 1rem 0;
+  transition: all 0.2s ease-in-out;
+}
+
+.input-container button:hover {
+  background: linear-gradient(135deg, #BFF0FA 0%, #4998ffc4 100%);
+}
+
+@media (max-width: 500px) {
+  .input-container {
+    flex-direction: column;
+  }
+
+  .input-container input {
+    border-radius: 0.8rem;
+  }
+
+  .input-container button {
+    padding: 1rem;
+    border-radius: 0.8rem;
+  }
 }
 </style>

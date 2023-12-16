@@ -59,11 +59,6 @@ export default {
       this.sender = $store.state.currUser.email;
     }
   },
-updated(){
-  if($store.state.selectedMsg===-1){
-      this.sentto=$store.state.wantedContact;
-    }
-},
   mounted() {
     if($store.state.selectedMsg===-1){
       this.sentto=$store.state.wantedContact;
@@ -396,14 +391,14 @@ updated(){
   background-color: rgb(203, 220, 247);
 }
 .window {
-  padding-top: 30px;
+  padding-top: 0px;
   display: flex;
   flex-flow: row;
   justify-content: center;
-  width: 80%;
+  width: 100%;
   margin: auto;
   border-radius: 50px;
-  height: 700px;
+  height: 100vh;
 }
 .row {
   margin: 10px;
@@ -454,7 +449,14 @@ button {
   border: none;
   background: none;
 }
-
+.window{
+  height: 100vh;
+  
+}
+.flex-column{
+  height: 100vh;
+  
+}
 button {
   --primary-color: #111;
   --hovered-color: #c84747;

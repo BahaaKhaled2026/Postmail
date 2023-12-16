@@ -137,6 +137,23 @@ public class services {
             return new ResponseEntity<>("Failed to send mail", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @PostMapping("/addContact/{user}/{email}")
+    public ResponseEntity<String> addContact(@PathVariable String user,@PathVariable String email) {
+
+        try {
+            UserData sender=userDataService.getUserByEmail(user);
+            ArrayList<UserData>usersData=userDataService.getUsersData();
+            if(!user.equals(email) && !sender.getContacts().contains(email)) {
+                usersData.get(sender.getIndex()).getContacts().add(email);
+
+                userDataService.writeUsersData(usersData);
+            }
+            return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
+        } catch (Exception e) {
+
+            return new ResponseEntity<>("Failed to send mail", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping("/draft")
     public ResponseEntity<String> addToDraft(@RequestBody mail mailObject) {

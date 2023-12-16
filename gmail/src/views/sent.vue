@@ -101,17 +101,23 @@ export default {
   background-color: rgb(203, 220, 247);
 }
 .window {
-  padding-top: 30px;
+  padding-top: 0px;
   display: flex;
   flex-flow: row;
   justify-content: center;
-  width: 80%;
+  width: 100%;
   margin: auto;
   border-radius: 50px;
-  height: 700px;
+  
 }
 .body > * {
   margin: 2px;
   margin-top: 5px;
+}
+.window{
+  height: 100vh;
+}
+.flex-column{
+  height: 100vh;
 }
 </style>
