@@ -315,6 +315,39 @@ export default {
         .catch((error) => {
           console.error("Error:", error.message);
         });
+        const userDataString = localStorage.getItem("userData");
+        if (!userDataString) {
+      $store.commit("setLoginStatus", false);
+      $store.commit("setCurrUser", null);
+    } 
+    else {
+      $store.commit("setLoginStatus", true);
+      let em = JSON.parse(userDataString).email;
+      let newData;
+      fetch(`http://localhost:8080/users/${em}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        })
+        .then((userData) => {
+          console.log(userData);
+          this.userContacts=userData.contacts;
+          newData = userData;
+          $store.commit("setCurrUser", newData);
+        })
+        .catch((error) => {
+          console.error("Error during login:", error);
+        });
+    }
+
       }
     },
     goSend(x){

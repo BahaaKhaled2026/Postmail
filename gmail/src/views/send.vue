@@ -122,6 +122,7 @@ export default {
     sideBar,
   },
   unmounted() {
+    $store.commit("setWantedContact","");
     if (
       !$store.state.holdDraft &&
       $store.state.currUser !== null &&
