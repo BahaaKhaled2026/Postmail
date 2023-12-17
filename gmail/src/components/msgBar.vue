@@ -114,7 +114,7 @@
               v-for="fld in folders"
               :key="fld.foldername"
             >
-              <input type="checkbox" v-model="isChecked[fld.index]" />
+              <input type="checkbox" v-model="isChecked" />
               <label for="myCheckbox">{{ fld.foldername }}</label>
             </div>
           </div>
@@ -138,7 +138,7 @@ export default {
       inTrash: !$store.state.currUser.trash.includes(this.msg),
       showfolders: false,
       folders : $store.state.currUser.folders,
-      isChecked: new Array(this.folders.length).fill(false),
+      isChecked: false ,
     };
   },
   props: ["msg"],
