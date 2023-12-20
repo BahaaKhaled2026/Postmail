@@ -1,41 +1,46 @@
 <template>
   <section class="flex-column">
     <ul class="nav flex-column">
-      <li>
-        <button @click="deletechoosen">delete</button>
-      </li>
-      <li>
-        <button @click="restorechoosen">restore</button>
-      </li>
-      <li>
-        <button>tofolder</button>
-      </li>
+      
       <li class="nav-item">
         <router-link class="nav-link" to="/send">
-          <button class="animated-button">
-            <svg
-              viewBox="0 0 24 24"
-              class="arr-2"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-              ></path>
-            </svg>
-            <span class="text">Send</span>
-            <span class="circle"></span>
-            <svg
-              viewBox="0 0 24 24"
-              class="arr-1"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-              ></path>
-            </svg>
-          </button>
+          <div class="sendBtn">
+            <button class="animated-button">
+              <svg
+                viewBox="0 0 24 24"
+                class="arr-2"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+                ></path>
+              </svg>
+              <span class="text">Send</span>
+              <span class="circle"></span>
+              <svg
+                viewBox="0 0 24 24"
+                class="arr-1"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+                ></path>
+              </svg>
+            </button>
+          </div>
         </router-link>
       </li>
+      <div class="bts">
+        <li>
+          <button class="topBts" @click="deletechoosen">delete</button>
+        </li>
+        <li>
+          <button class="topBts" @click="restorechoosen">restore</button>
+        </li>
+        <li>
+          <button class="topBts">tofolder</button>
+        </li>
+      </div>
       <li class="nav-item">
         <router-link class="nav-link active" to="/inbox">
           <div class="row">
@@ -184,43 +189,46 @@
             </label>
           </form>
         </div>
-        <div>
-          <label class="popup">
-            <input type="checkbox" />
-            <div class="burger" tabindex="0">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-            <nav class="popup-window">
-              <legend>Contacts</legend>
-              <ul>
-                <li v-for="contact in userContacts" :key="contact">
-                  <button @click="goSend(contact)">
-                    <svg
-                      stroke-linejoin="round"
-                      stroke-linecap="round"
-                      stroke-width="2"
-                      stroke="currentColor"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      height="14"
-                      width="14"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"
-                      ></path>
-                      <circle r="4" cy="7" cx="9"></circle>
-                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                    </svg>
-                    <span>{{ contact }}</span>
-                  </button>
-                </li>
-              </ul>
-            </nav>
-          </label>
+        <div class="contactss">
+          <div><span class="cnt">contacts</span></div>
+          <div class="dropCnt">
+            <label class="popup">
+              <input type="checkbox" />
+              <div class="burger" tabindex="0">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <nav class="popup-window">
+                <legend>Contacts</legend>
+                <ul>
+                  <li v-for="contact in userContacts" :key="contact">
+                    <button @click="goSend(contact)">
+                      <svg
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        height="14"
+                        width="14"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"
+                        ></path>
+                        <circle r="4" cy="7" cx="9"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                      </svg>
+                      <span>{{ contact }}</span>
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </label>
+          </div>
         </div>
       </li>
       <div class="input-container">
@@ -536,6 +544,12 @@ export default {
 .nav a.router-link-exact-active {
   color: black;
 }
+.bts{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  margin-bottom: 20px;
+}
 .butn {
   margin-bottom: 20px;
   background-color: rgba(255, 0, 0, 0.582);
@@ -607,12 +621,24 @@ export default {
 .type1:hover::after {
   transform: translateY(0) scale(1.2);
 }
+.menu{
+  height: 40px;
+  position: relative;
+  bottom: 3px;
+  
+}
 
 .type1:hover::before {
   transform: translateY(-50px) scale(0) rotate(120deg);
 }
 .flex-column {
-  width: 300px;
+  width: 350px;
+}
+.sendBtn{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 .animated-button {
   margin-left: 25px;
@@ -764,7 +790,23 @@ input:hover {
   position: absolute;
   left: -9999px;
 }
-
+.contactss{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: left;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-left: 0px;
+  gap: 20px;
+}
+.cnt{
+  font-size: xx-large;
+}
+.dropCnt{
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
 .container label input:checked + span {
   background-color: rgba(255, 0, 0, 0.582);
   color: white;
@@ -1095,4 +1137,24 @@ input:hover {
     border-radius: 0.8rem;
   }
 }
+.topBts {
+  border: 2px solid #8cc6e3;
+  background-color: #8cc6e3;
+  border-radius: 0.9em;
+  padding: 0.8em 1.2em 0.8em 1em;
+  transition: all ease-in-out 0.2s;
+  font-size: 16px;
+ }
+ 
+ .topBts span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-weight: 600;
+ }
+ 
+ .topBts:hover {
+  background-color: #0071e2;
+ }
 </style>
