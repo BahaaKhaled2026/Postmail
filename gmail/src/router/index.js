@@ -11,6 +11,7 @@ import sent from '../views/sent.vue'
 import messsage from '../views/message.vue'
 import trash from '../views/trash.vue'
 import draft from '../views/draft.vue'
+import contacts from '../views/contacts.vue'
 import allfolders from '../views/allfolders.vue'
 import folder from '../views/folder.vue'
 const routes = [
@@ -86,6 +87,11 @@ const routes = [
     component : folder,
     props : true
   },
+  {
+    path: '/contacts',
+    name: 'contacts',
+    component : contacts
+  }
 ]
 
 const router = createRouter({
