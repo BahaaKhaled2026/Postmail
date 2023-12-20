@@ -10,7 +10,10 @@
             <button @click="createfolder">create folder</button>
           </div>
         </div>
-        <div class="test" v-for="fld in folders" :key="fld.foldername"> {{ fld.foldername }}</div>
+        <div class="test d-flex justify-content-between" v-for="fld in folders" :key="fld.foldername">
+           <p class="name flex-grow-1"  @click="openfolder(fld)" >{{ fld.foldername }}</p>
+           <button @click="deletefolder(fld)">delete</button>
+          </div>
       </div>
       <div v-else class="body flex-column">
         <h1>No Folders</h1>
@@ -89,15 +92,47 @@ export default {
     },
   },
   methods: {
+    deletefolder(fld){
+      $store.commit("deletefolder", fld);
+      fetch(
+        `http://localhost:8080/updateMessages/${$store.state.currUser.email}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify($store.state.currUser),
+        }
+      )
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        })
+        .then((userData) => {
+          $store.commit("setCurrUser", userData);
+          console.log(userData);
+        })
+        .catch((error) => {
+          console.error("Error during login:", error);
+        });
+    },
     showform() {
       this.showf = !this.showf;
     },
     createfolder(){
-        console.log(this.folders) ;
+        for(let i = 0 ; i < this.folders.length ; i++){
+          if(this.foldername === this.folders[i].foldername){
+            console.log("tmaaaaaaaaam") ;
+            return ;
+          }
+        }
         const newfolder = {
             messages: [] ,
             foldername : this.foldername ,
-            index : this.folders.length ,
+            folderindex: this.folders.length ,
         }
         $store.commit("createfolder" , newfolder) ;
         fetch(
@@ -125,6 +160,9 @@ export default {
           console.error("Error during login:", error);
         });
       console.log($store.currUser);
+    },
+    openfolder(fld){
+      this.$router.push({ name: "folder", params: { id: fld.folderindex } });
     }
   },
 };

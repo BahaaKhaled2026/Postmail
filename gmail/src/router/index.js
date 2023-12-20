@@ -12,6 +12,7 @@ import messsage from '../views/message.vue'
 import trash from '../views/trash.vue'
 import draft from '../views/draft.vue'
 import allfolders from '../views/allfolders.vue'
+import folder from '../views/folder.vue'
 const routes = [
   {
     path: '/',
@@ -78,6 +79,12 @@ const routes = [
     path: '/allfolders',
     name: 'allfolders',
     component: allfolders
+  },
+  {
+    path: '/folder/:id',
+    name : 'folder',
+    component : folder,
+    props : true
   },
 ]
 

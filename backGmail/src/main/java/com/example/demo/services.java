@@ -205,13 +205,11 @@ public class services {
         ArrayList<UserData> usersData = userDataService.getUsersData();
         System.out.println(usersData);
         try {
-            System.out.println("deleted");
             usersData.remove(user.getIndex()) ;
             usersData.add(user.getIndex(),user);
             userDataService.writeUsersData(usersData);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 }

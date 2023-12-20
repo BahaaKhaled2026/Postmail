@@ -18,14 +18,14 @@ export default createStore({
         holdDraft: false,
         selectedMsg: -1,
         search: "",
-        searchType:"",
-        selectedMsg:-1,
-        sendClicked:false,
-        wantedContact:""
+        searchType: "",
+        selectedMsg: -1,
+        sendClicked: false,
+        wantedContact: ""
     },
     mutations: {
-        setWantedContact(state,status){
-            state.wantedContact=status;
+        setWantedContact(state, status) {
+            state.wantedContact = status;
         },
         setCurrUser(state, user) {
             state.currUser = user;
@@ -47,20 +47,34 @@ export default createStore({
         setSearch(state, search) {
             state.search = search;
         },
-        setSendClicked(state,status){
-            state.sendClicked=status
+        setSendClicked(state, status) {
+            state.sendClicked = status
         },
-        setSearchType(state,searchType){
+        setSearchType(state, searchType) {
             state.searchType = searchType
         },
         setCurrMsg(state, status) {
             state.currDraftMsg = status
         },
         updatepriority(state, payload) {
-            const { msg, usersRate } = payload;
-            state.currUser.inbox = state.currUser.inbox.filter((m) => m.id !== msg.id);
-            msg.priorityLvl = usersRate;
-            state.currUser.inbox.push(msg);
+            const { msg, usersRate, route, index } = payload;
+            switch (route) {
+                case "inbox":
+                    state.currUser.inbox = state.currUser.inbox.filter((m) => m.id !== msg.id);
+                    msg.priorityLvl = usersRate;
+                    state.currUser.inbox.push(msg);
+                    break;
+                case "sent":
+                    state.currUser.sent = state.currUser.sent.filter((m) => m.id !== msg.id);
+                    msg.priorityLvl = usersRate;
+                    state.currUser.sent.push(msg);
+                    break;
+                case "folder":
+                    state.currUser.folders[index].messages = state.currUser.folders[index].messages.filter((m) => m.id !== msg.id);
+                    msg.priorityLvl = usersRate;
+                    state.currUser.folders[index].messages.push(msg);
+                    break;
+            }
         },
         setHoldDraft(state, status) {
             state.holdDraft = status
@@ -96,6 +110,11 @@ export default createStore({
             state.currUser.sent.sort((a, b) => {
                 return a.id - b.id;
             });
+            for (let i = 0; i < state.currUser.folders.length; i++) {
+                state.currUser.folders[i].messages.sort((a, b) => {
+                    return a.id - b.id;
+                });
+            }
         },
         sortMsgDec(state) {
             state.currUser.inbox.sort((a, b) => {
@@ -110,6 +129,11 @@ export default createStore({
             state.currUser.sent.sort((a, b) => {
                 return b.id - a.id;
             });
+            for (let i = 0; i < state.currUser.folders.length; i++) {
+                state.currUser.folders[i].messages.sort((a, b) => {
+                    return b.id - a.id;
+                });
+            }
         },
         sortMsgPri(state) {
             state.currUser.inbox.sort((a, b) => {
@@ -124,13 +148,19 @@ export default createStore({
             state.currUser.sent.sort((a, b) => {
                 return b.priorityLvl - a.priorityLvl;
             });
+            for (let i = 0; i < state.currUser.folders.length; i++) {
+                state.currUser.folders[i].messages.sort((a, b) => {
+                    return b.priorityLvl - a.priorityLvl;
+                });
+            }
         },
         restore(state, msg) {
             state.currUser.trash = state.currUser.trash.filter(m => m.id !== msg.id);
-            if(msg.sender===state.currUser.email){
+            if (msg.sender === state.currUser.email) {
                 state.currUser.sent.push(msg);
+                state.currUser.inbox.push(msg);
             }
-            else{
+            else {
                 state.currUser.inbox.push(msg);
             }
         },
@@ -138,25 +168,25 @@ export default createStore({
             state.currUser.draft = state.currUser.draft.filter(m => m !== msg);
         },
         searchMsg(state, search) {
-            if(state.searchType=="title"){
-            state.currUser.inbox = state.currUser.inbox.filter((m) => m.title.includes(search));
-            state.currUser.trash = state.currUser.trash.filter((m) => m.title.includes(search));
-            state.currUser.draft = state.currUser.draft.filter((m) => m.title.includes(search));
-            state.currUser.sent = state.currUser.sent.filter((m) => m.title.includes(search));
+            if (state.searchType == "title") {
+                state.currUser.inbox = state.currUser.inbox.filter((m) => m.title.includes(search));
+                state.currUser.trash = state.currUser.trash.filter((m) => m.title.includes(search));
+                state.currUser.draft = state.currUser.draft.filter((m) => m.title.includes(search));
+                state.currUser.sent = state.currUser.sent.filter((m) => m.title.includes(search));
             }
-            else if(state.searchType=="date"){
+            else if (state.searchType == "date") {
                 state.currUser.inbox = state.currUser.inbox.filter((m) => m.date.includes(search));
                 state.currUser.trash = state.currUser.trash.filter((m) => m.date.includes(search));
                 state.currUser.draft = state.currUser.draft.filter((m) => m.date.includes(search));
                 state.currUser.sent = state.currUser.sent.filter((m) => m.date.includes(search));
             }
-            else if(state.searchType=="message"){
+            else if (state.searchType == "message") {
                 state.currUser.inbox = state.currUser.inbox.filter((m) => m.message.includes(search));
                 state.currUser.trash = state.currUser.trash.filter((m) => m.message.includes(search));
                 state.currUser.draft = state.currUser.draft.filter((m) => m.message.includes(search));
                 state.currUser.sent = state.currUser.sent.filter((m) => m.message.includes(search));
             }
-            else if(state.searchType=="sender"){
+            else if (state.searchType == "sender") {
                 state.currUser.inbox = state.currUser.inbox.filter((m) => m.sender.includes(search));
                 state.currUser.trash = state.currUser.trash.filter((m) => m.sender.includes(search));
                 state.currUser.draft = state.currUser.draft.filter((m) => m.sender.includes(search));
@@ -164,9 +194,17 @@ export default createStore({
             }
         },
         createfolder(state, newfolder) {
-            console.log(newfolder);
             state.currUser.folders.push(newfolder);
         },
+        deletefolder(state, folder) {
+            state.currUser.folders = state.currUser.folders.filter(f => f.foldername !== folder.foldername);
+            for (let i = 0; i < state.currUser.folders.length; i++) {
+                state.currUser.folders[i].folderindex = i;
+            }
+        },
+        deletemsgfromfolder(state, msg) {
+            state.currUser.folders[msg.index].messages = state.currUser.folders[msg.index].messages.filter(m => m !== msg.message);
+        }
     },
     actions: {
     },

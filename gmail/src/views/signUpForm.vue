@@ -471,6 +471,7 @@ export default {
       draft: [],
       msgId:0,
       contacts:[],
+      favourites:[],
       folders:[],
     };
 
