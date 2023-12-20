@@ -67,14 +67,13 @@ export default {
     },
   },
   created() {
-
       console.log($store.state.currUser)
       console.log(this.id)
       const allMessages = [].concat(
       this.$store.state.currUser.inbox,
       this.$store.state.currUser.sent,
       this.$store.state.currUser.trash,
-      this.$store.state.currUser.draft
+      this.$store.state.currUser.draft,
   );
       this.msg = allMessages.find(msg => msg.id == this.$route.params.id)
   },
