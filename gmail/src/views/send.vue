@@ -18,31 +18,41 @@
         <div class="d-flex attch">
           <label><i class="fa-solid fa-paperclip"></i></label>
           <input
+            style="color: transparent"
             type="file"
             multiple
             ref="fileInput"
             @change="handleFileChange"
           />
         </div>
-        <!-- <button @click="getusers">hat</button> -->
-        <div class="bttn d-flex flex-row-reverse row">
-          <button @click="sendMail">
-            <p>Send</p>
-            <svg
-              stroke-width="4"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              fill="none"
-              class="h-6 w-6"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M14 5l7 7m0 0l-7 7m7-7H3"
-                stroke-linejoin="round"
-                stroke-linecap="round"
-              ></path>
-            </svg>
-          </button>
+        <div
+          class="d-flex attch"
+          v-for="attch in attachmentOBJ"
+          :key="attch.attName"
+        >
+          <p>{{ attch.attName }}</p>
+          <button @click="remove(attch)">x</button>
+        </div>
+        <div>
+          <div class="bttn d-flex flex-row-reverse row">
+            <button @click="sendMail">
+              <p>Send</p>
+              <svg
+                stroke-width="4"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                fill="none"
+                class="h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  stroke-linejoin="round"
+                  stroke-linecap="round"
+                ></path>
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -60,24 +70,21 @@ export default {
     }
   },
   mounted() {
-    if($store.state.selectedMsg===-1){
-      this.sentto=$store.state.wantedContact;
+    if ($store.state.selectedMsg === -1) {
+      this.sentto = $store.state.wantedContact;
     }
-    if($store.state.selectedMsg>0){
-      $store.state.currDraftMsg.sentToMails.map((ms,index)=>{
-        if($store.state.currDraftMsg.sentToMails.length===1){
-          this.sentto+=ms
-        }
-        else{
-          if($store.state.currDraftMsg.sentToMails.length-1===index){
-            this.sentto+=ms
+    if ($store.state.selectedMsg > 0) {
+      $store.state.currDraftMsg.sentToMails.map((ms, index) => {
+        if ($store.state.currDraftMsg.sentToMails.length === 1) {
+          this.sentto += ms;
+        } else {
+          if ($store.state.currDraftMsg.sentToMails.length - 1 === index) {
+            this.sentto += ms;
+          } else {
+            this.sentto += ms + ",";
           }
-          else{
-            this.sentto+=ms+','
-          }
-          
         }
-      })
+      });
     }
     this.getCurrentDate();
     console.log(this.msg);
@@ -122,13 +129,14 @@ export default {
     sideBar,
   },
   unmounted() {
-    $store.commit("setWantedContact","");
+    $store.commit("setWantedContact", "");
     if (
       !$store.state.holdDraft &&
       $store.state.currUser !== null &&
       (this.mail.title.length !== 0 ||
         this.mail.sentToMails.length !== 0 ||
-        this.mail.message.length !== 0) && !$store.state.sendClicked
+        this.mail.message.length !== 0) &&
+      !$store.state.sendClicked
     ) {
       this.addToDraft();
     }
@@ -161,6 +169,11 @@ export default {
     };
   },
   methods: {
+    remove(attch) {
+      this.attachmentOBJ = this.attachmentOBJ.filter(
+        (m) => m.attName !== attch.attName
+      );
+    },
     getCurrentDate() {
       const now = new Date();
       const timeZone = "Europe/Athens";
@@ -239,7 +252,7 @@ export default {
       if ($store.state.selectedMsg > 0) {
         let x = $store.state.selectedMsg;
         console.log(x);
-        mailObject.id=x;
+        mailObject.id = x;
         fetch(`http://localhost:8080/removeDraft/${x}`, {
           method: "POST",
           headers: {
@@ -261,8 +274,8 @@ export default {
             console.error("Error:", error.message);
           });
       }
-      $store.commit("setSendClicked",true)
-      $store.commit("setSelectedMsg",-1);
+      $store.commit("setSendClicked", true);
+      $store.commit("setSelectedMsg", -1);
       console.log($store.state.selectedMsg);
     },
     addToDraft() {
@@ -385,7 +398,6 @@ export default {
   border-bottom-right-radius: 20px;
   box-shadow: 3px 0px 14px 0px #00000086;
   overflow-y: scroll;
-
 }
 .all {
   height: 100%;
@@ -441,7 +453,7 @@ input:focus {
   margin: 10px;
   width: max-content;
 }
-.bttn{
+.bttn {
   max-width: 80px;
 }
 button {
@@ -450,13 +462,11 @@ button {
   border: none;
   background: none;
 }
-.window{
+.window {
   height: 100vh;
-  
 }
-.flex-column{
+.flex-column {
   height: 100vh;
-  
 }
 button {
   --primary-color: #111;
@@ -473,7 +483,7 @@ button p {
   margin: 0;
   position: relative;
   font-size: 20px;
-  color: var(--primary-color)
+  color: var(--primary-color);
 }
 
 button::after {
@@ -507,7 +517,7 @@ button:hover p::before {
 
 button:hover svg {
   transform: translateX(4px);
-  color: var(--hovered-color)
+  color: var(--hovered-color);
 }
 
 button svg {

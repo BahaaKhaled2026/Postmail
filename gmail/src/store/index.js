@@ -99,8 +99,26 @@ export default createStore({
             state.currUser.sent = state.currUser.sent.filter(m => m.id !== msg.id);
         },
         updateMsg(state, msg) {
+            if(state.currUser.inbox.some(m => m.id === msg.id)){
             state.currUser.inbox = state.currUser.inbox.filter(m => m.id !== msg.id);
             state.currUser.inbox.push(msg);
+            }
+            else if(state.currUser.sent.some(m => m.id === msg.id)){
+                state.currUser.sent = state.currUser.sent.filter(m => m.id !== msg.id);
+                state.currUser.sent.push(msg);
+            }
+            else if(state.currUser.trash.some(m => m.id === msg.id)){
+                state.currUser.trash = state.currUser.trash.filter(m => m.id !== msg.id);
+                state.currUser.trash.push(msg);
+            }
+            else{
+                for (let i = 0; i < state.currUser.folders.length; i++) {
+                    if(state.currUser.folders[i].messages.some(m => m.id === msg.id)){
+                        state.currUser.folders[i].messages = state.currUser.folders[i].messages.filter(m => m.id !== msg.id);
+                        state.currUser.folders[i].messages.push(msg);
+                    }
+                }
+            }
         },
         sortMsgAsc(state) {
             state.currUser.inbox.sort((a, b) => {

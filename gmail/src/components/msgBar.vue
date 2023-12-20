@@ -4,7 +4,7 @@
       <div class="sender d-flex justify-content-between">
         <p @click="openMessage">{{ msg.title }}</p>
         <div class="actions d-flex">
-          <input type="checkbox"  @click="choose" v-model="chosen"/>
+          <input type="checkbox" @click="choose" v-model="chosen" />
           <div v-show="inTrash" class="yourrate">
             <i
               class="fa-solid fa-star"
@@ -109,12 +109,8 @@
       <div class="dateandfolder d-flex justify-content-between">
         <div class="addtofilder d-flex flex-column">
           <button @click="showfs">addtofolder</button>
-          <div class="folders d-flex " v-if="showfolders">
-            <div
-              class="flds"
-              v-for="fld in folders"
-              :key="fld.foldername"
-            >
+          <div class="folders d-flex" v-if="showfolders">
+            <div class="flds" v-for="fld in folders" :key="fld.foldername">
               <input type="checkbox" v-model="isChecked[fld.folderindex]" />
               <label for="myCheckbox">{{ fld.foldername }}</label>
             </div>
@@ -138,59 +134,57 @@ export default {
       clicked: false,
       inTrash: !$store.state.currUser.trash.includes(this.msg),
       showfolders: false,
-      folders : $store.state.currUser.folders,
-      isChecked: [] ,
-      routename:"" ,
-      folderindex:null ,
-      chosen : false ,
+      folders: $store.state.currUser.folders,
+      isChecked: [],
+      routename: "",
+      folderindex: null,
+      chosen: false,
     };
   },
   props: ["msg"],
   methods: {
-    choose(){
-      if(!this.chosen){
+    choose() {
+      if (!this.chosen) {
         console.log("choose");
         $store.commit("choose", {
-        msg: this.msg,
-        route: this.routename,
-        index: this.folderindex,
-      });
-      console.log($store.state.inboxmirror);
-      }
-      else{
+          msg: this.msg,
+          route: this.routename,
+          index: this.folderindex,
+        });
+        console.log($store.state.inboxmirror);
+      } else {
         console.log("unchoose");
         $store.commit("unchoose", {
-        msg: this.msg,
-        route: this.routename,
-        index: this.folderindex,
-      });
-      console.log($store.state.inboxmirror);
+          msg: this.msg,
+          route: this.routename,
+          index: this.folderindex,
+        });
+        console.log($store.state.inboxmirror);
       }
     },
     showfs() {
-      if(this.showfolders === true){
-        this.addtofolders() ;
-        this.isChecked.fill(false) ;
+      if (this.showfolders === true) {
+        this.addtofolders();
+        this.isChecked.fill(false);
       }
       this.showfolders = !this.showfolders;
     },
-    msginfolder(id , index){
-      for(let i = 0 ; i < this.folders[index].messages.length ; i++){
-        if(this.folders[index].messages[i].id === id){
-          return true ;
+    msginfolder(id, index) {
+      for (let i = 0; i < this.folders[index].messages.length; i++) {
+        if (this.folders[index].messages[i].id === id) {
+          return true;
         }
       }
-      return false ;
+      return false;
     },
-    addtofolders(){
-      for(let i = 0 ; i < this.folders.length ; i++){
-        if(this.isChecked[i] === true){
-          if(!this.msginfolder(this.msg.id , i)){
-            let msgs = JSON.parse(JSON.stringify(this.msg)) ;
-            $store.state.currUser.folders[i].messages.push(msgs) ;
-          }
-          else{
-            console.log("tmam") ;
+    addtofolders() {
+      for (let i = 0; i < this.folders.length; i++) {
+        if (this.isChecked[i] === true) {
+          if (!this.msginfolder(this.msg.id, i)) {
+            let msgs = JSON.parse(JSON.stringify(this.msg));
+            $store.state.currUser.folders[i].messages.push(msgs);
+          } else {
+            console.log("tmam");
           }
         }
       }
@@ -222,13 +216,37 @@ export default {
     openMessage() {
       this.msg.read = true;
       $store.commit("updateMsg", this.msg);
+      fetch(
+        `http://localhost:8080/updateMessages/${$store.state.currUser.email}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify($store.state.currUser),
+        }
+      )
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        })
+        .then((userData) => {
+          $store.commit("setCurrUser", userData);
+          console.log(userData);
+        })
+        .catch((error) => {
+          console.error("Error during login:", error);
+        });
       this.$router.push({ name: "message", params: { id: this.msg.id } });
     },
-    deletemsgfromfolder(){
+    deletemsgfromfolder() {
       let msg = {
-        index : this.folderindex ,
-        message : this.msg ,
-      }
+        index: this.folderindex,
+        message: this.msg,
+      };
       $store.commit("deletemsgfromfolder", msg);
       fetch(
         `http://localhost:8080/updateMessages/${$store.state.currUser.email}`,
@@ -256,9 +274,9 @@ export default {
         });
     },
     moveToTrash() {
-      if(this.routename === "folder"){
-        this.deletemsgfromfolder() ;
-        return ;
+      if (this.routename === "folder") {
+        this.deletemsgfromfolder();
+        return;
       }
       $store.commit("moveToTrash", this.msg);
       fetch(
@@ -352,17 +370,17 @@ export default {
       console.log($store.currUser);
     },
   },
-  mounted(){
-    this.routename =  this.$route.name ;
-    this.folderindex = parseInt(this.$route.path.replace("/folder/" , ""));
-    console.log(this.routename) ;
-    console.log(this.$route.path) ;
-    console.log(this.folderindex) ;
-    for(let i = 0 ; i < this.folders.length ; i++){
-      this.isChecked.push(false) ;
+  mounted() {
+    this.routename = this.$route.name;
+    this.folderindex = parseInt(this.$route.path.replace("/folder/", ""));
+    console.log(this.routename);
+    console.log(this.$route.path);
+    console.log(this.folderindex);
+    for (let i = 0; i < this.folders.length; i++) {
+      this.isChecked.push(false);
     }
     console.log(this.isChecked);
-  }
+  },
 };
 </script>
 
