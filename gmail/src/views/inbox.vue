@@ -22,7 +22,7 @@ export default {
     sideBar,
     msgBar,
   },
-  updated(){
+  mounted(){
     if(!this.done){
       const userDataString = localStorage.getItem("userData");
     if (!userDataString) {

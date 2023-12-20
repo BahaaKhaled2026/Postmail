@@ -29,7 +29,7 @@ export default {
     msgBar,
     draftMsg,
   },
-  updated(){
+  mounted(){
     const userDataString = localStorage.getItem("userData");
     if (!userDataString) {
       $store.commit("setLoginStatus", false);

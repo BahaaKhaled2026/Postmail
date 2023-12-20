@@ -161,10 +161,12 @@ export default {
 </script>
 
 <style scoped>
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  
 }
 .form {
   padding: 50px;
@@ -194,7 +196,7 @@ section {
   box-shadow: rgba(0, 0, 0, 0.418) -8px 1px 10px 2px;
 }
 .all {
-  height: 100%;
+  height: 100vh;
   background-color: rgb(203, 220, 247);
 }
 img {

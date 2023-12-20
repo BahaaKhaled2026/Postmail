@@ -137,6 +137,54 @@ public class services {
             return new ResponseEntity<>("Failed to send mail", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/removeContact/{user}/{email}")
+    public ResponseEntity<String> removeContact(@PathVariable String user,@PathVariable String email) {
+        try {
+            UserData sender=userDataService.getUserByEmail(user);
+            ArrayList<UserData>usersData=userDataService.getUsersData();
+            if(sender.getContacts().contains(email)) {
+                ArrayList<String> userContacts=usersData.get(sender.getIndex()).getContacts();
+                for(int i=0;i<userContacts.size();i++) {
+                    if (userContacts.get(i).equals(email)) {
+                        usersData.get(sender.getIndex()).getContacts().remove(i);
+                        userDataService.writeUsersData(usersData);
+                        break;
+                    }
+                }
+            }
+            return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
+        } catch (Exception e) {
+
+            return new ResponseEntity<>("Failed to send mail", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PostMapping("/editContact/{user}/{email}/{newEmail}")
+    public ResponseEntity<String> editContact(@PathVariable String user,@PathVariable String email,@PathVariable String newEmail) {
+        System.out.println(email+" "+newEmail);
+        try {
+            UserData sender=userDataService.getUserByEmail(user);
+            ArrayList<UserData>usersData=userDataService.getUsersData();
+            System.out.println(sender);
+            if(sender.getContacts().contains(email)) {
+                ArrayList<String> userContacts=usersData.get(sender.getIndex()).getContacts();
+                System.out.println("mwgood");
+                for(int i=0;i<userContacts.size();i++) {
+                    if (userContacts.get(i).equals(email)) {
+                        usersData.get(sender.getIndex()).getContacts().set(i,newEmail);
+                        System.out.println(usersData.get(sender.getIndex()));
+                        userDataService.writeUsersData(usersData);
+                        break;
+                    }
+                }
+            }
+            System.out.println("done");
+            return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
+        } catch (Exception e) {
+
+            return new ResponseEntity<>("Failed to send mail", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     @PostMapping("/addContact/{user}/{email}")
     public ResponseEntity<String> addContact(@PathVariable String user,@PathVariable String email) {
 

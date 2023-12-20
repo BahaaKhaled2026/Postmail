@@ -191,19 +191,19 @@
         </div>
         <div class="contactss">
           <div><span class="cnt">contacts</span></div>
-          <div class="dropCnt">
+          <div class="dropCnt" >
             <label class="popup">
               <input type="checkbox" />
-              <div class="burger" tabindex="0">
+              <div class="burger" tabindex="0" @click="changeDrop">
                 <span></span>
                 <span></span>
                 <span></span>
               </div>
-              <nav class="popup-window">
+              <nav class="popup-window" v-show="isDropdownOpen">
                 <legend>Contacts</legend>
                 <ul>
                   <li v-for="contact in userContacts" :key="contact">
-                    <button @click="goSend(contact)">
+                    <button >
                       <svg
                         stroke-linejoin="round"
                         stroke-linecap="round"
@@ -222,7 +222,7 @@
                         <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                         <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                       </svg>
-                      <span>{{ contact }}</span>
+                      <span class="cntct" @click="goSend(contact)">{{ contact }}</span> <span class="edit" @click="changeAdd(contact)">✏️</span><span @click="removeContact(contact)" class="remove">🗙</span>
                     </button>
                   </li>
                 </ul>
@@ -232,8 +232,8 @@
         </div>
       </li>
       <div class="input-container">
-        <input v-model="contact" placeholder="Add Contact" type="text" />
-        <button @click="addContact" class="button">Add</button>
+        <input class="inp" ref="adding" v-model="contact" placeholder="Contact" type="text" />
+        <button @click="addOrEdit==='Add' ? addContact():editContact()" class="button">{{addOrEdit}}</button>
       </div>
 
       <li class="nav-item2">
@@ -271,6 +271,9 @@ export default {
       userContacts: [],
       routename: "",
       folderindex: null,
+      addOrEdit:"Add",
+      isDropdownOpen: false,
+      willBeEdited:""
     };
   },
   mounted() {
@@ -323,6 +326,140 @@ export default {
     }
   },
   methods: {
+    handleDocumentClick(event) {
+      const isInputOrButton = event.target.classList.contains('inp') || event.target.classList.contains('button');
+      if (!isInputOrButton) {
+        this.addOrEdit="Add"
+        location.reload();
+      }
+    },
+    changeDrop(){
+      this.isDropdownOpen=!this.isDropdownOpen;
+    },
+    changeAdd(x){
+      this.willBeEdited=x;
+      this.addOrEdit="Edit";
+      this.isDropdownOpen=false;
+      setTimeout(() =>{
+        this.$refs.adding.focus();
+      },500)
+      setTimeout(() =>{
+        document.addEventListener('click', this.handleDocumentClick);
+      },500)
+      
+    },
+    editContact() {
+      let userEmail = $store.state.currUser.email;
+      if (this.contact.length !== 0) {
+        console.log("contact is added");
+        fetch(`http://localhost:8080/editContact/${userEmail}/${this.willBeEdited}/${this.contact}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to send mail");
+            }
+            this.$router.push({ name: "inbox" });
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Server response:", data);
+          })
+          .catch((error) => {
+            console.error("Error:", error.message);
+          });
+        const userDataString = localStorage.getItem("userData");
+        if (!userDataString) {
+          $store.commit("setLoginStatus", false);
+          $store.commit("setCurrUser", null);
+        } else {
+          $store.commit("setLoginStatus", true);
+          let em = JSON.parse(userDataString).email;
+          let newData;
+          fetch(`http://localhost:8080/users/${em}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+            })
+            .then((userData) => {
+              console.log(userData);
+              this.userContacts = userData.contacts;
+              newData = userData;
+              $store.commit("setCurrUser", newData);
+            })
+            .catch((error) => {
+              console.error("Error during login:", error);
+            });
+        }
+      }
+      this.addOrEdit="Add";
+    },
+    removeContact(cont) {
+      let userEmail = $store.state.currUser.email;
+        console.log("contact is added");
+        fetch(`http://localhost:8080/removeContact/${userEmail}/${cont}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to send mail");
+            }
+            this.$router.push({ name: "inbox" });
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Server response:", data);
+          })
+          .catch((error) => {
+            console.error("Error:", error.message);
+          });
+        const userDataString = localStorage.getItem("userData");
+        if (!userDataString) {
+          $store.commit("setLoginStatus", false);
+          $store.commit("setCurrUser", null);
+        } else {
+          $store.commit("setLoginStatus", true);
+          let em = JSON.parse(userDataString).email;
+          let newData;
+          fetch(`http://localhost:8080/users/${em}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+            })
+            .then((userData) => {
+              console.log(userData);
+              this.userContacts = userData.contacts;
+              newData = userData;
+              $store.commit("setCurrUser", newData);
+            })
+            .catch((error) => {
+              console.error("Error during login:", error);
+            });
+        }
+      
+    },
     getmsgbyid(id, place) {
       if (place === "inbox") {
         for (let i = 0; i < $store.state.currUser.inbox.length; i++) {
@@ -540,7 +677,15 @@ export default {
   font-size: 18px;
   color: rgba(0, 0, 0, 0.315);
 }
-
+.edit:hover{
+  background-color: black;
+}
+.cntct:hover{
+  background-color: black;
+}
+.remove:hover{
+  background-color: black;
+}
 .nav a.router-link-exact-active {
   color: black;
 }
