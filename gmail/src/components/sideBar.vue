@@ -32,14 +32,31 @@
       </li>
       <div class="bts">
         <li>
-          <button class="topBts" @click="deletechoosen">delete</button>
-        </li>
-        <li>
-          <button class="topBts" @click="restorechoosen">restore</button>
-        </li>
-        <li>
-          <button class="topBts">tofolder</button>
-        </li>
+        <button
+        class = "topBts"
+          @click="deletechoosen"
+          v-show="routename == 'inbox' || routename == 'sent'"
+        >
+          delete
+        </button>
+      </li>
+      <li>
+        <button
+        class = "topBts"
+          @click="removechoosen"
+          v-show="routename == 'draft' || routename == 'folder'"
+        >
+          remove
+        </button>
+      </li>
+      <li>
+        <button class = "topBts" @click="restorechoosen" v-show="routename == 'trash'">
+          restore
+        </button>
+      </li>
+      <li>
+        <button class = "topBts">tofolder</button>
+      </li>
       </div>
       <li class="nav-item">
         <router-link class="nav-link active" to="/inbox">
@@ -467,18 +484,68 @@ export default {
             return $store.state.currUser.inbox[i];
           }
         }
-      } else {
+      } else if (place === "trash") {
         for (let i = 0; i < $store.state.currUser.trash.length; i++) {
           if (id === $store.state.currUser.trash[i].id) {
             return $store.state.currUser.trash[i];
           }
         }
+      } else if (place === "sent") {
+        for (let i = 0; i < $store.state.currUser.sent.length; i++) {
+          if (id === $store.state.currUser.sent[i].id) {
+            return $store.state.currUser.sent[i];
+          }
+        }
+      } else if (place === "draft") {
+        for (let i = 0; i < $store.state.currUser.draft.length; i++) {
+          if (id === $store.state.currUser.draft[i].id) {
+            return $store.state.currUser.draft[i];
+          }
+        }
       }
       return null;
     },
+    removechoosen() {
+      if (this.routename === "draft") {
+        for (let i = 0; i < $store.state.inboxmirror.length; i++) {
+          $store.commit(
+            "deleteMsg",
+            this.getmsgbyid($store.state.draftmirror[i], "draft")
+          );
+        }
+        $store.state.draftmirror = [];
+      }
+      fetch(
+        `http://localhost:8080/updateMessages/${$store.state.currUser.email}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify($store.state.currUser),
+        }
+      )
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        })
+        .then((userData) => {
+          $store.commit("setCurrUser", userData);
+          console.log(userData);
+        })
+        .catch((error) => {
+          console.error("Error during login:", error);
+        });
+    },
     restorechoosen() {
       for (let i = 0; i < $store.state.trashmirror.length; i++) {
-        $store.commit("restore", this.getmsgbyid($store.state.trashmirror[i]));
+        $store.commit(
+          "restore",
+          this.getmsgbyid($store.state.trashmirror[i], "trash")
+        );
       }
       $store.state.trashmirror = [];
       fetch(
@@ -507,13 +574,23 @@ export default {
         });
     },
     deletechoosen() {
-      for (let i = 0; i < $store.state.inboxmirror.length; i++) {
-        $store.commit(
-          "moveToTrash",
-          this.getmsgbyid($store.state.inboxmirror[i], "inbox")
-        );
+      if (this.routename === "inbox") {
+        for (let i = 0; i < $store.state.inboxmirror.length; i++) {
+          $store.commit(
+            "moveToTrash",
+            this.getmsgbyid($store.state.inboxmirror[i], "inbox")
+          );
+        }
+        $store.state.inboxmirror = [];
+      } else if (this.routename === "sent") {
+        for (let i = 0; i < $store.state.sentmirror.length; i++) {
+          $store.commit(
+            "moveToTrash",
+            this.getmsgbyid($store.state.sentmirror[i], "sent")
+          );
+        }
+        $store.state.sentmirror = [];
       }
-      $store.state.inboxmirror = [];
       fetch(
         `http://localhost:8080/updateMessages/${$store.state.currUser.email}`,
         {

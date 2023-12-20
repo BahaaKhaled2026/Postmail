@@ -26,7 +26,7 @@
     mounted() {
       setInterval(() => {
         this.messages =
-          $store.state.currUser && $store.state.currUser.folders[this.id].messages
+          $store.state.currUser && $store.state.currUser.folders[this.id] && $store.state.currUser.folders[this.id].messages
             ? $store.state.currUser.folders[this.id].messages
             : null;
       }, 50);
