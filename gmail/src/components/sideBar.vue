@@ -1,6 +1,15 @@
 <template>
   <section class="flex-column">
     <ul class="nav flex-column">
+      <li>
+        <button @click="deletechoosen">delete</button>
+      </li>
+      <li>
+        <button @click="restorechoosen">restore</button>
+      </li>
+      <li>
+        <button>tofolder</button>
+      </li>
       <li class="nav-item">
         <router-link class="nav-link" to="/send">
           <button class="animated-button">
@@ -135,18 +144,18 @@
                   </g>
                 </svg>
                 <div>
-              <div>
-                <input
-                  placeholder="Search"
-                  type="search"
-                  class="input"
-                  v-model="search"
-                  @input="searchMsg"
-                />
-              </div>
-              </div>
-              <div class="col-2 dropdown">
-                  <select v-model="searchType" class = "menu">
+                  <div>
+                    <input
+                      placeholder="Search"
+                      type="search"
+                      class="input"
+                      v-model="search"
+                      @input="searchMsg"
+                    />
+                  </div>
+                </div>
+                <div class="col-2 dropdown">
+                  <select v-model="searchType" class="menu">
                     <option value="title">title</option>
                     <option value="date">date</option>
                     <option value="sender">sender</option>
@@ -177,7 +186,7 @@
         </div>
         <div>
           <label class="popup">
-            <input type="checkbox">
+            <input type="checkbox" />
             <div class="burger" tabindex="0">
               <span></span>
               <span></span>
@@ -188,26 +197,37 @@
               <ul>
                 <li v-for="contact in userContacts" :key="contact">
                   <button @click="goSend(contact)">
-                    <svg stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <svg
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      height="14"
+                      width="14"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"
+                      ></path>
                       <circle r="4" cy="7" cx="9"></circle>
                       <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                       <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                     </svg>
-                    <span>{{contact}}</span>
+                    <span>{{ contact }}</span>
                   </button>
                 </li>
-                
               </ul>
             </nav>
           </label>
         </div>
       </li>
       <div class="input-container">
-        <input v-model="contact" placeholder="Add Contact" type="text">
+        <input v-model="contact" placeholder="Add Contact" type="text" />
         <button @click="addContact" class="button">Add</button>
       </div>
-      
+
       <li class="nav-item2">
         <div class="row">
           <div class="col-12">
@@ -230,7 +250,7 @@ export default {
   },
   data() {
     return {
-      contact:"",
+      contact: "",
       messages: {
         inbox: [],
         draft: [],
@@ -240,10 +260,14 @@ export default {
       currUser: { inbox: [], draft: [], sent: [], trash: [] },
       search: "",
       searchType: "",
-      userContacts:[]
+      userContacts: [],
+      routename: "",
+      folderindex: null,
     };
   },
   mounted() {
+    this.routename = this.$route.name;
+    this.folderindex = parseInt(this.$route.path.replace("/folder/", ""));
     $store.commit("setSearch", localStorage.getItem("search"));
     this.search = $store.state.search;
     $store.commit("setSearchType", localStorage.getItem("searchType"));
@@ -255,7 +279,6 @@ export default {
         this.messages = { inbox: [], draft: [], sent: [], trash: [] };
       }
     }, 50);
-
 
     const userDataString = localStorage.getItem("userData");
     if (!userDataString) {
@@ -281,55 +304,48 @@ export default {
         .then((userData) => {
           console.log(userData);
           newData = userData;
-          this.userContacts=userData.contacts;
+          this.userContacts = userData.contacts;
           console.log(this.userContacts);
           $store.commit("setCurrUser", newData);
         })
         .catch((error) => {
           console.error("Error during login:", error);
         });
-        this.sortMsgDec ;
+      this.sortMsgDec;
     }
   },
   methods: {
-    addContact(){
-      let userEmail=$store.state.currUser.email;
-      if(this.contact.length!==0){
-        console.log("contact is added");
-      fetch(`http://localhost:8080/addContact/${userEmail}/${this.contact}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to send mail");
+    getmsgbyid(id, place) {
+      if (place === "inbox") {
+        for (let i = 0; i < $store.state.currUser.inbox.length; i++) {
+          if (id === $store.state.currUser.inbox[i].id) {
+            return $store.state.currUser.inbox[i];
           }
-          this.$router.push({ name: "inbox" });
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Server response:", data);
-        })
-        .catch((error) => {
-          console.error("Error:", error.message);
-        });
-        const userDataString = localStorage.getItem("userData");
-        if (!userDataString) {
-      $store.commit("setLoginStatus", false);
-      $store.commit("setCurrUser", null);
-    } 
-    else {
-      $store.commit("setLoginStatus", true);
-      let em = JSON.parse(userDataString).email;
-      let newData;
-      fetch(`http://localhost:8080/users/${em}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+        }
+      } else {
+        for (let i = 0; i < $store.state.currUser.trash.length; i++) {
+          if (id === $store.state.currUser.trash[i].id) {
+            return $store.state.currUser.trash[i];
+          }
+        }
+      }
+      return null;
+    },
+    restorechoosen() {
+      for (let i = 0; i < $store.state.trashmirror.length; i++) {
+        $store.commit("restore", this.getmsgbyid($store.state.trashmirror[i]));
+      }
+      $store.state.trashmirror = [];
+      fetch(
+        `http://localhost:8080/updateMessages/${$store.state.currUser.email}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify($store.state.currUser),
+        }
+      )
         .then((response) => {
           if (response.ok) {
             return response.json();
@@ -338,20 +354,104 @@ export default {
           }
         })
         .then((userData) => {
+          $store.commit("setCurrUser", userData);
           console.log(userData);
-          this.userContacts=userData.contacts;
-          newData = userData;
-          $store.commit("setCurrUser", newData);
         })
         .catch((error) => {
           console.error("Error during login:", error);
         });
-    }
-
+    },
+    deletechoosen() {
+      for (let i = 0; i < $store.state.inboxmirror.length; i++) {
+        $store.commit(
+          "moveToTrash",
+          this.getmsgbyid($store.state.inboxmirror[i], "inbox")
+        );
+      }
+      $store.state.inboxmirror = [];
+      fetch(
+        `http://localhost:8080/updateMessages/${$store.state.currUser.email}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify($store.state.currUser),
+        }
+      )
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        })
+        .then((userData) => {
+          $store.commit("setCurrUser", userData);
+          console.log(userData);
+        })
+        .catch((error) => {
+          console.error("Error during login:", error);
+        });
+    },
+    addContact() {
+      let userEmail = $store.state.currUser.email;
+      if (this.contact.length !== 0) {
+        console.log("contact is added");
+        fetch(`http://localhost:8080/addContact/${userEmail}/${this.contact}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to send mail");
+            }
+            this.$router.push({ name: "inbox" });
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Server response:", data);
+          })
+          .catch((error) => {
+            console.error("Error:", error.message);
+          });
+        const userDataString = localStorage.getItem("userData");
+        if (!userDataString) {
+          $store.commit("setLoginStatus", false);
+          $store.commit("setCurrUser", null);
+        } else {
+          $store.commit("setLoginStatus", true);
+          let em = JSON.parse(userDataString).email;
+          let newData;
+          fetch(`http://localhost:8080/users/${em}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+            })
+            .then((userData) => {
+              console.log(userData);
+              this.userContacts = userData.contacts;
+              newData = userData;
+              $store.commit("setCurrUser", newData);
+            })
+            .catch((error) => {
+              console.error("Error during login:", error);
+            });
+        }
       }
     },
-    goSend(x){
-      $store.commit("setWantedContact",x);
+    goSend(x) {
+      $store.commit("setWantedContact", x);
       console.log(x);
       this.$router.push({ name: "send" });
     },
@@ -425,6 +525,7 @@ export default {
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
   box-shadow: -3px 0px 14px 0px #00000086;
+  overflow-y: scroll;
 }
 .nav a {
   font-weight: 700px;
@@ -459,7 +560,7 @@ export default {
   overflow: hidden;
   transition: all 0.5s ease-in-out;
 }
-.flex-column{
+.flex-column {
   height: 100vh;
 }
 
@@ -510,7 +611,7 @@ export default {
 .type1:hover::before {
   transform: translateY(-50px) scale(0) rotate(120deg);
 }
-.flex-column{
+.flex-column {
   width: 300px;
 }
 .animated-button {
@@ -612,7 +713,7 @@ export default {
 }
 
 .input {
-  width: 180px ;  
+  width: 180px;
   height: 40px;
   line-height: 28px;
   padding: 0 1rem;
@@ -699,22 +800,21 @@ input:hover {
   box-shadow: inset 0 0 0 0.125em rgba(55, 0, 0, 0.582);
 }
 
-
 /* The design is inspired from the mockapi.io */
 
 .popup {
   --burger-line-width: 1.125em;
   --burger-line-height: 0.125em;
   --burger-offset: 0.625em;
-  --burger-bg: rgba(0, 0, 0, .15);
+  --burger-bg: rgba(0, 0, 0, 0.15);
   --burger-color: #333;
   --burger-line-border-radius: 0.1875em;
   --burger-diameter: 2.125em;
   --burger-btn-border-radius: calc(var(--burger-diameter) / 2);
-  --burger-line-transition: .3s;
-  --burger-transition: all .1s ease-in-out;
+  --burger-line-transition: 0.3s;
+  --burger-transition: all 0.1s ease-in-out;
   --burger-hover-scale: 1.1;
-  --burger-active-scale: .95;
+  --burger-active-scale: 0.95;
   --burger-enable-outline-color: var(--burger-bg);
   --burger-enable-outline-width: 0.125em;
   --burger-enable-outline-offset: var(--burger-enable-outline-width);
@@ -724,11 +824,11 @@ input:hover {
   --nav-border-radius: 0.375em;
   --nav-border-color: #ccc;
   --nav-border-width: 0.0625em;
-  --nav-shadow-color: rgba(0, 0, 0, .2);
+  --nav-shadow-color: rgba(0, 0, 0, 0.2);
   --nav-shadow-width: 0 1px 5px;
   --nav-bg: #eee;
   --nav-font-family: Menlo, Roboto Mono, monospace;
-  --nav-default-scale: .8;
+  --nav-default-scale: 0.8;
   --nav-active-scale: 1;
   --nav-position-left: 0;
   --nav-position-right: unset;
@@ -817,7 +917,10 @@ input:hover {
   border-radius: var(--nav-border-radius);
   box-shadow: var(--nav-shadow-width) var(--nav-shadow-color);
   border: var(--nav-border-width) solid var(--nav-border-color);
-  top: calc(var(--burger-diameter) + var(--burger-enable-outline-width) + var(--burger-enable-outline-offset));
+  top: calc(
+    var(--burger-diameter) + var(--burger-enable-outline-width) +
+      var(--burger-enable-outline-offset)
+  );
   left: var(--nav-position-left);
   right: var(--nav-position-right);
   transition: var(--burger-transition);
@@ -870,7 +973,8 @@ input:hover {
 .popup-window hr {
   margin: var(--underline-margin-y) 0;
   border: none;
-  border-bottom: var(--underline-border-width) solid var(--underline-border-color);
+  border-bottom: var(--underline-border-width) solid
+    var(--underline-border-color);
 }
 
 /* actions */
@@ -896,45 +1000,46 @@ input:hover {
   outline-offset: var(--burger-enable-outline-offset);
 }
 
-.popup input:checked+.burger span:nth-child(1) {
+.popup input:checked + .burger span:nth-child(1) {
   top: 50%;
   transform: translateY(-50%) rotate(45deg);
 }
 
-.popup input:checked+.burger span:nth-child(2) {
+.popup input:checked + .burger span:nth-child(2) {
   bottom: 50%;
   transform: translateY(50%) rotate(-45deg);
 }
 
-.popup input:checked+.burger span:nth-child(3) {
-  transform: translateX(calc(var(--burger-diameter) * -1 - var(--burger-line-width)));
+.popup input:checked + .burger span:nth-child(3) {
+  transform: translateX(
+    calc(var(--burger-diameter) * -1 - var(--burger-line-width))
+  );
 }
 
-.popup input:checked~nav {
+.popup input:checked ~ nav {
   transform: scale(var(--nav-active-scale));
   visibility: visible;
   opacity: 1;
-} 
-
-.dropdown{
-  margin-top : 5px ;
-  margin-left: 5px ;
 }
-.menu{
-  border-radius: 10px ;
+
+.dropdown {
+  margin-top: 5px;
+  margin-left: 5px;
+}
+.menu {
+  border-radius: 10px;
   outline: none;
   border-color: rgba(234, 76, 137, 0.4);
   background-color: #fff;
   box-shadow: 0 0 0 4px rgb(234 76 137 / 10%);
 }
 
-
 .input-container {
   display: flex;
   background: white;
   border-radius: 1rem;
   background: linear-gradient(45deg, #c5c5c5 0%, #ffffff 100%);
-  box-shadow: 20px 20px 20px #d8d8d8,-10px -10px 20px #f8f8f8;
+  box-shadow: 20px 20px 20px #d8d8d8, -10px -10px 20px #f8f8f8;
   padding: 0.3rem;
   gap: 0.3rem;
 }
@@ -942,27 +1047,26 @@ input:hover {
 .input-container input {
   border-radius: 0.8rem 0 0 0.8rem;
   background: #e8e8e8;
-  box-shadow: inset 13px 13px 10px #dcdcdc,
-            inset -13px -13px 10px #f4f4f4;
+  box-shadow: inset 13px 13px 10px #dcdcdc, inset -13px -13px 10px #f4f4f4;
   width: 100%;
   flex-basis: 75%;
   padding: 1rem;
   border: none;
-  border-left: 2px solid #4998FF;
+  border-left: 2px solid #4998ff;
   color: #5e5e5e;
   transition: all 0.2s ease-in-out;
 }
 
 .input-container input:focus {
-  border-left: 2px solid #4998FF;
+  border-left: 2px solid #4998ff;
   outline: none;
-  box-shadow: inset 13px 13px 10px #BFF0FA,inset -13px -13px 10px #f4f4f4;
+  box-shadow: inset 13px 13px 10px #bff0fa, inset -13px -13px 10px #f4f4f4;
 }
 
 .input-container button {
   flex-basis: 25%;
   padding: 1rem;
-  background: linear-gradient(135deg, #BFF0FA 0%, #4998FF 100%);
+  background: linear-gradient(135deg, #bff0fa 0%, #4998ff 100%);
   font-weight: 900;
   letter-spacing: 0.3rem;
   text-transform: uppercase;
@@ -974,7 +1078,7 @@ input:hover {
 }
 
 .input-container button:hover {
-  background: linear-gradient(135deg, #BFF0FA 0%, #4998ffc4 100%);
+  background: linear-gradient(135deg, #bff0fa 0%, #4998ffc4 100%);
 }
 
 @media (max-width: 500px) {

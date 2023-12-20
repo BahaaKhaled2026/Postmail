@@ -4,6 +4,7 @@
       <div class="sender d-flex justify-content-between">
         <p @click="openMessage">{{ msg.title }}</p>
         <div class="actions d-flex">
+          <input type="checkbox"  @click="choose" v-model="chosen"/>
           <div v-show="inTrash" class="yourrate">
             <i
               class="fa-solid fa-star"
@@ -141,10 +142,31 @@ export default {
       isChecked: [] ,
       routename:"" ,
       folderindex:null ,
+      chosen : false ,
     };
   },
   props: ["msg"],
   methods: {
+    choose(){
+      if(!this.chosen){
+        console.log("choose");
+        $store.commit("choose", {
+        msg: this.msg,
+        route: this.routename,
+        index: this.folderindex,
+      });
+      console.log($store.state.inboxmirror);
+      }
+      else{
+        console.log("unchoose");
+        $store.commit("unchoose", {
+        msg: this.msg,
+        route: this.routename,
+        index: this.folderindex,
+      });
+      console.log($store.state.inboxmirror);
+      }
+    },
     showfs() {
       if(this.showfolders === true){
         this.addtofolders() ;

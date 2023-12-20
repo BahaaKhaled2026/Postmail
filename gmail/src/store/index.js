@@ -21,7 +21,12 @@ export default createStore({
         searchType: "",
         selectedMsg: -1,
         sendClicked: false,
-        wantedContact: ""
+        wantedContact: "",
+        inboxmirror: [],
+        sentmirror: [],
+        draftmirror: [],
+        trashmirror: [],
+        foldersmirror: [],
     },
     mutations: {
         setWantedContact(state, status) {
@@ -204,7 +209,41 @@ export default createStore({
         },
         deletemsgfromfolder(state, msg) {
             state.currUser.folders[msg.index].messages = state.currUser.folders[msg.index].messages.filter(m => m !== msg.message);
-        }
+        },
+        choose(state, payload) {
+            const { msg,route, index } = payload;
+            switch (route) {
+                case "inbox":
+                    state.inboxmirror.push(msg.id);
+                    break;
+                case "sent":
+                    state.sentmirror.push(msg.id);
+                    break;
+                case "trash":
+                    state.trashmirror.push(msg.id);
+                    break;
+                case "draft":
+                    state.draftmirror.push(msg.id);
+                    break;
+            }
+        },
+        unchoose(state, payload) {
+            const { msg,route, index } = payload;
+            switch (route) {
+                case "inbox":
+                    state.inboxmirror = state.inboxmirror.filter(m => m !== msg.id ) ;
+                    break;
+                case "sent":
+                    state.sentmirror = state.sentmirror.filter(m => m !== msg.id ) ;
+                    break;
+                case "trash":
+                    state.trashmirror = state.trashmirror.filter(m => m !== msg.id ) ;
+                    break;
+                case "draft":
+                    state.draftmirror = state.draftmirror.filter(m => m !== msg.id ) ;
+                    break;
+            }
+        },
     },
     actions: {
     },
