@@ -23,7 +23,8 @@ export default {
     msgBar,
   },
   updated(){
-    const userDataString = localStorage.getItem("userData");
+    if(!this.done){
+      const userDataString = localStorage.getItem("userData");
     if (!userDataString) {
       $store.commit("setLoginStatus", false);
       $store.commit("setCurrUser", null);
@@ -58,8 +59,12 @@ export default {
           console.error("Error during login:", error);
         });
     }
+    this.done=true;
+  }
+    
   },
   mounted() {
+    this.done=false
     setInterval(() => {
       this.messages =
         $store.state.currUser && $store.state.currUser.inbox
@@ -104,7 +109,8 @@ export default {
   },
   data() {
     return {
-      messages: null,
+      messages: [],
+      done:false
     };
   },
   computed: {

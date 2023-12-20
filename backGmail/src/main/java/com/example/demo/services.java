@@ -162,6 +162,8 @@ public class services {
             ArrayList<UserData>usersData=userDataService.getUsersData();
             UserData sender=userDataService.getUserByEmail(mailObject.getSender());
             mailObject.setId(sender.getMsgId()+1);
+            System.out.println(sender.getMsgId()+1);
+            usersData.get(sender.getIndex()).setMsgId(sender.getMsgId()+1);
             usersData.get(sender.getIndex()).getDraft().add(mailObject);
             System.out.println(usersData);
             userDataService.writeUsersData(usersData);
