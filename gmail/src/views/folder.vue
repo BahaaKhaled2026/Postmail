@@ -64,7 +64,9 @@
           .catch((error) => {
             console.error("Error during login:", error);
           });
+          
       }
+      $store.commit("sortMsgDec")
     },
     data() {
       return {

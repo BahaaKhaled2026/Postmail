@@ -205,7 +205,8 @@ export default {
             if (!response.ok) {
               throw new Error("Failed to send mail");
             }
-            this.$router.push({ name: "inbox" });
+            //this.$router.push({ name: "inbox" });
+            location.reload();
             return response.json();
           })
           .then((data) => {
@@ -267,7 +268,8 @@ export default {
             if (!response.ok) {
               throw new Error("Failed to send mail");
             }
-            this.$router.push({ name: "inbox" });
+            // this.$router.push({ name: "inbox" });
+            location.reload();
             return response.json();
           })
           .then((data) => {

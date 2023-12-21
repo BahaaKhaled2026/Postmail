@@ -308,6 +308,7 @@ export default {
       this.usersRate = index;
       this.clicked = true;
       this.updatepriority();
+      $store.commit("sortMsgPri");
     },
     restore() {
       $store.commit("restore", this.msg);
