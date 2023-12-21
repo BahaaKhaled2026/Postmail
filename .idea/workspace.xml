@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="1933667c-78b0-4d23-8ffc-6fdaf210a9b4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backGmail/usersData.json" beforeDir="false" afterPath="$PROJECT_DIR$/backGmail/usersData.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backGmail/src/main/java/com/example/demo/Control.java" beforeDir="false" afterPath="$PROJECT_DIR$/backGmail/src/main/java/com/example/demo/Control.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gmail/src/views/inbox.vue" beforeDir="false" afterPath="$PROJECT_DIR$/gmail/src/views/inbox.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

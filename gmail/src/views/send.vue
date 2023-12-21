@@ -207,6 +207,8 @@ export default {
         message: $store.state.currDraftMsg.message,
         id: 0,
         isRead: false,
+        delDateDay: "",
+        delDateMonth: "",
       },
       attachmentOBJ: [],
     };
@@ -232,8 +234,8 @@ export default {
         timeZone,
       });
       this.mail.date = formatter.format(now);
-
-      console.log(this.mail.date);
+      this.mail.delDateDay = now.getDate();
+      this.mail.delDateMonth = now.getMonth();
     },
 
     async handleFileChange() {
@@ -268,6 +270,8 @@ export default {
         title: this.mail.title,
         sender: this.sender,
         message: this.mail.message,
+        delDateMonth: this.mail.delDateMonth,
+        delDateDay: this.mail.delDateDay,
         attachments: SentObj,
         id: z,
       };
