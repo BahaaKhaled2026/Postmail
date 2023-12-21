@@ -199,34 +199,34 @@ export default createStore({
         },
         searchMsg(state, search) {
             if (state.searchType == "title") {
-                state.currUser.inbox = state.currUser.inbox.filter((m) => m.title.includes(search));
-                state.currUser.trash = state.currUser.trash.filter((m) => m.title.includes(search));
-                state.currUser.draft = state.currUser.draft.filter((m) => m.title.includes(search));
-                state.currUser.sent = state.currUser.sent.filter((m) => m.title.includes(search));
+                state.currUser.inbox = state.currUser.inbox.filter((m) => m.title.toLowerCase().includes(search.toLowerCase()));
+                state.currUser.trash = state.currUser.trash.filter((m) => m.title.toLowerCase().includes(search.toLowerCase()));
+                state.currUser.draft = state.currUser.draft.filter((m) => m.title.toLowerCase().includes(search.toLowerCase()));
+                state.currUser.sent = state.currUser.sent.filter((m) => m.title.toLowerCase().includes(search.toLowerCase()));
             }
             else if (state.searchType == "date") {
-                state.currUser.inbox = state.currUser.inbox.filter((m) => m.date.includes(search));
-                state.currUser.trash = state.currUser.trash.filter((m) => m.date.includes(search));
-                state.currUser.draft = state.currUser.draft.filter((m) => m.date.includes(search));
-                state.currUser.sent = state.currUser.sent.filter((m) => m.date.includes(search));
+                state.currUser.inbox = state.currUser.inbox.filter((m) => m.date.toLowerCase().includes(search.toLowerCase()));
+                state.currUser.trash = state.currUser.trash.filter((m) => m.date.toLowerCase().includes(search.toLowerCase()));
+                state.currUser.draft = state.currUser.draft.filter((m) => m.date.toLowerCase().includes(search.toLowerCase()));
+                state.currUser.sent = state.currUser.sent.filter((m) => m.date.toLowerCase().includes(search.toLowerCase()));
             }
             else if (state.searchType == "message") {
-                state.currUser.inbox = state.currUser.inbox.filter((m) => m.message.includes(search));
-                state.currUser.trash = state.currUser.trash.filter((m) => m.message.includes(search));
-                state.currUser.draft = state.currUser.draft.filter((m) => m.message.includes(search));
-                state.currUser.sent = state.currUser.sent.filter((m) => m.message.includes(search));
+                state.currUser.inbox = state.currUser.inbox.filter((m) => m.message.toLowerCase().includes(search.toLowerCase()));
+                state.currUser.trash = state.currUser.trash.filter((m) => m.message.toLowerCase().includes(search.toLowerCase()));
+                state.currUser.draft = state.currUser.draft.filter((m) => m.message.toLowerCase().includes(search.toLowerCase()));
+                state.currUser.sent = state.currUser.sent.filter((m) => m.message.toLowerCase().includes(search.toLowerCase()));
             }
             else if (state.searchType == "sender") {
-                state.currUser.inbox = state.currUser.inbox.filter((m) => m.sender.includes(search));
-                state.currUser.trash = state.currUser.trash.filter((m) => m.sender.includes(search));
-                state.currUser.draft = state.currUser.draft.filter((m) => m.sender.includes(search));
-                state.currUser.sent = state.currUser.sent.filter((m) => m.sender.includes(search));
+                state.currUser.inbox = state.currUser.inbox.filter((m) => m.sender.toLowerCase().includes(search.toLowerCase()));
+                state.currUser.trash = state.currUser.trash.filter((m) => m.sender.toLowerCase().includes(search.toLowerCase()));
+                state.currUser.draft = state.currUser.draft.filter((m) => m.sender.toLowerCase().includes(search.toLowerCase()));
+                state.currUser.sent = state.currUser.sent.filter((m) => m.sender.toLowerCase().includes(search.toLowerCase()));
             }
             else if (state.searchType == "attachment") {
-                state.currUser.inbox = state.currUser.inbox.filter((m) => m.attachments && m.attachments.some(att => att.attName.includes(search)));
-                state.currUser.trash = state.currUser.trash.filter((m) => m.attachments && m.attachments.some(att => att.attName.includes(search)));
-                state.currUser.draft = state.currUser.draft.filter((m) => m.attachments && m.attachments.some(att => att.attName.includes(search)));
-                state.currUser.sent = state.currUser.sent.filter((m) => m.attachments && m.attachments.some(att => att.attName.includes(search)));
+                state.currUser.inbox = state.currUser.inbox.filter((m) => m.attachments && m.attachments.some(att => att.attName.toLowerCase().includes(search.toLowerCase())));
+                state.currUser.trash = state.currUser.trash.filter((m) => m.attachments && m.attachments.some(att => att.attName.toLowerCase().includes(search.toLowerCase())));
+                state.currUser.draft = state.currUser.draft.filter((m) => m.attachments && m.attachments.some(att => att.attName.toLowerCase().includes(search.toLowerCase())));
+                state.currUser.sent = state.currUser.sent.filter((m) => m.attachments && m.attachments.some(att => att.attName.toLowerCase().includes(search.toLowerCase())));
             }
         },
         createfolder(state, newfolder) {

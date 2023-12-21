@@ -1437,8 +1437,8 @@ input:hover {
   }
 }
 .topBts {
-  border: 2px solid #8cc6e3;
-  background-color: #8cc6e3;
+  border: 2px solid rgba(255, 0, 0, 0.582);
+  background-color: rgba(255, 0, 0, 0.582);
   border-radius: 0.9em;
   padding: 0.8em 1.2em 0.8em 1em;
   transition: all ease-in-out 0.2s;
@@ -1454,6 +1454,6 @@ input:hover {
 }
 
 .topBts:hover {
-  background-color: #0071e2;
+  background-color: rgba(236, 100, 100, 0.582);
 }
 </style>

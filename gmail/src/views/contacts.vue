@@ -389,6 +389,7 @@ export default {
 }
 .edit:hover{
   background-color: rgb(169, 224, 224);
+  border-radius:50% ;
 }
 .cntct:hover{
   background-color: rgb(169, 224, 224);
@@ -396,6 +397,7 @@ export default {
 }
 .remove:hover{
   background-color: rgb(169, 224, 224);
+  border-radius:50% ;
 }
 .name{
   display: flex;
@@ -408,7 +410,8 @@ export default {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-  
+  height: 40px;
+  align-content: center;
 }
 .nav a.router-link-exact-active {
   color: black;
