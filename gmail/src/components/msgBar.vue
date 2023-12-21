@@ -1,5 +1,5 @@
 <template>
-  <div class="msg">
+  <div class="msg" :style="{ backgroundColor: msg.read ? 'white' : 'aliceblue' }">
     <div class="row msgBody flex-column">
       <div class="sender d-flex justify-content-between">
         <p @click="openMessage">{{ msg.title }}</p>

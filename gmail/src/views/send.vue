@@ -70,6 +70,7 @@ export default {
     }
   },
   mounted() {
+    $store.commit("setSendClicked",false)
     if ($store.state.selectedMsg === -1) {
       this.sentto = $store.state.wantedContact;
     }
@@ -128,8 +129,11 @@ export default {
   components: {
     sideBar,
   },
-  unmounted() {
+  beforeUnmount() {
     $store.commit("setWantedContact", "");
+    console.log(
+      !$store.state.sendClicked
+      );
     if (
       !$store.state.holdDraft &&
       $store.state.currUser !== null &&
@@ -139,6 +143,45 @@ export default {
       !$store.state.sendClicked
     ) {
       this.addToDraft();
+      console.log("yoooooooooooo");
+    }
+    else if($store.state.holdDraft &&
+      $store.state.currUser !== null &&
+      (this.mail.title.length !== 0 ||
+        this.mail.sentToMails.length !== 0 ||
+        this.mail.message.length !== 0) &&
+      !$store.state.sendClicked){
+
+        const mailObject = {
+        sentToMails: [],
+        date: this.mail.date,
+        title: this.mail.title,
+        sender: this.sender,
+        message: this.mail.message,
+        attachments: [],
+        id: this.mail.id,
+      };
+        fetch(`http://localhost:8080/removeDraft/${$store.state.currDraftMsg.id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(mailObject),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to send mail");
+            }
+            this.$router.push({ name: "inbox" });
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Server response:", data);
+          })
+          .catch((error) => {
+            console.error("Error:", error.message);
+          });
+          this.addToDraft();
     }
     let currDraftMsg = {
       sentToMails: [],
@@ -218,6 +261,7 @@ export default {
         SentObj = this.attachmentOBJ;
         console.log("yo");
       }
+      let z=localStorage.getItem("willBeSentId");
       const mailObject = {
         sentToMails: emails,
         date: this.mail.date,
@@ -225,7 +269,7 @@ export default {
         sender: this.sender,
         message: this.mail.message,
         attachments: SentObj,
-        id: this.mail.id,
+        id: z,
       };
       console.log(mailObject);
       fetch(`http://localhost:8080/sendMail`, {

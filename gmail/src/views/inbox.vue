@@ -23,6 +23,7 @@ export default {
     msgBar,
   },
   mounted(){
+    location.reload();
     if(!this.done){
       const userDataString = localStorage.getItem("userData");
     if (!userDataString) {

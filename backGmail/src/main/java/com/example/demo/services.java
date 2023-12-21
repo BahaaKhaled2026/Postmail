@@ -24,6 +24,16 @@ public class services {
     public ArrayList<UserData> getUsers() {
         return userDataService.getUsersData();
     }
+    @GetMapping("/getMail/{email}/{id}")
+    public mail getmessage(@PathVariable int id,@PathVariable String email) {
+        ArrayList<UserData>usersData=userDataService.getUsersData();
+        UserData userData=userDataService.getUserByEmail(email);
+        ArrayList<mail>all=new ArrayList<>();
+        all.addAll(userData.getInbox());
+        all.addAll(userData.getTrash());
+        all.addAll(userData.getSent());
+        return all.get(userDataService.getMsgIndByID(all,id));
+    }
 
     @PostMapping("/users/add")
     public void addUser(@RequestBody UserData userData){
@@ -93,7 +103,7 @@ public class services {
             ArrayList<UserData>usersData=userDataService.getUsersData();
             ArrayList<Integer>index=new ArrayList<>();
             ArrayList<String>sentTo=mailObject.getSentToMails();
-            System.out.println("2bl el for");
+
             for(int i=0;i<mailObject.getSentToMails().size();i++){
                 index.add(userDataService.getUserByEmail(sentTo.get(i)).getIndex());
                 System.out.println(i);
@@ -106,30 +116,12 @@ public class services {
                 usersData.get(index.get(i)).addMailInbox(temp);
                 usersData.get(index.get(i)).setMsgId(id);
                 System.out.println((usersData.get(index.get(i)).getContacts().contains(sender.getEmail())));
-
-                System.out.println(sender.getContacts());
             }
             int idSender=userDataService.getUserByEmail(mailObject.getSender()).getMsgId()+1;
             mail temp=mailObject;
             temp.setId(idSender);
             usersData.get(sender.getIndex()).addMailSent(temp);
             usersData.get(sender.getIndex()).setMsgId(idSender);
-            ArrayList<String> senderContacts=sender.getContacts();
-            int ind;
-            //hms7 el sender mn el sent to lw mwgood
-            if(mailObject.getSentToMails().contains(sender.getEmail())){
-                index.remove(mailObject.getSentToMails().indexOf(sender.getEmail()));
-            }
-
-            for(int i=0;i<index.size();i++){
-                if(!usersData.get(index.get(i)).getContacts().contains(sender.getEmail())){
-                    usersData.get(index.get(i)).getContacts().add(sender.getEmail());
-                }
-                if(!sender.getContacts().contains(usersData.get(index.get(i)).getEmail())){
-                    usersData.get(sender.getIndex()).getContacts().add(usersData.get(index.get(i)).getEmail());
-                    System.out.println("done");
-                }
-            }
             userDataService.writeUsersData(usersData);
             return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -143,14 +135,11 @@ public class services {
         try {
             UserData sender=userDataService.getUserByEmail(user);
             ArrayList<UserData>usersData=userDataService.getUsersData();
-            if(sender.getContacts().contains(email)) {
-                ArrayList<String> userContacts=usersData.get(sender.getIndex()).getContacts();
-                for(int i=0;i<userContacts.size();i++) {
-                    if (userContacts.get(i).equals(email)) {
-                        usersData.get(sender.getIndex()).getContacts().remove(i);
-                        userDataService.writeUsersData(usersData);
-                        break;
-                    }
+            for(int i=0;i<usersData.get(sender.getIndex()).getContacts().size();i++){
+                if(usersData.get(sender.getIndex()).getContacts().get(i).getName().equals(email)){
+                    usersData.get(sender.getIndex()).getContacts().remove(i);
+                    userDataService.writeUsersData(usersData);
+                    break;
                 }
             }
             return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
@@ -159,41 +148,42 @@ public class services {
             return new ResponseEntity<>("Failed to send mail", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PostMapping("/editContact/{user}/{email}/{newEmail}")
-    public ResponseEntity<String> editContact(@PathVariable String user,@PathVariable String email,@PathVariable String newEmail) {
-        System.out.println(email+" "+newEmail);
+
+    @PostMapping("/editContact/{user}/{name}")
+    public ResponseEntity<String> editContact(@PathVariable String user,@PathVariable String name,@RequestBody Contact contact) {
         try {
             UserData sender=userDataService.getUserByEmail(user);
             ArrayList<UserData>usersData=userDataService.getUsersData();
-            System.out.println(sender);
-            if(sender.getContacts().contains(email)) {
-                ArrayList<String> userContacts=usersData.get(sender.getIndex()).getContacts();
-                System.out.println("mwgood");
-                for(int i=0;i<userContacts.size();i++) {
-                    if (userContacts.get(i).equals(email)) {
-                        usersData.get(sender.getIndex()).getContacts().set(i,newEmail);
-                        System.out.println(usersData.get(sender.getIndex()));
-                        userDataService.writeUsersData(usersData);
-                        break;
-                    }
+            System.out.println(contact);
+            for(int i=0;i<usersData.get(sender.getIndex()).getContacts().size();i++){
+                if(usersData.get(sender.getIndex()).getContacts().get(i).getName().equals(contact.getName())){
+                    usersData.get(sender.getIndex()).getContacts().remove(i);
+                    usersData.get(sender.getIndex()).getContacts().add(contact);
+                    userDataService.writeUsersData(usersData);
+
+                    break;
                 }
             }
-            System.out.println("done");
+
             return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
         } catch (Exception e) {
 
             return new ResponseEntity<>("Failed to send mail", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PostMapping("/addContact/{user}/{email}")
-    public ResponseEntity<String> addContact(@PathVariable String user,@PathVariable String email) {
-
+    @PostMapping("/addContact/{user}")
+    public ResponseEntity<String> addContact(@PathVariable String user,@RequestBody Contact contact) {
         try {
             UserData sender=userDataService.getUserByEmail(user);
             ArrayList<UserData>usersData=userDataService.getUsersData();
-            if(!user.equals(email) && !sender.getContacts().contains(email)) {
-                usersData.get(sender.getIndex()).getContacts().add(email);
-
+            boolean isThere=false;
+            for(int i=0;i<usersData.get(sender.getIndex()).getContacts().size();i++){
+                if(usersData.get(sender.getIndex()).getContacts().get(i).getName().equals(contact.getName())){
+                    isThere=true;
+                }
+            }
+            if(!isThere) {
+                usersData.get(sender.getIndex()).getContacts().add(contact);
                 userDataService.writeUsersData(usersData);
             }
             return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
@@ -210,7 +200,6 @@ public class services {
             ArrayList<UserData>usersData=userDataService.getUsersData();
             UserData sender=userDataService.getUserByEmail(mailObject.getSender());
             mailObject.setId(sender.getMsgId()+1);
-            System.out.println(sender.getMsgId()+1);
             usersData.get(sender.getIndex()).setMsgId(sender.getMsgId()+1);
             usersData.get(sender.getIndex()).getDraft().add(mailObject);
             System.out.println(usersData);
@@ -224,7 +213,6 @@ public class services {
 
     @PostMapping("/removeDraft/{id}")
     public ResponseEntity<String> removeDraft(@RequestBody mail mailObject , @PathVariable int id) {
-        System.out.println("draftttt"+mailObject.toString());
         try {
 
             ArrayList<UserData>usersData=userDataService.getUsersData();
@@ -253,7 +241,6 @@ public class services {
     @PostMapping("/updateMessages/{email}")
     public void updateMessage(@PathVariable String email, @RequestBody UserData user) {
         ArrayList<UserData> usersData = userDataService.getUsersData();
-        System.out.println(usersData);
         try {
             usersData.remove(user.getIndex()) ;
             usersData.add(user.getIndex(),user);

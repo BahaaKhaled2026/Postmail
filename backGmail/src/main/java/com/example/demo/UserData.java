@@ -7,7 +7,9 @@ public class UserData {
     public UserData(){
 
     }
-    public UserData(int index, String email, String password, String securityQuestion, String securityAnswer, String firstName, String lastName, String gender, ArrayList<mail> inbox, ArrayList<mail> sent, ArrayList<mail> draft, ArrayList<mail> trash , ArrayList<mail> favourites ,ArrayList<folder> folders) {
+    public UserData(int index, String email, String password, String securityQuestion, String securityAnswer,
+                    String firstName, String lastName, String gender, ArrayList<mail> inbox, ArrayList<mail> sent,
+                    ArrayList<mail> draft, ArrayList<mail> trash, ArrayList<mail> favourites, ArrayList<folder> folders) {
         this.index = index;
         this.email = email;
         this.password = password;
@@ -20,9 +22,11 @@ public class UserData {
         this.sent = sent;
         this.draft = draft;
         this.trash = trash;
-        this.favourites = favourites ;
-        this.folders = folders ;
+        this.favourites = favourites;
+        this.folders = folders;
+        this.contacts = new ArrayList<>(); // Initialize the contacts field
     }
+
 
     public int getIndex() {
         return index;
@@ -71,13 +75,14 @@ public class UserData {
     private String firstName;
     private String lastName;
     private String gender;
-    private ArrayList<String>contacts;
+    private ArrayList<Contact>contacts;
 
-    public ArrayList<String> getContacts() {
+
+    public ArrayList<Contact> getContacts() {
         return contacts;
     }
 
-    public void setContacts(ArrayList<String> contacts) {
+    public void setContacts(ArrayList<Contact> contacts) {
         this.contacts = contacts;
     }
 

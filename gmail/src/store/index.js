@@ -27,8 +27,12 @@ export default createStore({
         draftmirror: [],
         trashmirror: [],
         foldersmirror: [],
+        willBeSentId:0
     },
     mutations: {
+        setWillBeSentId(state,status){
+
+        },
         setWantedContact(state, status) {
             state.wantedContact = status;
         },
@@ -83,6 +87,9 @@ export default createStore({
         },
         setHoldDraft(state, status) {
             state.holdDraft = status
+        },
+        setCurrDraftMsg(state,status){
+            state.currDraftMsg=status;
         },
         setSelectedMsg(state, status) {
             state.selectedMsg = status
@@ -214,6 +221,12 @@ export default createStore({
                 state.currUser.trash = state.currUser.trash.filter((m) => m.sender.includes(search));
                 state.currUser.draft = state.currUser.draft.filter((m) => m.sender.includes(search));
                 state.currUser.sent = state.currUser.sent.filter((m) => m.sender.includes(search));
+            }
+            else if(state.searchType=="attachment"){
+                state.currUser.inbox = state.currUser.inbox.filter((m) => m.attachments && m.attachments.some(att => att.attName.includes(search)));
+                state.currUser.trash = state.currUser.trash.filter((m) => m.attachments && m.attachments.some(att => att.attName.includes(search)));
+                state.currUser.draft = state.currUser.draft.filter((m) => m.attachments && m.attachments.some(att => att.attName.includes(search)));
+                state.currUser.sent = state.currUser.sent.filter((m) => m.attachments && m.attachments.some(att => att.attName.includes(search)));
             }
         },
         createfolder(state, newfolder) {

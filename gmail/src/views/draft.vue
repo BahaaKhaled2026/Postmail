@@ -30,6 +30,7 @@ export default {
     draftMsg,
   },
   mounted(){
+    location.reload();
     const userDataString = localStorage.getItem("userData");
     if (!userDataString) {
       $store.commit("setLoginStatus", false);
