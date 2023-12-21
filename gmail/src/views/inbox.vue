@@ -6,7 +6,6 @@
         <msgBar v-for="msg in messages" :key="msg.id" :msg="msg" />
       </div>
       <div v-else class="body flex-column">
-        <navBar />
         <h1>No messages</h1>
       </div>
     </section>

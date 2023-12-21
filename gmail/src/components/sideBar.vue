@@ -1,7 +1,6 @@
 <template>
   <section class="flex-column">
     <ul class="nav flex-column">
-      
       <li class="nav-item">
         <router-link class="nav-link" to="/send">
           <div class="sendBtn">
@@ -32,31 +31,51 @@
       </li>
       <div class="bts">
         <li>
-        <button
-        class = "topBts"
-          @click="deletechoosen"
-          v-show="routename == 'inbox' || routename == 'sent'"
-        >
-          delete
-        </button>
-      </li>
-      <li>
-        <button
-        class = "topBts"
-          @click="removechoosen"
-          v-show="routename == 'draft' || routename == 'folder'"
-        >
-          remove
-        </button>
-      </li>
-      <li>
-        <button class = "topBts" @click="restorechoosen" v-show="routename == 'trash'">
-          restore
-        </button>
-      </li>
-      <li>
-        <button class = "topBts">tofolder</button>
-      </li>
+          <button
+            class="topBts"
+            @click="deletechoosen"
+            v-show="routename == 'inbox' || routename == 'sent'"
+          >
+            delete
+          </button>
+        </li>
+        <li>
+          <button
+            class="topBts"
+            @click="removechoosen"
+            v-show="routename == 'draft' || routename == 'folder'"
+          >
+            remove
+          </button>
+        </li>
+        <li>
+          <button
+            class="topBts"
+            @click="restorechoosen"
+            v-show="routename == 'trash'"
+          >
+            restore
+          </button>
+        </li>
+        <li>
+          <button
+            class="topBts"
+            v-show="
+              routename == 'inbox' ||
+              routename == 'sent' ||
+              routename == 'folder'
+            "
+            @click="showfs"
+          >
+            addtofolder
+          </button>
+          <div class="folders d-flex" v-if="showfolders">
+            <div class="flds" v-for="fld in folders" :key="fld.foldername">
+              <input type="checkbox" v-model="isChecked[fld.folderindex]" />
+              <label for="myCheckbox">{{ fld.foldername }}</label>
+            </div>
+          </div>
+        </li>
       </div>
       <li class="nav-item">
         <router-link class="nav-link active" to="/inbox">
@@ -207,9 +226,8 @@
             </label>
           </form>
         </div>
-        <router-link to="/contacts" >Contacts</router-link>
+        <router-link to="/contacts">Contacts</router-link>
       </li>
-      
 
       <li class="nav-item2">
         <div class="row">
@@ -246,12 +264,19 @@ export default {
       userContacts: [],
       routename: "",
       folderindex: null,
-      addOrEdit:"Add",
+      addOrEdit: "Add",
       isDropdownOpen: false,
-      willBeEdited:""
+      willBeEdited: "",
+      showfolders: false,
+      folders: $store.state.currUser.folders,
+      isChecked: [],
     };
   },
   mounted() {
+    for (let i = 0; i < this.folders.length; i++) {
+      this.isChecked.push(false);
+    }
+    $store.commit("clear");
     this.routename = this.$route.name;
     this.folderindex = parseInt(this.$route.path.replace("/folder/", ""));
     $store.commit("setSearch", localStorage.getItem("search"));
@@ -302,37 +327,41 @@ export default {
   },
   methods: {
     handleDocumentClick(event) {
-      const isInputOrButton = event.target.classList.contains('inp') || event.target.classList.contains('button');
+      const isInputOrButton =
+        event.target.classList.contains("inp") ||
+        event.target.classList.contains("button");
       if (!isInputOrButton) {
-        this.addOrEdit="Add"
+        this.addOrEdit = "Add";
         location.reload();
       }
     },
-    changeDrop(){
-      this.isDropdownOpen=!this.isDropdownOpen;
+    changeDrop() {
+      this.isDropdownOpen = !this.isDropdownOpen;
     },
-    changeAdd(x){
-      this.willBeEdited=x;
-      this.addOrEdit="Edit";
-      this.isDropdownOpen=false;
-      setTimeout(() =>{
+    changeAdd(x) {
+      this.willBeEdited = x;
+      this.addOrEdit = "Edit";
+      this.isDropdownOpen = false;
+      setTimeout(() => {
         this.$refs.adding.focus();
-      },500)
-      setTimeout(() =>{
-        document.addEventListener('click', this.handleDocumentClick);
-      },500)
-      
+      }, 500);
+      setTimeout(() => {
+        document.addEventListener("click", this.handleDocumentClick);
+      }, 500);
     },
     editContact() {
       let userEmail = $store.state.currUser.email;
       if (this.contact.length !== 0) {
         console.log("contact is added");
-        fetch(`http://localhost:8080/editContact/${userEmail}/${this.willBeEdited}/${this.contact}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        fetch(
+          `http://localhost:8080/editContact/${userEmail}/${this.willBeEdited}/${this.contact}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
           .then((response) => {
             if (!response.ok) {
               throw new Error("Failed to send mail");
@@ -378,62 +407,61 @@ export default {
             });
         }
       }
-      this.addOrEdit="Add";
+      this.addOrEdit = "Add";
     },
     removeContact(cont) {
       let userEmail = $store.state.currUser.email;
-        console.log("contact is added");
-        fetch(`http://localhost:8080/removeContact/${userEmail}/${cont}`, {
-          method: "POST",
+      console.log("contact is added");
+      fetch(`http://localhost:8080/removeContact/${userEmail}/${cont}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to send mail");
+          }
+          this.$router.push({ name: "inbox" });
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Server response:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error.message);
+        });
+      const userDataString = localStorage.getItem("userData");
+      if (!userDataString) {
+        $store.commit("setLoginStatus", false);
+        $store.commit("setCurrUser", null);
+      } else {
+        $store.commit("setLoginStatus", true);
+        let em = JSON.parse(userDataString).email;
+        let newData;
+        fetch(`http://localhost:8080/users/${em}`, {
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
         })
           .then((response) => {
-            if (!response.ok) {
-              throw new Error("Failed to send mail");
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            this.$router.push({ name: "inbox" });
-            return response.json();
           })
-          .then((data) => {
-            console.log("Server response:", data);
+          .then((userData) => {
+            console.log(userData);
+            this.userContacts = userData.contacts;
+            newData = userData;
+            $store.commit("setCurrUser", newData);
           })
           .catch((error) => {
-            console.error("Error:", error.message);
+            console.error("Error during login:", error);
           });
-        const userDataString = localStorage.getItem("userData");
-        if (!userDataString) {
-          $store.commit("setLoginStatus", false);
-          $store.commit("setCurrUser", null);
-        } else {
-          $store.commit("setLoginStatus", true);
-          let em = JSON.parse(userDataString).email;
-          let newData;
-          fetch(`http://localhost:8080/users/${em}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-            .then((response) => {
-              if (response.ok) {
-                return response.json();
-              } else {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-              }
-            })
-            .then((userData) => {
-              console.log(userData);
-              this.userContacts = userData.contacts;
-              newData = userData;
-              $store.commit("setCurrUser", newData);
-            })
-            .catch((error) => {
-              console.error("Error during login:", error);
-            });
-        }
-      
+      }
     },
     getmsgbyid(id, place) {
       if (place === "inbox") {
@@ -460,16 +488,108 @@ export default {
             return $store.state.currUser.draft[i];
           }
         }
+      } else if (place === "folder") {
+        for (
+          let i = 0;
+          i < $store.state.currUser.folders[this.folderindex].messages.length;
+          i++
+        ) {
+          if (
+            id ===
+            $store.state.currUser.folders[this.folderindex].messages[i].id
+          ) {
+            return $store.state.currUser.folders[this.folderindex].messages[i];
+          }
+        }
       }
       return null;
     },
+    showfs() {
+      if (this.showfolders === true) {
+        this.movechoosen();
+        this.isChecked.fill(false);
+      }
+      this.showfolders = !this.showfolders;
+    },
+    msginfolder(id, index) {
+      for (let i = 0; i < this.folders[index].messages.length; i++) {
+        if (this.folders[index].messages[i].id === id) {
+          return true;
+        }
+      }
+      return false;
+    },
+    addtofolders(msg) {
+      for (let i = 0; i < this.folders.length; i++) {
+        if (this.isChecked[i] === true) {
+          if (!this.msginfolder(msg.id, i)) {
+            let msgs = JSON.parse(JSON.stringify(msg));
+            $store.state.currUser.folders[i].messages.push(msgs);
+          } else {
+            console.log("tmam");
+          }
+        }
+      }
+    },
+    movechoosen() {
+      if (this.routename === "inbox") {
+        for (let i = 0; i < $store.state.inboxmirror.length; i++) {
+            this.addtofolders(this.getmsgbyid($store.state.inboxmirror[i], "inbox"));
+        }
+        $store.state.inboxmirror = [];
+      } else if (this.routename === "sent") {
+        for (let i = 0; i < $store.state.sentmirror.length; i++) {
+            this.addtofolders(this.getmsgbyid($store.state.sentmirror[i], "sent"));
+        }
+        $store.state.sentmirror = [];
+      }else if (this.routename === "folder") {
+        for (let i = 0; i < $store.state.foldersmirror.length; i++) {
+          let msg = this.getmsgbyid($store.state.foldersmirror[i], "folder") ;
+          this.addtofolders(msg) ;
+        }
+        $store.state.draftmirror = [];
+      }
+      fetch(
+        `http://localhost:8080/updateMessages/${$store.state.currUser.email}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify($store.state.currUser),
+        }
+      )
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        })
+        .then((userData) => {
+          $store.commit("setCurrUser", userData);
+          console.log(userData);
+        })
+        .catch((error) => {
+          console.error("Error during login:", error);
+        });
+    },
     removechoosen() {
       if (this.routename === "draft") {
-        for (let i = 0; i < $store.state.inboxmirror.length; i++) {
+        for (let i = 0; i < $store.state.draftmirror.length; i++) {
           $store.commit(
             "deleteMsg",
             this.getmsgbyid($store.state.draftmirror[i], "draft")
           );
+        }
+        $store.state.draftmirror = [];
+      } else if (this.routename === "folder") {
+        for (let i = 0; i < $store.state.foldersmirror.length; i++) {
+          let msg = {
+            index: this.folderindex,
+            message: this.getmsgbyid($store.state.foldersmirror[i], "folder"),
+          };
+          $store.commit("deletemsgfromfolder", msg);
         }
         $store.state.draftmirror = [];
       }
@@ -712,19 +832,19 @@ export default {
   font-size: 18px;
   color: rgba(0, 0, 0, 0.315);
 }
-.edit:hover{
+.edit:hover {
   background-color: black;
 }
-.cntct:hover{
+.cntct:hover {
   background-color: black;
 }
-.remove:hover{
+.remove:hover {
   background-color: black;
 }
 .nav a.router-link-exact-active {
   color: black;
 }
-.bts{
+.bts {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-evenly;
@@ -801,11 +921,10 @@ export default {
 .type1:hover::after {
   transform: translateY(0) scale(1.2);
 }
-.menu{
+.menu {
   height: 40px;
   position: relative;
   bottom: 3px;
-  
 }
 
 .type1:hover::before {
@@ -814,7 +933,7 @@ export default {
 .flex-column {
   width: 350px;
 }
-.sendBtn{
+.sendBtn {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -970,7 +1089,7 @@ input:hover {
   position: absolute;
   left: -9999px;
 }
-.contactss{
+.contactss {
   display: flex;
   flex-flow: row wrap;
   justify-content: left;
@@ -979,10 +1098,10 @@ input:hover {
   margin-left: 0px;
   gap: 20px;
 }
-.cnt{
+.cnt {
   font-size: xx-large;
 }
-.dropCnt{
+.dropCnt {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
@@ -1324,17 +1443,17 @@ input:hover {
   padding: 0.8em 1.2em 0.8em 1em;
   transition: all ease-in-out 0.2s;
   font-size: 16px;
- }
- 
- .topBts span {
+}
+
+.topBts span {
   display: flex;
   justify-content: center;
   align-items: center;
   color: #fff;
   font-weight: 600;
- }
- 
- .topBts:hover {
+}
+
+.topBts:hover {
   background-color: #0071e2;
- }
+}
 </style>

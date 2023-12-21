@@ -10,10 +10,25 @@
             <button @click="createfolder">create folder</button>
           </div>
         </div>
-        <div class="test d-flex justify-content-between" v-for="fld in folders" :key="fld.foldername">
-           <p class="name flex-grow-1"  @click="openfolder(fld)" >{{ fld.foldername }}</p>
-           <button @click="deletefolder(fld)">delete</button>
+        <div
+          class="test d-flex justify-content-between"
+          v-for="fld in folders"
+          :key="fld.foldername"
+        >
+          <p class="name flex-grow-1" @click="openfolder(fld)">
+            {{ fld.foldername }}
+          </p>
+          <button @click="deletefolder(fld)">delete</button>
+          <button @click="showrenameform(fld.folderindex)">Rename folder</button>
+          <div class="form" v-show="showrename[fld.folderindex]">
+            <input
+              type="text"
+              placeholder="folder name"
+              v-model="newname[fld.folderindex]"
+            />
+            <button @click="renamefolder(fld)">rename folder</button>
           </div>
+        </div>
       </div>
       <div v-else class="body flex-column">
         <h1>No Folders</h1>
@@ -78,12 +93,18 @@ export default {
           console.error("Error during login:", error);
         });
     }
+    for (let i = 0; i < $store.state.currUser.folders.length; i++) {
+        this.showrename.push(false);
+        this.newname.push("");
+      }
   },
   data() {
     return {
       folders: null,
       showf: false,
-      foldername:"",
+      foldername: "",
+      newname: [],
+      showrename: [],
     };
   },
   computed: {
@@ -92,7 +113,39 @@ export default {
     },
   },
   methods: {
-    deletefolder(fld){
+    renamefolder(fld) {
+      if (this.newname === "") return;
+      fld.foldername = this.newname[fld.folderindex];
+      $store.commit("rename", fld);
+      fetch(
+        `http://localhost:8080/updateMessages/${$store.state.currUser.email}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify($store.state.currUser),
+        }
+      )
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        })
+        .then((userData) => {
+          $store.commit("setCurrUser", userData);
+          console.log(userData);
+        })
+        .catch((error) => {
+          console.error("Error during login:", error);
+        });
+    },
+    showrenameform(x) {
+      this.showrename[x] = !this.showrename[x];
+    },
+    deletefolder(fld) {
       $store.commit("deletefolder", fld);
       fetch(
         `http://localhost:8080/updateMessages/${$store.state.currUser.email}`,
@@ -122,20 +175,20 @@ export default {
     showform() {
       this.showf = !this.showf;
     },
-    createfolder(){
-        for(let i = 0 ; i < this.folders.length ; i++){
-          if(this.foldername === this.folders[i].foldername){
-            console.log("tmaaaaaaaaam") ;
-            return ;
-          }
+    createfolder() {
+      for (let i = 0; i < this.folders.length; i++) {
+        if (this.foldername === this.folders[i].foldername) {
+          return;
         }
-        const newfolder = {
-            messages: [] ,
-            foldername : this.foldername ,
-            folderindex: this.folders.length ,
-        }
-        $store.commit("createfolder" , newfolder) ;
-        fetch(
+      }
+      const newfolder = {
+        messages: [],
+        foldername: this.foldername,
+        folderindex: this.folders.length,
+      };
+      console.log($store.state.currUser);
+      $store.commit("createfolder", newfolder);
+      fetch(
         `http://localhost:8080/updateMessages/${$store.state.currUser.email}`,
         {
           method: "POST",
@@ -161,9 +214,9 @@ export default {
         });
       console.log($store.currUser);
     },
-    openfolder(fld){
+    openfolder(fld) {
       this.$router.push({ name: "folder", params: { id: fld.folderindex } });
-    }
+    },
   },
 };
 </script>
@@ -198,7 +251,7 @@ export default {
   border-radius: 50px;
   height: 100vh;
 }
-.flex-column{
+.flex-column {
   height: 100vh;
 }
 .body > * {

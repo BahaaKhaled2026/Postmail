@@ -9,7 +9,7 @@ public class UserData {
     }
     public UserData(int index, String email, String password, String securityQuestion, String securityAnswer,
                     String firstName, String lastName, String gender, ArrayList<mail> inbox, ArrayList<mail> sent,
-                    ArrayList<mail> draft, ArrayList<mail> trash, ArrayList<mail> favourites, ArrayList<folder> folders) {
+                    ArrayList<mail> draft, ArrayList<mail> trash, ArrayList<mail> favourites, ArrayList<Object> folders) {
         this.index = index;
         this.email = email;
         this.password = password;
@@ -99,13 +99,13 @@ public class UserData {
     private ArrayList<mail>draft;
     private ArrayList<mail>trash; // add spam
     private ArrayList<mail> favourites ;
-    private ArrayList<folder> folders ;
+    private ArrayList<Object> folders ;
 
-    public ArrayList<folder> getFolders() {
+    public ArrayList<Object> getFolders() {
         return folders;
     }
 
-    public void setFolders(ArrayList<folder> folders) {
+    public void setFolders(ArrayList<Object> folders) {
         this.folders = folders;
     }
 

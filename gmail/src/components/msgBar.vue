@@ -109,7 +109,7 @@
       <div class="dateandfolder d-flex justify-content-between">
         <div class="addtofilder d-flex flex-column">
           <button @click="showfs">addtofolder</button>
-          <div class="folders d-flex" v-if="showfolders">
+          <div class="folders d-flex flex-column" v-if="showfolders">
             <div class="flds" v-for="fld in folders" :key="fld.foldername">
               <input type="checkbox" v-model="isChecked[fld.folderindex]" />
               <label for="myCheckbox">{{ fld.foldername }}</label>
@@ -151,7 +151,7 @@ export default {
           route: this.routename,
           index: this.folderindex,
         });
-        console.log($store.state.inboxmirror);
+        console.log($store.state.foldersmirror);
       } else {
         console.log("unchoose");
         $store.commit("unchoose", {
@@ -159,7 +159,7 @@ export default {
           route: this.routename,
           index: this.folderindex,
         });
-        console.log($store.state.inboxmirror);
+        console.log($store.state.foldersmirror);
       }
     },
     showfs() {
@@ -400,7 +400,7 @@ export default {
 }
 .msgBody {
   padding: 15px;
-  max-height: 170px;
+  max-height: 10000px;
 }
 .msgBody p {
   margin: 0;

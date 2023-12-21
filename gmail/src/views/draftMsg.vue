@@ -10,6 +10,7 @@
           <p @click="goTosend(msg)">{{ msg.date }}</p>
         </div>
         <div class="delete">
+          <input type="checkbox" @click="choose" v-model="chosen" />
           <button @click="deleteMsg">delete</button>
         </div>
       </div>
@@ -28,6 +29,8 @@ import $store from "../store/index.js";
 export default {
   props: ["msg"],
   mounted() {
+    this.routename = this.$route.name;
+    this.folderindex = parseInt(this.$route.path.replace("/folder/", ""));
     if ($store.state.selectedMsg > 0) {
       $store.state.currDraftMsg.sentToMails.map((ms, index) => {
         if ($store.state.currDraftMsg.sentToMails.length === 1) {
@@ -46,9 +49,31 @@ export default {
     return {
       messages: this.msg,
       sentTo: "",
+      chosen:false ,
+      routename: "",
+      folderindex: null,
     };
   },
   methods: {
+    choose() {
+      if (!this.chosen) {
+        console.log("choose");
+        $store.commit("choose", {
+          msg: this.msg,
+          route: this.routename,
+          index: this.folderindex,
+        });
+        console.log($store.state.draftmirror);
+      } else {
+        console.log("unchoose");
+        $store.commit("unchoose", {
+          msg: this.msg,
+          route: this.routename,
+          index: this.folderindex,
+        });
+        console.log($store.state.inboxmirror);
+      }
+    },
     goTosend(ms) {
       $store.commit("setWillBeSentId",ms.id);
       console.log(ms.id);
