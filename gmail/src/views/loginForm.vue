@@ -200,7 +200,7 @@ section {
 }
 .all {
   height: 100vh;
-  background-image: url("design-space-paper-textured-background.jpg");
+  background-image: url("view-white-crumpled-paper.jpg");
 }
 img {
   height: 100%;
