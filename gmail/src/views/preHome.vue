@@ -16,7 +16,11 @@
 <script>
 // @ is an alias to /src
 
-export default {};
+export default {
+  mounted(){
+    localStorage.removeItem("userData");
+  }
+};
 </script>
 
 <style scoped>

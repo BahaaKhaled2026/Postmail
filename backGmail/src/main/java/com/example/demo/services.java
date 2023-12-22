@@ -123,6 +123,7 @@ public class services {
             usersData.get(sender.getIndex()).addMailSent(temp);
             usersData.get(sender.getIndex()).setMsgId(idSender);
             userDataService.writeUsersData(usersData);
+            System.out.println("send done");
             return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
         } catch (Exception e) {
 
@@ -195,15 +196,16 @@ public class services {
 
     @PostMapping("/draft")
     public ResponseEntity<String> addToDraft(@RequestBody mail mailObject) {
-        System.out.println(mailObject.getSender());
+        System.out.println(mailObject);
         try {
             ArrayList<UserData>usersData=userDataService.getUsersData();
             UserData sender=userDataService.getUserByEmail(mailObject.getSender());
             mailObject.setId(sender.getMsgId()+1);
             usersData.get(sender.getIndex()).setMsgId(sender.getMsgId()+1);
             usersData.get(sender.getIndex()).getDraft().add(mailObject);
-            System.out.println(usersData);
+            System.out.println(usersData.get(sender.getIndex()).getDraft());
             userDataService.writeUsersData(usersData);
+            System.out.println("done add");
             return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
         } catch (Exception e) {
 
@@ -214,13 +216,12 @@ public class services {
     @PostMapping("/removeDraft/{id}")
     public ResponseEntity<String> removeDraft(@RequestBody mail mailObject , @PathVariable int id) {
         try {
-
             ArrayList<UserData>usersData=userDataService.getUsersData();
-
             UserData sender=userDataService.getUserByEmail(mailObject.getSender());
             int z=userDataService.getMsgIndByID(usersData.get(sender.getIndex()).getDraft(),id);
             usersData.get(sender.getIndex()).getDraft().remove(z);
             userDataService.writeUsersData(usersData);
+            System.out.println("done removed,"+id);
             return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Failed to send mail", HttpStatus.INTERNAL_SERVER_ERROR);

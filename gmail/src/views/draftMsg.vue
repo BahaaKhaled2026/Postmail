@@ -83,13 +83,14 @@ export default {
 
       $store.commit("setCurrMsg", ms);
 
-      this.$router.push({ name: "send" });
+      
       $store.commit("setHoldDraft", true);
       let x = $store.state.currDraftMsg.id;
       console.log(x);
       $store.commit("setSelectedMsg", x);
       console.log($store.state.selectedMsg);
       console.log(this.messages);
+      this.$router.push({ name: "send" });
     },
     deleteMsg() {
       $store.commit("deleteMsg", this.msg);

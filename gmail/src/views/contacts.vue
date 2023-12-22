@@ -5,7 +5,11 @@
       <div class="body">
         <div class="search">
           <input @input="searchContacts" placeholder="Search..." v-model="searched" class="inputt" name="text" type="text">
+          <button @click="sortDescending" class="swallow__icon">
+            <span></span>
+          </button>
         </div>
+        
         <div class="input-container">
           <input class="inp" ref="adding" v-model="name" placeholder="Name" type="text" />
           <input class="inp" ref="adding" v-model="contact" placeholder="email,email,email..." type="text" />
@@ -65,6 +69,9 @@ export default {
         .then((userData) => {
           console.log(userData);
           newData = userData;
+          this.userContacts = userData.contacts.sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
           this.userContacts = userData.contacts;
           this.temp=userData.contacts
           console.log(this.userContacts);
@@ -73,6 +80,7 @@ export default {
         .catch((error) => {
           console.error("Error during login:", error);
         });
+       
       }
   },
 
@@ -97,7 +105,8 @@ export default {
       addOrEdit:"Add",
       isDropdownOpen: false,
       willBeEdited:"",
-      temp:[]
+      temp:[],
+      sortByNameOrder: 1,
     };
   },
   methods:{
@@ -105,8 +114,11 @@ export default {
         this.userContacts = this.temp.filter((x) => {
         return x.name.toLowerCase().includes(this.searched.toLowerCase());
       });
+      
 },
-
+    sortDescending() {
+      this.userContacts.reverse();
+    },
     handleDocumentClick(event) {
       const isInputOrButton = event.target.classList.contains('inp') || event.target.classList.contains('button');
       if (!isInputOrButton) {
@@ -336,6 +348,7 @@ export default {
   box-shadow: 3px 0px 14px 0px #00000086;
   overflow-y: scroll;
   overflow-x: scroll;
+  
 }
 .all {
   height: 100%;
@@ -388,15 +401,15 @@ export default {
   color: rgba(0, 0, 0, 0.315);
 }
 .edit:hover{
-  background-color: rgb(169, 224, 224);
+  background-color: #d67272;
   border-radius:50% ;
 }
 .cntct:hover{
-  background-color: rgb(169, 224, 224);
+  background-color: #d67272;
   border-radius:15px ;
 }
 .remove:hover{
-  background-color: rgb(169, 224, 224);
+  background-color: #d67272;
   border-radius:50% ;
 }
 .name{
@@ -966,21 +979,21 @@ input:hover {
   flex-basis: 75%;
   padding: 1rem;
   border: none;
-  border-left: 2px solid #4998ff;
+  border-left: 2px solid #c84747;
   color: #5e5e5e;
   transition: all 0.2s ease-in-out;
 }
 
 .input-container input:focus {
-  border-left: 2px solid #4998ff;
+  border-left: 2px solid #c84747;
   outline: none;
-  box-shadow: inset 13px 13px 10px #bff0fa, inset -13px -13px 10px #f4f4f4;
+  box-shadow: inset 13px 13px 10px #c84747, inset -13px -13px 10px #f4f4f4;
 }
 
 .input-container button {
   flex-basis: 25%;
   padding: 1rem;
-  background: linear-gradient(135deg, #bff0fa 0%, #4998ff 100%);
+  background: linear-gradient(135deg, #bff0fa 0%, #c84747 100%);
   font-weight: 900;
   letter-spacing: 0.3rem;
   text-transform: uppercase;
@@ -992,7 +1005,7 @@ input:hover {
 }
 
 .input-container button:hover {
-  background: linear-gradient(135deg, #bff0fa 0%, #4998ffc4 100%);
+  background: linear-gradient(135deg, #c84747 0%, #c84747 100%);
 }
 
 @media (max-width: 500px) {
@@ -1010,8 +1023,8 @@ input:hover {
   }
 }
 .topBts {
-  border: 2px solid #8cc6e3;
-  background-color: #8cc6e3;
+  border: 2px solid #c84747;
+  background-color: #c84747;
   border-radius: 0.9em;
   padding: 0.8em 1.2em 0.8em 1em;
   transition: all ease-in-out 0.2s;
@@ -1027,14 +1040,14 @@ input:hover {
  }
  
  .topBts:hover {
-  background-color: #0071e2;
+  background-color: #c84747;
  }
  .inputt {
   padding: 10px;
   width: 120px;
   border: none;
   outline: none;
-  border-radius: 5px;
+  border-radius:5px 0px 0px 5px;
   box-shadow: 0 1px  gray;
   font-size: 18px;
   transition: width 0.3s;
@@ -1050,6 +1063,78 @@ input:hover {
 }
 
 .inputt::placeholder {
-  color: blue;
+  color: #c84747;
 }
+
+
+/* <reset-style> ============================ */
+  .swallow__icon {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    font-family: inherit;
+    height: 27px;
+    border-radius:0 5px 5px 0px;
+  }
+  /* <main-style> ============================ */
+  .swallow__icon {
+    width: 2rem;
+    height: 48px;
+    background-color: #c84747;
+    backdrop-filter: saturate(180%) blur(20px);
+    border: solid 1px rgba(66,66,69,0.7);
+    position: relative;
+  }
+  
+  .swallow__icon span {
+    width: 1.5rem;
+    height: 1rem;
+    position: absolute;
+    top: calc(.25rem + .563rem - 1px);
+    left: calc(.25rem - 1px);
+    transition: transform 1s cubic-bezier(.86, 0, .07, 1),
+                transform-origin 1s cubic-bezier(.86, 0, .07, 1);
+  }
+  
+  .swallow__icon span:before,
+  .swallow__icon span:after {
+    content: "";
+    width: .75rem;
+    height: .125rem;
+    background-color: rgb(245, 245, 247);
+    position: absolute;
+    bottom: 0;
+    transition: transform 1s cubic-bezier(.86, 0, .07, 1),
+                transform-origin 1s cubic-bezier(.86, 0, .07, 1);
+  }
+  
+  .swallow__icon span:before {
+    right: 50%;
+    border-radius: 2px 0 0 2px;
+    transform-origin: 100% 100%;
+    transform: rotate(40deg);
+  }
+  
+  .swallow__icon span:after {
+    left: 50%;
+    border-radius: 0 2px 2px 0;
+    transform-origin: 0 100%;
+    transform: rotate(-40deg);
+  }
+  
+  .swallow__icon:hover span {
+    transform: translateY(-8px);
+  }
+  
+  .swallow__icon:hover span:before {
+    transform-origin: 100% 0;
+    transform: rotate(-40deg);
+  }
+  
+  .swallow__icon:hover span:after {
+    transform-origin: 0 0;
+    transform: rotate(40deg);
+  }
 </style>

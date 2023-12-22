@@ -8,7 +8,7 @@
             <h2>
               <i class="fa-solid fa-arrow-left" style="color: #000000"></i></h2
           ></router-link>
-          <h3>Hi Again!</h3>
+          
           <div
             v-show="this.missingData"
             class="alert alert-danger"
@@ -44,7 +44,8 @@
               <h6>Forget Your Password</h6>
             </router-link>
           </div>
-          <button @click="checkMissingData" class="submit-button">Log in</button>
+
+          <button @click="checkMissingData" class="comic-button">Log in</button>
           <div class="row">
             <router-link to="/signup" class="nav-link links">
               <h6 class="center">Don't have an account? Sign up</h6>
@@ -171,7 +172,7 @@ export default {
 .form {
   padding: 50px;
   width: 50%;
-  background-color: #33455b;
+  background-color: white;
   text-align: start;
   margin: 50px 0px;
   border-top-right-radius: 30px;
@@ -189,7 +190,9 @@ section {
 }
 .img {
   width: 50%;
-  background-color: #53c6ba;
+  background-image: url("_77a2a87b-0367-41d4-9321-ec79b7cbeb23.jpg");
+  background-position: center;
+  background-size: cover;
   margin: 50px 0px;
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
@@ -197,7 +200,7 @@ section {
 }
 .all {
   height: 100vh;
-  background-color: rgb(203, 220, 247);
+  background-image: url("design-space-paper-textured-background.jpg");
 }
 img {
   height: 100%;
@@ -382,30 +385,8 @@ in other input type*/
   position: absolute;
   width: 100%;
   height: 100%;
-  filter: blur(40px);
-  -webkit-clip-path: polygon(
-    26% 0,
-    66% 0,
-    92% 0,
-    100% 8%,
-    100% 89%,
-    91% 100%,
-    7% 100%,
-    0 92%,
-    0 0
-  );
-  clip-path: polygon(
-    26% 0,
-    66% 0,
-    92% 0,
-    100% 8%,
-    100% 89%,
-    91% 100%,
-    7% 100%,
-    0 92%,
-    0 0
-  );
-  background: rgba(122, 251, 255, 0.5568627451);
+  
+  background: #c84747;
   transition: all 1s ease-in-out;
 }
 
@@ -414,48 +395,8 @@ in other input type*/
   position: absolute;
   width: 98%;
   height: 98%;
-  box-shadow: inset 0px 0px 20px 20px #212121;
-  background: repeating-linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgba(64, 144, 181, 0.6) 1px,
-      rgb(0, 0, 0) 3px,
-      hsl(295, 60%, 12%) 5px,
-      #153544 4px,
-      transparent 0.5%
-    ),
-    repeating-linear-gradient(
-      to left,
-      hsl(295, 60%, 12%) 100%,
-      hsla(295, 60%, 12%, 0.99) 100%
-    );
-  -webkit-clip-path: polygon(
-    26% 0,
-    31% 5%,
-    61% 5%,
-    66% 0,
-    92% 0,
-    100% 8%,
-    100% 89%,
-    91% 100%,
-    7% 100%,
-    0 92%,
-    0 0
-  );
-  clip-path: polygon(
-    26% 0,
-    31% 5%,
-    61% 5%,
-    66% 0,
-    92% 0,
-    100% 8%,
-    100% 89%,
-    91% 100%,
-    7% 100%,
-    0 92%,
-    0 0
-  );
-  animation: backglitch 50ms linear infinite;
+  
+ 
 }
 
 .input-dist {
@@ -490,36 +431,24 @@ in other input type*/
   padding-block: 0.7em;
   border: none;
   transition: all 1s ease-in-out;
-  border-bottom: 1px solid hsl(221, 26%, 43%);
+  border-bottom: 1px solid hsl(221, 86%, 9%);
 }
 
 .input-is:hover {
   transition: all 1s ease-in-out;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(102, 224, 255, 0.2) 27%,
-    rgba(102, 224, 255, 0.2) 63%,
-    transparent 100%
-  );
+  
 }
 
 .input-content:focus-within::before {
   transition: all 1s ease-in-out;
-  background: hsla(0, 0%, 100%, 0.814);
+  
 }
 
 .input-is:focus {
   outline: none;
-  border-bottom: 1px solid hsl(192, 100%, 100%);
+  border-bottom: 1px solid hsl(0, 84%, 70%);
   color: hsl(192, 100%, 88%);
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(102, 224, 255, 0.2) 27%,
-    rgba(102, 224, 255, 0.2) 63%,
-    transparent 100%
-  );
+  
 }
 
 .input-is::-moz-placeholder {
@@ -585,12 +514,12 @@ in other input type*/
 @keyframes blinkShadowsFilter {
   0% {
     filter: drop-shadow(46px 36px 28px rgba(64, 144, 181, 0.3411764706))
-      drop-shadow(-55px -40px 28px #9e30a9);
+      drop-shadow(-55px -40px 28px #c84747);
   }
 
   25% {
     filter: drop-shadow(46px -36px 24px rgba(64, 144, 181, 0.8980392157))
-      drop-shadow(-55px 40px 24px #9e30a9);
+      drop-shadow(-55px 40px 24px #c84747);
   }
 
   50% {
@@ -605,9 +534,38 @@ in other input type*/
 
   to {
     filter: drop-shadow(46px 36px 28px rgba(64, 144, 181, 0.3411764706))
-      drop-shadow(-55px -40px 28px #9e30a9);
+      drop-shadow(-55px -40px 28px #c84747);
   }
 }
+.comic-button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  background-color: #ff5252;
+  border: 2px solid #000;
+  border-radius: 10px;
+  box-shadow: 5px 5px 0px #000;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.comic-button:hover {
+  background-color: #fff;
+  color: #ff5252;
+  border: 2px solid #ff5252;
+  box-shadow: 5px 5px 0px #ff5252;
+}
+
+.comic-button:active {
+  background-color: #fcf414;
+  box-shadow: none;
+  transform: translateY(4px);
+}
+
 
 </style>
 

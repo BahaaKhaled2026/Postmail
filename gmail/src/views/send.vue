@@ -159,8 +159,9 @@ export default {
         sender: this.sender,
         message: this.mail.message,
         attachments: [],
-        id: this.mail.id,
+        id: localStorage.getItem("willBeSentId"),
       };
+      console.log($store.state.currDraftMsg.id);
         fetch(`http://localhost:8080/removeDraft/${$store.state.currDraftMsg.id}`, {
           method: "POST",
           headers: {
@@ -274,6 +275,8 @@ export default {
         delDateDay: this.mail.delDateDay,
         attachments: SentObj,
         id: z,
+        isRead:false,
+        priorityLvl:0,
       };
       console.log(mailObject);
       fetch(`http://localhost:8080/sendMail`, {
@@ -344,10 +347,14 @@ export default {
         title: this.mail.title,
         sender: this.sender,
         message: this.mail.message,
+        delDateMonth: this.mail.delDateMonth,
+        delDateDay: this.mail.delDateDay,
         attachments: SentObj,
-        id: this.mail.id,
+        id: 0,
+        isRead:false,
+        priorityLvl:0,
       };
-      console.log(mailObject);
+      console.log(mailObject,"hya di");
       fetch(`http://localhost:8080/draft`, {
         method: "POST",
         headers: {
