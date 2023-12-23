@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class Control {
     }
     public  long calculateSecondsPassed(String providedDateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        LocalDateTime providedDate = LocalDateTime.parse(providedDateString + "T00:00:00", formatter);
+        LocalDateTime providedDate = LocalDate.parse(providedDateString, formatter).atStartOfDay();
         LocalDateTime currentDate = LocalDateTime.now();
         Duration duration = Duration.between(providedDate, currentDate);
         return duration.getSeconds();
