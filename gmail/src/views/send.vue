@@ -70,7 +70,7 @@ export default {
     }
   },
   mounted() {
-    $store.commit("setSendClicked",false)
+    $store.commit("setSendClicked", false);
     if ($store.state.selectedMsg === -1) {
       this.sentto = $store.state.wantedContact;
     }
@@ -131,9 +131,7 @@ export default {
   },
   beforeUnmount() {
     $store.commit("setWantedContact", "");
-    console.log(
-      !$store.state.sendClicked
-      );
+    console.log(!$store.state.sendClicked);
     if (
       !$store.state.holdDraft &&
       $store.state.currUser !== null &&
@@ -144,7 +142,7 @@ export default {
     ) {
       this.addToDraft();
       console.log("yoooooooooooo");
-    }else if($store.state.holdDraft && !$store.state.sendClicked ){
+    } else if ($store.state.holdDraft && !$store.state.sendClicked) {
       console.log(localStorage.getItem("willBeSentId"));
       let emails = [];
       emails = this.sentto.split(",");
@@ -157,40 +155,44 @@ export default {
         SentObj = this.attachmentOBJ;
         console.log("yo");
       }
-      let z=localStorage.getItem("willBeSentId");
+      let z = localStorage.getItem("willBeSentId");
       const mailObject = {
         sentToMails: emails,
         date: this.mail.date,
         title: this.mail.title,
         sender: this.sender,
         message: this.mail.message,
-        delDateMonth: this.mail.delDateMonth,
-        delDateDay: this.mail.delDateDay,
+        delDate : this.mail.delDate,
         attachments: SentObj,
         id: z,
-        isRead:false,
-        priorityLvl:0,
+        isRead: false,
+        priorityLvl: 0,
       };
-      fetch(`http://localhost:8080/renewDraft/${localStorage.getItem("willBeSentId")}`, {
+      fetch(
+        `http://localhost:8080/renewDraft/${localStorage.getItem(
+          "willBeSentId"
+        )}`,
+        {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(mailObject),
+        }
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to send mail");
+          }
+          return response.json();
         })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Failed to send mail");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            console.log("Server response:", data);
-          })
-          .catch((error) => {
-            console.error("Error:", error.message);
-          });
-    } 
+        .then((data) => {
+          console.log("Server response:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error.message);
+        });
+    }
 
     let currDraftMsg = {
       sentToMails: [],
@@ -216,8 +218,7 @@ export default {
         message: $store.state.currDraftMsg.message,
         id: 0,
         isRead: false,
-        delDateDay: "",
-        delDateMonth: "",
+        delDate: "",
       },
       attachmentOBJ: [],
     };
@@ -243,8 +244,10 @@ export default {
         timeZone,
       });
       this.mail.date = formatter.format(now);
-      this.mail.delDateDay = now.getDate();
-      this.mail.delDateMonth = now.getMonth()+1;
+      let delDateDay = now.getDate();
+      let delDateMonth = now.getMonth() + 1;
+      let delDateYear = now.getFullYear();
+      this.mail.delDate = delDateMonth + "/" + delDateDay + "/" + delDateYear;
     },
 
     async handleFileChange() {
@@ -272,19 +275,18 @@ export default {
         SentObj = this.attachmentOBJ;
         console.log("yo");
       }
-      let z=localStorage.getItem("willBeSentId");
+      let z = localStorage.getItem("willBeSentId");
       const mailObject = {
         sentToMails: emails,
         date: this.mail.date,
         title: this.mail.title,
         sender: this.sender,
         message: this.mail.message,
-        delDateMonth: this.mail.delDateMonth,
-        delDateDay: this.mail.delDateDay,
+        delDate: this.mail.delDate,
         attachments: SentObj,
         id: z,
-        isRead:false,
-        priorityLvl:0,
+        isRead: false,
+        priorityLvl: 0,
       };
       console.log(mailObject);
       fetch(`http://localhost:8080/sendMail`, {
@@ -355,14 +357,13 @@ export default {
         title: this.mail.title,
         sender: this.sender,
         message: this.mail.message,
-        delDateMonth: this.mail.delDateMonth,
-        delDateDay: this.mail.delDateDay,
+        delDate: this.mail.delDate,
         attachments: SentObj,
         id: 0,
-        isRead:false,
-        priorityLvl:0,
+        isRead: false,
+        priorityLvl: 0,
       };
-      console.log(mailObject,"hya di");
+      console.log(mailObject, "hya di");
       fetch(`http://localhost:8080/draft`, {
         method: "POST",
         headers: {
