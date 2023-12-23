@@ -75,9 +75,9 @@ export default {
       }
     },
     goTosend(ms) {
-      $store.commit("setWillBeSentId",ms.id);
-      console.log(ms.id);
+      
       localStorage.setItem("willBeSentId",ms.id);
+      console.log(localStorage.getItem("willBeSentId"));
       $store.commit("setCurrDraftMsg",ms);
       //$store.state.currDraftMsg.sentToMails = ms.sentToMails;
 

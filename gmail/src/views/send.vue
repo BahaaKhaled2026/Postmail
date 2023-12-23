@@ -144,25 +144,34 @@ export default {
     ) {
       this.addToDraft();
       console.log("yoooooooooooo");
-    }
-    else if($store.state.holdDraft &&
-      $store.state.currUser !== null &&
-      (this.mail.title.length !== 0 ||
-        this.mail.sentToMails.length !== 0 ||
-        this.mail.message.length !== 0) &&
-      !$store.state.sendClicked){
+    }else if($store.state.holdDraft && !$store.state.sendClicked ){
+      console.log(localStorage.getItem("willBeSentId"));
+      let emails = [];
+      emails = this.sentto.split(",");
+      let attachedfile = null;
+      let attachmenttype = null;
+      let attachmentName = null;
 
-        const mailObject = {
-        sentToMails: [],
+      let SentObj = null;
+      if (this.selectedFile !== null) {
+        SentObj = this.attachmentOBJ;
+        console.log("yo");
+      }
+      let z=localStorage.getItem("willBeSentId");
+      const mailObject = {
+        sentToMails: emails,
         date: this.mail.date,
         title: this.mail.title,
         sender: this.sender,
         message: this.mail.message,
-        attachments: [],
-        id: localStorage.getItem("willBeSentId"),
+        delDateMonth: this.mail.delDateMonth,
+        delDateDay: this.mail.delDateDay,
+        attachments: SentObj,
+        id: z,
+        isRead:false,
+        priorityLvl:0,
       };
-      console.log($store.state.currDraftMsg.id);
-        fetch(`http://localhost:8080/removeDraft/${$store.state.currDraftMsg.id}`, {
+      fetch(`http://localhost:8080/renewDraft/${localStorage.getItem("willBeSentId")}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -173,7 +182,6 @@ export default {
             if (!response.ok) {
               throw new Error("Failed to send mail");
             }
-            this.$router.push({ name: "inbox" });
             return response.json();
           })
           .then((data) => {
@@ -182,8 +190,8 @@ export default {
           .catch((error) => {
             console.error("Error:", error.message);
           });
-          this.addToDraft();
-    }
+    } 
+
     let currDraftMsg = {
       sentToMails: [],
       date: "",
@@ -236,7 +244,7 @@ export default {
       });
       this.mail.date = formatter.format(now);
       this.mail.delDateDay = now.getDate();
-      this.mail.delDateMonth = now.getMonth();
+      this.mail.delDateMonth = now.getMonth()+1;
     },
 
     async handleFileChange() {

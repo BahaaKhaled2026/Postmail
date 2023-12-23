@@ -21,8 +21,7 @@ public class mail {
     private String message;
     private ArrayList<attachment>attachments;
     private int id;
-    private int delDateDay;
-    private int delDateMonth;
+    private String delDate;
     private int priorityLvl;
 
     public int getPriorityLvl() {
@@ -33,21 +32,7 @@ public class mail {
         this.priorityLvl = priorityLvl;
     }
 
-    public int getDelDateDay() {
-        return delDateDay;
-    }
 
-    public void setDelDateDay(int delDateDay) {
-        this.delDateDay = delDateDay;
-    }
-
-    public int getDelDateMonth() {
-        return delDateMonth;
-    }
-
-    public void setDelDateMonth(int delDateMonth) {
-        this.delDateMonth = delDateMonth;
-    }
 
     public int getId() {
         return id;
@@ -68,7 +53,17 @@ public class mail {
                 ", message='" + message + '\'' +
                 ", attachments=" + attachments +
                 ", id=" + id +
+                ", delDate='" + delDate + '\'' +
+                ", priorityLvl=" + priorityLvl +
                 '}';
+    }
+
+    public String getDelDate() {
+        return delDate;
+    }
+
+    public void setDelDate(String delDate) {
+        this.delDate = delDate;
     }
 
     public ArrayList<attachment> getAttachments() {

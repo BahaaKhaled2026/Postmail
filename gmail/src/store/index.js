@@ -27,7 +27,7 @@ export default createStore({
         draftmirror: [],
         trashmirror: [],
         foldersmirror: [],
-        willBeSentId: 0
+        willBeSentId: 0,
     },
     mutations: {
         setWillBeSentId(state, status) {

@@ -65,6 +65,9 @@ public class services {
 
                 if (hashedInputPassword.equals(sentUser.getPassword())) {
                     System.out.println("Login successful");
+                    ArrayList<UserData>tandeef=userDataService.getUsersData();
+                    userDataService.cleanTrash(tandeef.get(sentUser.getIndex()).getTrash());
+                    userDataService.writeUsersData(tandeef);
                     return ResponseEntity.ok(sentUser);
                 } else {
                     System.out.println("Incorrect password");
@@ -97,7 +100,7 @@ public class services {
     }
     @PostMapping("/sendMail")
     public ResponseEntity<String> sendMail(@RequestBody mail mailObject) {
-        System.out.println(mailObject.toString());
+        System.out.println(mailObject.toString()+"from send");
         try {
             UserData sender=userDataService.getUserByEmail(mailObject.getSender());
             ArrayList<UserData>usersData=userDataService.getUsersData();
@@ -220,6 +223,22 @@ public class services {
             UserData sender=userDataService.getUserByEmail(mailObject.getSender());
             int z=userDataService.getMsgIndByID(usersData.get(sender.getIndex()).getDraft(),id);
             usersData.get(sender.getIndex()).getDraft().remove(z);
+            userDataService.writeUsersData(usersData);
+            System.out.println("done removed,"+id);
+            return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to send mail", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/renewDraft/{id}")
+    public ResponseEntity<String> renewDraft(@RequestBody mail mailObject , @PathVariable int id) {
+        try {
+            mailObject.setId(id);
+            ArrayList<UserData>usersData=userDataService.getUsersData();
+            UserData sender=userDataService.getUserByEmail(mailObject.getSender());
+            int z=userDataService.getMsgIndByID(usersData.get(sender.getIndex()).getDraft(),id);
+            usersData.get(sender.getIndex()).getDraft().set(z,mailObject);
             userDataService.writeUsersData(usersData);
             System.out.println("done removed,"+id);
             return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
