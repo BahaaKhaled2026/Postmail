@@ -43,6 +43,7 @@ export default {
     },
   },
   mounted() {
+    $store.commit("setSrtPriority", false);
     location.reload();
     if (!this.done) {
       const userDataString = localStorage.getItem("userData");
@@ -84,6 +85,7 @@ export default {
     }
   },
   mounted() {
+    $store.commit("setSrtPriority", false);
     this.done = false;
     setInterval(() => {
       this.messages =
@@ -132,7 +134,7 @@ export default {
       messages: [],
       done: false,
       currentPage: 1,
-      pageSize: 4,
+      pageSize: 5,
     };
   },
   computed: {
@@ -167,8 +169,8 @@ export default {
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
   box-shadow: 3px 0px 14px 0px #00000086;
+  overflow-x: hidden;
   overflow-y: scroll;
-  overflow-x: scroll;
 }
 .all {
   height: 100%;

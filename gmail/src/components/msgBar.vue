@@ -7,6 +7,7 @@
     }"
   >
     <div class="row msgBody flex-column">
+      <div @click="openMessage" class="overLay"></div>
       <div class="sender d-flex justify-content-between">
         <p @click="openMessage">{{ msg.title }}</p>
         <div class="actions d-flex">
@@ -447,6 +448,7 @@ export default {
 .msgBody {
   padding: 15px;
   max-height: 10000px;
+  position: relative;
 }
 .msgBody p {
   margin: 0;
@@ -729,5 +731,12 @@ export default {
   background-color: #fff;
   box-shadow: 0 0 0 2px rgb(255, 222, 222);
   align-self: start;
+}
+.overLay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 75%;
+  height: 100%;
 }
 </style>
