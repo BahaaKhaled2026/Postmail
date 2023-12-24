@@ -269,6 +269,7 @@ export default {
           console.error("Error during login:", error);
         });
         this.newname[fld.folderindex] = "" ;
+        this.showrename = false ;
     },
     showrenameform(x) {
       this.showrename[x] = !this.showrename[x];
