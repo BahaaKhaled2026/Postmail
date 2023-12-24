@@ -1,7 +1,10 @@
 <template>
   <div
     class="msg"
-    :style="{ backgroundColor: msg.read ? 'white' : 'aliceblue', fontWeight: msg.read ? 'bold' : 'bolder' }"
+    :style="{
+      backgroundColor: msg.read ? 'white' : 'aliceblue',
+      fontWeight: msg.read ? 'bold' : 'bolder',
+    }"
   >
     <div class="row msgBody flex-column">
       <div class="sender d-flex justify-content-between">
@@ -130,13 +133,12 @@
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <line x1="12" x2="12" y1="5" y2="19"></line>
-                <line x1="5" x2="19" y1="12" y2="12"></line>
-                </svg
+                <line x1="5" x2="19" y1="12" y2="12"></line></svg
             ></span>
           </button>
           <div class="folders d-flex flex-column" v-if="showfolders">
             <div
-              class="flds fldmenu col-5 d-flex justify-content-between "
+              class="flds fldmenu col-5 d-flex justify-content-between"
               v-for="fld in folders"
               :key="fld.foldername"
             >
@@ -216,7 +218,7 @@ export default {
         if (this.isChecked[i] === true) {
           if (!this.msginfolder(this.msg.id, i)) {
             let msgs = JSON.parse(JSON.stringify(this.msg));
-            msgs.priorityLvl = 0 ;
+            msgs.priorityLvl = 0;
             $store.state.currUser.folders[i].messages.push(msgs);
           } else {
             console.log("tmam");
@@ -340,16 +342,18 @@ export default {
         });
     },
     mousedown(index) {
-      if(index === this.usersRate){
-        this.usersRate = 0 ;
-        this.clicked =false ;
-      }
-      else{
+      if (index === this.usersRate) {
+        this.usersRate = 0;
+        this.clicked = false;
+      } else {
         this.usersRate = index;
         this.clicked = true;
       }
       this.updatepriority();
-      console.log($store.state.currUser) ;
+      if ($store.state.srtPriority === true) {
+        $store.commit("sortMsgPri");
+      }
+      console.log($store.state.currUser);
     },
     restore() {
       $store.commit("restore", this.msg);
@@ -703,11 +707,11 @@ export default {
   transform: translate(3px, 3px);
   box-shadow: 0px 0px var(--main-color);
 }
-.folders{
+.folders {
   background: inherit;
 }
 .folders {
-  margin-top:40px ;
+  margin-top: 40px;
   position: absolute;
   width: 500px;
 }

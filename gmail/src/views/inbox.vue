@@ -3,7 +3,16 @@
     <section class="d-flex window">
       <sideBar />
       <div v-if="hasMessages" class="body flex-column">
-        <msgBar v-for="msg in messages" :key="msg.id" :msg="msg" />
+        <div class="pagination">
+          <button @click="prevPage" :disabled="currentPage === 1">
+            Previous
+          </button>
+          <span>{{ currentPage }}</span>
+          <button @click="nextPage" :disabled="currentPage === totalPages">
+            Next
+          </button>
+        </div>
+        <msgBar v-for="msg in displayedMessages" :key="msg.id" :msg="msg" />
       </div>
       <div v-else class="body flex-column">
         <h1>No messages</h1>
@@ -21,50 +30,61 @@ export default {
     sideBar,
     msgBar,
   },
-  mounted(){
-    location.reload();
-    if(!this.done){
-      const userDataString = localStorage.getItem("userData");
-    if (!userDataString) {
-      $store.commit("setLoginStatus", false);
-      $store.commit("setCurrUser", null);
-    } else {
-      $store.commit("setLoginStatus", true);
-      let em = JSON.parse(userDataString).email;
-      let newData;
-      fetch(`http://localhost:8080/users/${em}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-        })
-        .then((userData) => {
-          console.log(userData);
-          newData = userData;
-          $store.commit("setSearch", localStorage.getItem("search"));
-          $store.commit("setSearchType", localStorage.getItem("searchType"));
-          setTimeout(() => {
-            $store.commit("searchMsg", $store.state.search);
-          }, 0);
-          $store.commit("setCurrUser", newData);
-        })
-        .catch((error) => {
-          console.error("Error during login:", error);
-        });
-    }
-    this.done=true;
-  }
-    
+  methods: {
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
   },
   mounted() {
-    this.done=false
+    location.reload();
+    if (!this.done) {
+      const userDataString = localStorage.getItem("userData");
+      if (!userDataString) {
+        $store.commit("setLoginStatus", false);
+        $store.commit("setCurrUser", null);
+      } else {
+        $store.commit("setLoginStatus", true);
+        let em = JSON.parse(userDataString).email;
+        let newData;
+        fetch(`http://localhost:8080/users/${em}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+          })
+          .then((userData) => {
+            console.log(userData);
+            newData = userData;
+            $store.commit("setSearch", localStorage.getItem("search"));
+            $store.commit("setSearchType", localStorage.getItem("searchType"));
+            setTimeout(() => {
+              $store.commit("searchMsg", $store.state.search);
+            }, 0);
+            $store.commit("setCurrUser", newData);
+          })
+          .catch((error) => {
+            console.error("Error during login:", error);
+          });
+      }
+      this.done = true;
+    }
+  },
+  mounted() {
+    this.done = false;
     setInterval(() => {
       this.messages =
         $store.state.currUser && $store.state.currUser.inbox
@@ -110,12 +130,25 @@ export default {
   data() {
     return {
       messages: [],
-      done:false
+      done: false,
+      currentPage: 1,
+      pageSize: 4,
     };
   },
   computed: {
     hasMessages() {
       return this.messages && this.messages.length > 0;
+    },
+    totalPages() {
+      const totalMessages = this.$store.state.currUser.inbox
+        ? this.$store.state.currUser.inbox.length
+        : 0;
+      return Math.ceil(totalMessages / this.pageSize);
+    },
+    displayedMessages() {
+      const start = (this.currentPage - 1) * this.pageSize;
+      const end = start + this.pageSize;
+      return this.$store.state.currUser.inbox.slice(start, end);
     },
   },
 };
@@ -149,17 +182,23 @@ export default {
   width: 100%;
   margin: auto;
   border-radius: 50px;
-  
-  
 }
 .body > * {
   margin: 2px;
   margin-top: 5px;
 }
-.window{
+.window {
   height: 100vh;
 }
-.flex-column{
+.flex-column {
   height: 100vh;
+}
+.pagination {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.pagination button {
+  cursor: pointer;
 }
 </style>

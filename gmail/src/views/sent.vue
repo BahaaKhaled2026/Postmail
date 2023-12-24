@@ -3,7 +3,16 @@
     <section class="d-flex window">
       <sideBar />
       <div v-if="hasMessages" class="body flex-column">
-        <msgBar v-for="msg in messages" :key="msg.id" :msg="msg" />
+        <div class="pagination">
+          <button @click="prevPage" :disabled="currentPage === 1">
+            Previous
+          </button>
+          <span>{{ currentPage }}</span>
+          <button @click="nextPage" :disabled="currentPage === totalPages">
+            Next
+          </button>
+        </div>
+        <msgBar v-for="msg in displayedMessages" :key="msg.id" :msg="msg" />
       </div>
       <div v-else class="body flex-column">
         <h1>No messages</h1>
@@ -21,7 +30,7 @@ export default {
     sideBar,
     msgBar,
   },
-  mounted(){
+  mounted() {
     const userDataString = localStorage.getItem("userData");
     if (!userDataString) {
       $store.commit("setLoginStatus", false);
@@ -59,6 +68,7 @@ export default {
     }
   },
   mounted() {
+    $store.commit("setSrtPriority", false);
     setInterval(() => {
       this.messages =
         $store.state.currUser && $store.state.currUser.sent
@@ -108,11 +118,36 @@ export default {
   data() {
     return {
       messages: null,
+      currentPage: 1,
+      pageSize: 4,
     };
+  },
+  methods: {
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
   },
   computed: {
     hasMessages() {
       return this.messages && this.messages.length > 0;
+    },
+    totalPages() {
+      const totalMessages = this.$store.state.currUser.sent
+        ? this.$store.state.currUser.sent.length
+        : 0;
+      return Math.ceil(totalMessages / this.pageSize);
+    },
+    displayedMessages() {
+      const start = (this.currentPage - 1) * this.pageSize;
+      const end = start + this.pageSize;
+      return this.$store.state.currUser.sent.slice(start, end);
     },
   },
 };
@@ -145,16 +180,23 @@ export default {
   width: 100%;
   margin: auto;
   border-radius: 50px;
-  
 }
 .body > * {
   margin: 2px;
   margin-top: 5px;
 }
-.window{
+.window {
   height: 100vh;
 }
-.flex-column{
+.flex-column {
   height: 100vh;
+}
+.pagination {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.pagination button {
+  cursor: pointer;
 }
 </style>

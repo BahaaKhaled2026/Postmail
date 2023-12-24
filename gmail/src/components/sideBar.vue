@@ -42,7 +42,13 @@
         <li>
           <button
             class="topBts2"
-            v-show="routename != 'inbox' && routename != 'sent' && routename != 'draft' && routename != 'folder' && routename != 'trash'"
+            v-show="
+              routename != 'inbox' &&
+              routename != 'sent' &&
+              routename != 'draft' &&
+              routename != 'folder' &&
+              routename != 'trash'
+            "
           >
             delete
           </button>
@@ -79,7 +85,7 @@
           </button>
           <div class="folders d-flex flex-column" v-if="showfolders">
             <div
-              class="flds fldmenu col-5 d-flex justify-content-between "
+              class="flds fldmenu col-5 d-flex justify-content-between"
               v-for="fld in folders"
               :key="fld.foldername"
             >
@@ -102,7 +108,7 @@
               routename != 'folder'
             "
           >
-          addtofolder
+            addtofolder
           </button>
         </li>
       </div>
@@ -789,14 +795,17 @@ export default {
       this.$router.push({ name: "send" });
     },
     sortMsgAsc() {
+      $store.commit("setSrtPriority", false);
       this.$store.commit("sortMsgAsc");
       console.log($store.state.currUser.inbox);
     },
     sortMsgDec() {
+      $store.commit("setSrtPriority", false);
       this.$store.commit("sortMsgDec");
       console.log($store.state.currUser.inbox);
     },
     sortMsgPri() {
+      $store.commit("setSrtPriority", true);
       this.$store.commit("sortMsgPri");
       console.log($store.state.currUser.inbox);
     },
@@ -1563,7 +1572,7 @@ input:hover {
   display: block;
 }
 
-.linktocont:hover{
+.linktocont:hover {
   color: #212121;
 }
 .topBts2 {

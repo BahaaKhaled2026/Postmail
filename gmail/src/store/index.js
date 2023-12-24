@@ -28,8 +28,12 @@ export default createStore({
         trashmirror: [],
         foldersmirror: [],
         willBeSentId: 0,
+        srtPriority: false,
     },
     mutations: {
+        setSrtPriority(state, status) {
+            state.srtPriority = status
+        },
         setWillBeSentId(state, status) {
 
         },
