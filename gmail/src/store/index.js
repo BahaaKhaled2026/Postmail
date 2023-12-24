@@ -69,19 +69,25 @@ export default createStore({
             const { msg, usersRate, route, index } = payload;
             switch (route) {
                 case "inbox":
-                    state.currUser.inbox = state.currUser.inbox.filter((m) => m.id !== msg.id);
-                    msg.priorityLvl = usersRate;
-                    state.currUser.inbox.push(msg);
+                    for(let i = 0 ; i < state.currUser.inbox.length ; i++){
+                        if(state.currUser.inbox[i].id === msg.id){
+                            state.currUser.inbox[i].priorityLvl = usersRate ;
+                        }
+                    }
                     break;
                 case "sent":
-                    state.currUser.sent = state.currUser.sent.filter((m) => m.id !== msg.id);
-                    msg.priorityLvl = usersRate;
-                    state.currUser.sent.push(msg);
+                    for(let i = 0 ; i < state.currUser.sent.length ; i++){
+                        if(state.currUser.sent[i].id === msg.id){
+                            state.currUser.sent[i].priorityLvl = usersRate ;
+                        }
+                    }
                     break;
                 case "folder":
-                    state.currUser.folders[index].messages = state.currUser.folders[index].messages.filter((m) => m.id !== msg.id);
-                    msg.priorityLvl = usersRate;
-                    state.currUser.folders[index].messages.push(msg);
+                    for(let i = 0 ; i < state.currUser.folders[index].messages.length ; i++){
+                        if(state.currUser.folders[index].messages[i].id === msg.id){
+                            state.currUser.folders[index].messages[i].priorityLvl = usersRate ;
+                        }
+                    }
                     break;
             }
         },

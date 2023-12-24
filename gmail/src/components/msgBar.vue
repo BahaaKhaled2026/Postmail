@@ -1,7 +1,7 @@
 <template>
   <div
     class="msg"
-    :style="{ backgroundColor: msg.read ? 'white' : 'aliceblue' , fontWeight: msg.read ? 'bold' : 'bolder'}"
+    :style="{ backgroundColor: msg.read ? 'white' : 'aliceblue', fontWeight: msg.read ? 'bold' : 'bolder' }"
   >
     <div class="row msgBody flex-column">
       <div class="sender d-flex justify-content-between">
@@ -342,12 +342,14 @@ export default {
     mousedown(index) {
       if(index === this.usersRate){
         this.usersRate = 0 ;
+        this.clicked =false ;
       }
       else{
         this.usersRate = index;
+        this.clicked = true;
       }
-      this.clicked = true;
       this.updatepriority();
+      console.log($store.state.currUser) ;
     },
     restore() {
       $store.commit("restore", this.msg);
