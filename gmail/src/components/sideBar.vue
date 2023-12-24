@@ -41,11 +41,19 @@
         </li>
         <li>
           <button
+            class="topBts2"
+            v-show="routename != 'inbox' && routename != 'sent' && routename != 'draft' && routename != 'folder' && routename != 'trash'"
+          >
+            delete
+          </button>
+        </li>
+        <li>
+          <button
             class="topBts"
             @click="removechoosen"
             v-show="routename == 'draft' || routename == 'folder'"
           >
-            remove
+            delete
           </button>
         </li>
         <li>
@@ -69,12 +77,33 @@
           >
             addtofolder
           </button>
-          <div class="folders d-flex" v-if="showfolders">
-            <div class="flds" v-for="fld in folders" :key="fld.foldername">
-              <input type="checkbox" v-model="isChecked[fld.folderindex]" />
-              <label for="myCheckbox">{{ fld.foldername }}</label>
+          <div class="folders d-flex flex-column" v-if="showfolders">
+            <div
+              class="flds fldmenu col-5 d-flex justify-content-between "
+              v-for="fld in folders"
+              :key="fld.foldername"
+            >
+              <label class="checkcontainer">
+                <input type="checkbox" v-model="isChecked[fld.folderindex]" />
+                <div class="checkmark"></div>
+              </label>
+              <label class="foldername flex-grow-1" for="myCheckbox">{{
+                fld.foldername
+              }}</label>
             </div>
           </div>
+        </li>
+        <li>
+          <button
+            class="topBts2"
+            v-show="
+              routename != 'inbox' &&
+              routename != 'sent' &&
+              routename != 'folder'
+            "
+          >
+          addtofolder
+          </button>
         </li>
       </div>
       <li class="nav-item">
@@ -226,7 +255,7 @@
             </label>
           </form>
         </div>
-        <router-link to="/contacts">Contacts</router-link>
+        <router-link to="/contacts" class="linktocont">Contacts</router-link>
       </li>
 
       <li class="nav-item2">
@@ -534,18 +563,22 @@ export default {
     movechoosen() {
       if (this.routename === "inbox") {
         for (let i = 0; i < $store.state.inboxmirror.length; i++) {
-            this.addtofolders(this.getmsgbyid($store.state.inboxmirror[i], "inbox"));
+          this.addtofolders(
+            this.getmsgbyid($store.state.inboxmirror[i], "inbox")
+          );
         }
         $store.state.inboxmirror = [];
       } else if (this.routename === "sent") {
         for (let i = 0; i < $store.state.sentmirror.length; i++) {
-            this.addtofolders(this.getmsgbyid($store.state.sentmirror[i], "sent"));
+          this.addtofolders(
+            this.getmsgbyid($store.state.sentmirror[i], "sent")
+          );
         }
         $store.state.sentmirror = [];
-      }else if (this.routename === "folder") {
+      } else if (this.routename === "folder") {
         for (let i = 0; i < $store.state.foldersmirror.length; i++) {
-          let msg = this.getmsgbyid($store.state.foldersmirror[i], "folder") ;
-          this.addtofolders(msg) ;
+          let msg = this.getmsgbyid($store.state.foldersmirror[i], "folder");
+          this.addtofolders(msg);
         }
         $store.state.draftmirror = [];
       }
@@ -825,7 +858,6 @@ export default {
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
   box-shadow: -3px 0px 14px 0px #00000086;
-  overflow-y: scroll;
 }
 .nav a {
   font-weight: 700px;
@@ -925,6 +957,7 @@ export default {
   height: 40px;
   position: relative;
   bottom: 3px;
+  z-index: 1;
 }
 
 .type1:hover::before {
@@ -1437,6 +1470,8 @@ input:hover {
   }
 }
 .topBts {
+  font-weight: bold;
+  color: white;
   border: 2px solid rgba(255, 0, 0, 0.582);
   background-color: rgba(255, 0, 0, 0.582);
   border-radius: 0.9em;
@@ -1454,6 +1489,99 @@ input:hover {
 }
 
 .topBts:hover {
-  background-color: rgba(236, 100, 100, 0.582);
+  background-color: white;
+  color: rgba(255, 0, 0, 0.582);
+}
+.folders {
+  position: absolute;
+}
+.foldername {
+  word-break: break-all;
+}
+.fldmenu {
+  margin: 1px;
+  position: relative;
+  height: auto;
+  z-index: 2;
+  border-radius: 10px;
+  outline: none;
+  border-color: rgba(255, 0, 0, 0.582);
+  background-color: #fff;
+  box-shadow: 0 0 0 2px rgb(255, 222, 222);
+  align-self: start;
+}
+
+/* checkbox */
+.checkcontainer {
+  max-height: 20px;
+  margin: 5px;
+  --input-focus: rgba(255, 0, 0, 0.582);
+  --input-out-of-focus: #ccc;
+  --bg-color: #fff;
+  --bg-color-alt: #666;
+  --main-color: #323232;
+  position: relative;
+  cursor: pointer;
+}
+
+.checkcontainer input {
+  position: absolute;
+  opacity: 0;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  top: 0;
+  left: 0;
+  border: 2px solid var(--main-color);
+  border-radius: 5px;
+  box-shadow: 4px 4px var(--main-color);
+  background-color: var(--input-out-of-focus);
+  transition: all 0.3s;
+}
+
+.checkcontainer input:checked ~ .checkmark {
+  background-color: var(--input-focus);
+}
+
+.checkmark:after {
+  content: "";
+  width: 7px;
+  height: 10px;
+  position: absolute;
+  top: 1.5px;
+  left: 4px;
+  display: none;
+  border: solid var(--bg-color);
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+}
+
+.checkcontainer input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.linktocont:hover{
+  color: #212121;
+}
+.topBts2 {
+  font-weight: bold;
+  color: white;
+  border: 2px solid rgba(60, 60, 60, 0.582);
+  background-color: rgba(60, 60, 60, 0.582);
+  border-radius: 0.9em;
+  padding: 0.8em 1.2em 0.8em 1em;
+  transition: all ease-in-out 0.2s;
+  font-size: 16px;
+}
+
+.topBts2 span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-weight: 600;
 }
 </style>

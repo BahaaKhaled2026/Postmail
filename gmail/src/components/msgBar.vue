@@ -1,10 +1,16 @@
 <template>
-  <div class="msg" :style="{ backgroundColor: msg.read ? 'white' : 'aliceblue' }">
+  <div
+    class="msg"
+    :style="{ backgroundColor: msg.read ? 'white' : 'aliceblue' , fontWeight: msg.read ? 'bold' : 'bolder'}"
+  >
     <div class="row msgBody flex-column">
       <div class="sender d-flex justify-content-between">
         <p @click="openMessage">{{ msg.title }}</p>
         <div class="actions d-flex">
-          <input type="checkbox" @click="choose" v-model="chosen" />
+          <label class="checkcontainer">
+            <input type="checkbox" @click="choose" v-model="chosen" />
+            <div class="checkmark"></div>
+          </label>
           <div v-show="inTrash" class="yourrate">
             <i
               class="fa-solid fa-star"
@@ -107,12 +113,40 @@
         <p @click="openMessage">{{ msg.sender }}</p>
       </div>
       <div class="dateandfolder d-flex justify-content-between">
-        <div class="addtofilder d-flex flex-column">
-          <button @click="showfs">addtofolder</button>
+        <div class="addtofolder d-flex flex-column">
+          <button class="addbutton" type="button" @click="showfs">
+            <span class="addbutton__text">To folders</span>
+            <span class="addbutton__icon"
+              ><svg
+                class="svg"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <line x1="12" x2="12" y1="5" y2="19"></line>
+                <line x1="5" x2="19" y1="12" y2="12"></line>
+                </svg
+            ></span>
+          </button>
           <div class="folders d-flex flex-column" v-if="showfolders">
-            <div class="flds" v-for="fld in folders" :key="fld.foldername">
-              <input type="checkbox" v-model="isChecked[fld.folderindex]" />
-              <label for="myCheckbox">{{ fld.foldername }}</label>
+            <div
+              class="flds fldmenu col-5 d-flex justify-content-between "
+              v-for="fld in folders"
+              :key="fld.foldername"
+            >
+              <label class="checkcontainer">
+                <input type="checkbox" v-model="isChecked[fld.folderindex]" />
+                <div class="checkmark"></div>
+              </label>
+              <label class="foldername flex-grow-1" for="myCheckbox">{{
+                fld.foldername
+              }}</label>
             </div>
           </div>
         </div>
@@ -182,6 +216,7 @@ export default {
         if (this.isChecked[i] === true) {
           if (!this.msginfolder(this.msg.id, i)) {
             let msgs = JSON.parse(JSON.stringify(this.msg));
+            msgs.priorityLvl = 0 ;
             $store.state.currUser.folders[i].messages.push(msgs);
           } else {
             console.log("tmam");
@@ -305,10 +340,14 @@ export default {
         });
     },
     mousedown(index) {
-      this.usersRate = index;
+      if(index === this.usersRate){
+        this.usersRate = 0 ;
+      }
+      else{
+        this.usersRate = index;
+      }
       this.clicked = true;
       this.updatepriority();
-      $store.commit("sortMsgPri");
     },
     restore() {
       $store.commit("restore", this.msg);
@@ -543,7 +582,146 @@ export default {
 .Btn2:active {
   transform: translate(2px, 2px);
 }
+
+/* checkbox */
+.checkcontainer {
+  max-height: 20px;
+  margin: 5px;
+  margin-right: 20px;
+  --input-focus: rgba(255, 0, 0, 0.582);
+  --input-out-of-focus: #ccc;
+  --bg-color: #fff;
+  --bg-color-alt: #666;
+  --main-color: #323232;
+  position: relative;
+  cursor: pointer;
+}
+
+.checkcontainer input {
+  position: absolute;
+  opacity: 0;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  top: 0;
+  left: 0;
+  border: 2px solid var(--main-color);
+  border-radius: 5px;
+  box-shadow: 4px 4px var(--main-color);
+  background-color: var(--input-out-of-focus);
+  transition: all 0.3s;
+}
+
+.checkcontainer input:checked ~ .checkmark {
+  background-color: var(--input-focus);
+}
+
+.checkmark:after {
+  content: "";
+  width: 7px;
+  height: 10px;
+  position: absolute;
+  top: 1.5px;
+  left: 4px;
+  display: none;
+  border: solid var(--bg-color);
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+}
+
+.checkcontainer input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* add button */
+.addbutton {
+  --main-focus: #2d8cf0;
+  --font-color: #323232;
+  --bg-color-sub: #dedede;
+  --bg-color: #eee;
+  --main-color: #323232;
+  position: relative;
+  width: 150px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--main-color);
+  box-shadow: 4px 4px var(--main-color);
+  background-color: var(--bg-color);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.addbutton,
+.addbutton__icon,
+.addbutton__text {
+  transition: all 0.3s;
+}
+
+.addbutton .addbutton__text {
+  transform: translateX(22px);
+  color: var(--font-color);
+  font-weight: 600;
+}
+
+.addbutton .addbutton__icon {
+  position: absolute;
+  transform: translateX(109px);
+  height: 100%;
+  width: 39px;
+  background-color: var(--bg-color-sub);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addbutton .svg {
+  width: 20px;
+  fill: var(--main-color);
+}
+
+.addbutton:hover {
+  background: var(--bg-color);
+}
+
+.addbutton:hover .addbutton__text {
+  color: transparent;
+}
+
+.addbutton:hover .addbutton__icon {
+  width: 148px;
+  transform: translateX(0);
+}
+
+.addbutton:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0px 0px var(--main-color);
+}
+.folders{
+  background: inherit;
+}
 .folders {
-  background: white;
+  margin-top:40px ;
+  position: absolute;
+  width: 500px;
+}
+.foldername {
+  word-break: break-all;
+}
+.fldmenu {
+  margin: 1px;
+  position: relative;
+  height: auto;
+  z-index: 2;
+  border-radius: 10px;
+  outline: none;
+  border-color: rgba(255, 0, 0, 0.582);
+  background-color: #fff;
+  box-shadow: 0 0 0 2px rgb(255, 222, 222);
+  align-self: start;
 }
 </style>
