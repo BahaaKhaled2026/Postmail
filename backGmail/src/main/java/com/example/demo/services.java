@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
+
 public class services {
 
     @Autowired
@@ -134,22 +135,22 @@ public class services {
         }
     }
 
-    @PostMapping("/removeContact/{user}/{email}")
-    public ResponseEntity<String> removeContact(@PathVariable String user,@PathVariable String email) {
+    @DeleteMapping("/removeContact/{user}/{email}")
+    public ResponseEntity<String> removeContact(@PathVariable String user, @PathVariable String email) {
+        System.out.println("sba7o");
         try {
-            UserData sender=userDataService.getUserByEmail(user);
-            ArrayList<UserData>usersData=userDataService.getUsersData();
-            for(int i=0;i<usersData.get(sender.getIndex()).getContacts().size();i++){
-                if(usersData.get(sender.getIndex()).getContacts().get(i).getName().equals(email)){
+            UserData sender = userDataService.getUserByEmail(user);
+            ArrayList<UserData> usersData = userDataService.getUsersData();
+            for (int i = 0; i < usersData.get(sender.getIndex()).getContacts().size(); i++) {
+                if (usersData.get(sender.getIndex()).getContacts().get(i).getName().equals(email)) {
                     usersData.get(sender.getIndex()).getContacts().remove(i);
                     userDataService.writeUsersData(usersData);
                     break;
                 }
             }
-            return new ResponseEntity<>("Mail sent successfully", HttpStatus.OK);
+            return new ResponseEntity<>("Contact removed successfully", HttpStatus.OK);
         } catch (Exception e) {
-
-            return new ResponseEntity<>("Failed to send mail", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Failed to remove contact", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

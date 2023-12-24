@@ -810,10 +810,12 @@ export default {
       console.log($store.state.currUser.inbox);
     },
     signOut() {
+      this.$store.commit("setSignOut", true);
       localStorage.removeItem("token");
       localStorage.removeItem("userData");
       this.$store.commit("setLoginStatus", false);
       this.$store.commit("setCurrUser", null);
+      
       this.$router.push({ name: "prehome" });
     },
     searchMsg() {
@@ -974,6 +976,8 @@ export default {
 }
 .flex-column {
   width: 350px;
+  height: max-content;
+  min-height: 100vh;
 }
 .sendBtn {
   display: flex;

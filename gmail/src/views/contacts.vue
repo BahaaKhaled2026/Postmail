@@ -161,7 +161,7 @@ export default {
             if (!response.ok) {
               throw new Error("Failed to send mail");
             }
-            this.$router.push({ name: "inbox" });
+            location.reload();
             return response.json();
           })
           .then((data) => {
@@ -206,9 +206,10 @@ export default {
     },
     removeContact(cont) {
       let userEmail = $store.state.currUser.email;
+      
         console.log("contact is added");
         fetch(`http://localhost:8080/removeContact/${userEmail}/${cont.name}`, {
-          method: "POST",
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
@@ -324,8 +325,15 @@ export default {
       }
     },
     goSend(x) {
-      
-      $store.commit("setWantedContact", x.emails);
+      let z=""
+      for(let i=0;i<x.emails.length;i++){
+        if(i===x.emails.length-1){
+          z+=x.emails[i];
+          break;
+        }
+        z+=x.emails[i]+",";
+      }
+      $store.commit("setWantedContact", z);
       console.log(x);
       this.$router.push({ name: "send" });
     },

@@ -112,9 +112,9 @@ export default {
         });
     }
   },
-  updated() {
-    this.messages = $store.state.currUser.sent;
-  },
+  // updated() {
+  //   this.messages = $store.state.currUser.sent;
+  // },
   data() {
     return {
       messages: null,
@@ -139,15 +139,17 @@ export default {
       return this.messages && this.messages.length > 0;
     },
     totalPages() {
+      if(!$store.state.signOutClicked){
       const totalMessages = this.$store.state.currUser.sent
         ? this.$store.state.currUser.sent.length
         : 0;
-      return Math.ceil(totalMessages / this.pageSize);
+      return Math.ceil(totalMessages / this.pageSize);}
     },
     displayedMessages() {
+      if(!$store.state.signOutClicked){
       const start = (this.currentPage - 1) * this.pageSize;
       const end = start + this.pageSize;
-      return this.$store.state.currUser.sent.slice(start, end);
+      return this.$store.state.currUser.sent.slice(start, end);}
     },
   },
 };

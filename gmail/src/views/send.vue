@@ -265,6 +265,7 @@ export default {
     },
     sendMail() {
       let emails = [];
+      console.log(this.sentto);
       emails = this.sentto.split(",");
       let attachedfile = null;
       let attachmenttype = null;
@@ -392,6 +393,63 @@ export default {
         reader.onerror = (error) => reject(error);
       });
     },
+    // getusers() {
+    //   fetch(`http://localhost:8080/users`, {
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   })
+    //     .then((response) => {
+    //       if (!response.ok) {
+    //         throw new Error("Failed to send mail");
+    //       }
+    //       return response.json();
+    //     })
+    //     .then((data) => {
+    //       console.log(data);
+    //       console.log(
+    //         data[0].sent[1].attachment,
+    //         "new",
+    //         data[0].sent[1].attType
+    //       );
+    //       this.downloadAttachment(
+    //         data[0].sent[1].attachment,
+    //         "new",
+    //         data[0].sent[1].attType
+    //       );
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error:", error.message);
+    //     });
+    // },
+
+    // async downloadAttachment(attachmentData, fileName, fileType) {
+    //   try {
+    //     const binaryData = atob(attachmentData);
+
+    //     const arrayBuffer = new ArrayBuffer(binaryData.length);
+    //     const view = new Uint8Array(arrayBuffer);
+    //     for (let i = 0; i < binaryData.length; i++) {
+    //       view[i] = binaryData.charCodeAt(i);
+    //     }
+
+    //     const blob = new Blob([arrayBuffer], {
+    //       type: fileType || "application/octet-stream",
+    //     });
+
+    //     const link = document.createElement("a");
+    //     link.href = URL.createObjectURL(blob);
+    //     link.download = fileName;
+
+    //     document.body.appendChild(link);
+    //     link.click();
+
+    //     document.body.removeChild(link);
+    //   } catch (error) {
+    //     console.error("Error downloading attachment:", error);
+    //   }
+    // },
   },
 };
 </script>

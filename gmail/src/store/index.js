@@ -29,10 +29,14 @@ export default createStore({
         foldersmirror: [],
         willBeSentId: 0,
         srtPriority: false,
+        signOutClicked:false,
     },
     mutations: {
         setSrtPriority(state, status) {
             state.srtPriority = status
+        },
+        setSignOut(state, status) {
+            state.signOutClicked = status
         },
         setWillBeSentId(state, status) {
 

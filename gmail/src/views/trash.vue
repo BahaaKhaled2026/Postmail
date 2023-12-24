@@ -140,15 +140,19 @@ export default {
       return this.messages && this.messages.length > 0;
     },
     totalPages() {
-      const totalMessages = this.$store.state.currUser.trash
-        ? this.$store.state.currUser.trash.length
-        : 0;
+      if(!$store.state.signOutClicked){
+        const totalMessages = this.$store.state.currUser.trash
+          ? this.$store.state.currUser.trash.length
+          : 0;
       return Math.ceil(totalMessages / this.pageSize);
+      }
     },
     displayedMessages() {
-      const start = (this.currentPage - 1) * this.pageSize;
-      const end = start + this.pageSize;
-      return this.$store.state.currUser.trash.slice(start, end);
+      if(!$store.state.signOutClicked){
+        const start = (this.currentPage - 1) * this.pageSize;
+        const end = start + this.pageSize;
+        return this.$store.state.currUser.trash.slice(start, end);
+      }
     },
   },
 };

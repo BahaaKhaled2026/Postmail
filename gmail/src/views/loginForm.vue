@@ -105,6 +105,7 @@ export default {
             $store.commit("setLoginStatus", true);
             $store.commit("setCurrUser", userData);
             console.log(userData);
+            this.$store.commit("setSignOut", false);
             this.$router.push({ name: "inbox" });
           } else {
             this.userNotFound = true;

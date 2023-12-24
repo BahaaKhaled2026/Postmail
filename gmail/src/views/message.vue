@@ -3,6 +3,17 @@
     <section class="d-flex window">
       <sideBar />
       <div v-if="this.msg" class="body d-flex flex-column align-items-start">
+        <h3>Audio message</h3>
+        <br>
+        <button class="audButton" @click="showAudio">
+          <span>View Audio message</span>
+        </button>
+        <br>
+        <div v-show="showAud">
+          <audio controls ref="audioPlayer">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
         <h2>{{ this.msg.title }}</h2>
         <div class="info d-flex flex-row justify-content-between">
           <h5>{{ this.msg.sender }}</h5>
@@ -79,9 +90,41 @@ export default {
         date: "",
         message: "",
       },
+      showAud:false,
     };
   },
   methods: {
+    showAudio(){
+      this.showAud=!this.showAud;
+    },
+    async getAudio() {
+  let rsala = this.msg.message;
+  rsala = rsala.split(' ').join('%20');
+  console.log(this.msg);
+  const url = `https://voicerss-text-to-speech.p.rapidapi.com/?key=a3801a6c985d4c6583e980fb4ba8bfe7&src=${rsala}&hl=en-us&r=0&c=mp3&f=8khz_8bit_mono`;
+  const options = {
+    method: 'GET',
+    headers: {
+      'X-RapidAPI-Key': 'fe9219690cmshc641c468ac1874dp156f63jsna03d6a220172',
+      'X-RapidAPI-Host': 'voicerss-text-to-speech.p.rapidapi.com'
+    }
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const blob = await response.blob();
+    const audioUrl = URL.createObjectURL(blob);
+
+    // Update the source of the audio element
+    this.$refs.audioPlayer.src = audioUrl;
+
+    
+  } catch (error) {
+    console.error(error);
+  }
+},
+
+
     download(attch) {
       this.downloadAttachment(attch);
     },
@@ -131,10 +174,13 @@ export default {
       .then((msgData) => {
         console.log(msgData);
         this.msg = msgData;
+        this.getAudio();
       })
       .catch((error) => {
         console.error("Error during login:", error);
       });
+      
+      console.log(11111);
   },
   mounted() {
     console.log(this.id);
@@ -310,6 +356,144 @@ h5 {
 
   100% {
     transform: translateY(0%);
+  }
+}
+
+
+
+
+.audButton {
+  --fs: 1.25em;
+  --col1: honeydew;
+  --col2: rgba(240, 128, 128, 0.603);
+  --col3: indianred;
+  --col4: maroon;
+  --pd: .5em .65em;
+  display: grid;
+  align-content: baseline;
+  appearance: none;
+  border: 0;
+  grid-template-columns: min-content 1fr;
+  padding: var(--pd);
+  font-size: var(--fs);
+  color: var(--col1);
+  background-color: var(--col3);
+  border-radius: 6px;
+  text-shadow: 1px 1px var(--col4);
+  box-shadow: inset -2px 1px 1px var(--col2),
+    inset 2px 1px 1px var(--col2);
+  position: relative;
+  transition: all .75s ease-out;
+  transform-origin: center;
+}
+
+.audButton:hover {
+  color: var(--col4);
+  box-shadow: inset -2px 1px 1px var(--col2),
+    inset 2px 1px 1px var(--col2),
+    inset 0px -2px 20px var(--col4),
+    0px 20px 30px var(--col3),
+    0px -20px 30px var(--col2),
+    1px 2px 20px var(--col4);
+  text-shadow: 1px 1px var(--col2);
+}
+
+.audButton:active {
+  animation: offset 1s ease-in-out infinite;
+  outline: 2px solid var(--col2);
+  outline-offset: 0;
+}
+
+.audButton::after,
+.audButton::before {
+  content: '';
+  align-self: center;
+  justify-self: center;
+  height: .5em;
+  margin: 0 .5em;
+  grid-column: 1;
+  grid-row: 1;
+  opacity: 1;
+}
+
+.audButton::after {
+  position: relative;
+  border: 2px solid var(--col4);
+  border-radius: 50%;
+  transition: all .5s ease-out;
+  height: .1em;
+  width: .1em;
+}
+
+.audButton:hover::after {
+  border: 2px solid var(--col3);
+  transform: rotate(-120deg) translate(10%, 140%);
+}
+
+.audButton::before {
+  border-radius: 50% 0%;
+  border: 4px solid var(--col4);
+  box-shadow: inset 1px 1px var(--col2);
+  transition: all 1s ease-out;
+  transform: rotate(45deg);
+  height: .45em;
+  width: .45em;
+}
+
+.audButton:hover::before {
+  border-radius: 50%;
+  border: 4px solid var(--col1);
+  transform: scale(1.25) rotate(0deg);
+  animation: blink 1.5s ease-out 1s infinite alternate;
+}
+
+.audButton:hover > span {
+  filter: contrast(150%);
+}
+
+@keyframes blink {
+  0% {
+    transform: scale(1, 1) skewX(0deg);
+    opacity: 1;
+  }
+
+  5% {
+    transform: scale(1.5, .1) skewX(10deg);
+    opacity: .5;
+  }
+
+  10%,
+  35% {
+    transform: scale(1, 1) skewX(0deg);
+    opacity: 1;
+  }
+
+  40% {
+    transform: scale(1.5, .1) skewX(10deg);
+    opacity: .25;
+  }
+
+  45%,
+  100% {
+    transform: scale(1, 1) skewX(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes offset {
+  50% {
+    outline-offset: .15em;
+    outline-color: var(--col1);
+  }
+
+  55% {
+    outline-offset: .1em;
+    transform: translateY(1px);
+  }
+
+  80%,
+  100% {
+    outline-offset: 0;
   }
 }
 </style>

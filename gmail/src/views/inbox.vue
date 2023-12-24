@@ -142,15 +142,20 @@ export default {
       return this.messages && this.messages.length > 0;
     },
     totalPages() {
-      const totalMessages = this.$store.state.currUser.inbox
-        ? this.$store.state.currUser.inbox.length
+      console.log($store.state.signOutClicked);
+      if(!$store.state.signOutClicked){
+      const totalMessages = $store.state.currUser.inbox
+        ? $store.state.currUser.inbox.length
         : 0;
       return Math.ceil(totalMessages / this.pageSize);
+      }
     },
     displayedMessages() {
+      if(!$store.state.signOutClicked){
       const start = (this.currentPage - 1) * this.pageSize;
       const end = start + this.pageSize;
       return this.$store.state.currUser.inbox.slice(start, end);
+      }
     },
   },
 };
