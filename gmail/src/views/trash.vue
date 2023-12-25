@@ -4,12 +4,12 @@
       <sideBar />
       <div v-if="hasMessages" class="body flex-column">
         <div class="pagination">
-          <button @click="prevPage" :disabled="currentPage === 1">
-            Previous
+          <button @click="prevPage" :disabled="currentPage === 1" class="bttn">
+            <i class="fa-solid fa-arrow-left"></i>
           </button>
           <span>{{ currentPage }}</span>
-          <button @click="nextPage" :disabled="currentPage === totalPages">
-            Next
+          <button @click="nextPage" :disabled="currentPage === totalPages" class="bttn">
+            <i class="fa-solid fa-arrow-right"></i>
           </button>
         </div>
         <msgBar v-for="msg in displayedMessages" :key="msg.id" :msg="msg" />
@@ -204,5 +204,9 @@ export default {
 }
 .pagination button {
   cursor: pointer;
+}
+.bttn{
+  font-size: 1.5rem;
+  border-radius: 20%;
 }
 </style>

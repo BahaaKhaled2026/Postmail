@@ -117,7 +117,7 @@
         <p @click="openMessage">{{ msg.sender }}</p>
       </div>
       <div class="dateandfolder d-flex justify-content-between">
-        <div class="addtofolder d-flex flex-column">
+        <div class="addtofolder d-flex flex-column" v-if="routename != 'trash'">
           <button class="addbutton" type="button" @click="showfs">
             <span class="addbutton__text">To folders</span>
             <span class="addbutton__icon"
