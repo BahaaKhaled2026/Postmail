@@ -3,6 +3,7 @@
     <div class="container">
       <div class="txt">
         <h1>Welcome to</h1>
+        <h1 class="logo">PostMail</h1>
         <h4>Join us in an impressive experience</h4>
       </div>
       <div class="butns">
@@ -65,5 +66,9 @@ h1 {
 .btn:hover {
   color: white;
   background: black;
+}
+.logo{
+  font-family: Rubik Doodle Shadow;
+  font-size: 100px;
 }
 </style>

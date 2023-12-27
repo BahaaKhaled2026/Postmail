@@ -1,7 +1,10 @@
 <template>
   <div class="all">
     <section class="d-flex">
-      <div class="img"></div>
+      <div class="img">
+        <img src="./2308-w030-n003-822B-p15-822.jpg" alt="sad">
+        <h1 class="logo">PostMail</h1>
+      </div>
       <div class="form">
         <form @submit.prevent="logIn" class="container" >
           <router-link to="/">
@@ -191,7 +194,6 @@ section {
 }
 .img {
   width: 50%;
-  background-image: url("_77a2a87b-0367-41d4-9321-ec79b7cbeb23.jpg");
   background-position: center;
   background-size: cover;
   margin: 50px 0px;
@@ -269,6 +271,9 @@ h6 {
   cursor: pointer;
   padding: 20px;
   text-decoration: underline;
+}
+h6:hover{
+  color: #c84747;
 }
 .center {
   margin: 0 auto;
@@ -482,6 +487,25 @@ in other input type*/
   cursor: pointer;
   font-size: medium;
   font-weight: bold;
+}
+img{
+  width: 300px;
+  height: 300px;
+  position: relative;
+  right: 20px;
+}
+.img {
+  width: 50%;
+  background-color: #ffffff;
+  
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  justify-content: center;
+}
+.logo{
+  font-family: Rubik Doodle Shadow;
+  font-size: 100px;
 }
 
 @keyframes backglitch {

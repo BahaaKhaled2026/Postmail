@@ -7,7 +7,11 @@
     ></div> -->
     <!--for popup-->
     <section class="d-flex">
-      <div class="img"></div>
+      <div class="img">
+        
+        <img src="./2308-w030-n003-822B-p15-822.jpg" alt="sad">
+        <h1 class="logo">PostMail</h1>
+      </div>
       <div class="form">
         <form @submit.prevent="signUp">
           <router-link to="/" class="center">
@@ -519,7 +523,7 @@ export default {
 .form {
   padding: 50px;
   width: 50%;
-  background-color: #33455b;
+  background-color: #c84747;
   text-align: start;
   margin: 50px 0px;
   border-top-right-radius: 30px;
@@ -539,26 +543,15 @@ section {
   border-radius: 50px;
   height: max-content;
 }
-.img {
-  width: 50%;
-  background-color: #53c6ba;
-  margin: 50px 0px;
-  border-top-left-radius: 30px;
-  border-bottom-left-radius: 30px;
-    box-shadow: rgba(0, 0, 0, 0.418) -8px 1px 10px 2px;
 
-}
 .all {
   height: 100%;
   margin-top: -60px;
-  background-color: rgb(203, 220, 247);
-}
-img {
-  height: 100%;
+  background-image: url("view-white-crumpled-paper.jpg");
 }
 .butn {
   position: relative;
-  background: linear-gradient(to bottom, white, #53c6ba);
+  background: linear-gradient(to bottom, white, #de5a50);
   border-radius: 50px;
   margin-top: 30px;
   padding: 10px 40px;
@@ -587,10 +580,13 @@ select {
   padding: 2px 1px;
   width: 100%;
   border: none;
-  background-color: #33455b;
+  background-color: #c84747;
   border-bottom: 2px solid #ddd;
   transition: all 0.1s ease-in;
-  color: rgba(255, 255, 255, 0.623);
+  color: rgba(0, 0, 0, 0.623);
+}
+input::placeholder {
+  color: #000000; 
 }
 input:focus {
   border-bottom: 5px solid #ddd;
@@ -687,5 +683,27 @@ a {
 a.router-link-exact-active {
   color: black;
   text-decoration: none;
+}
+img{
+  width: 500px;
+  height: 500px;
+  position: relative;
+  right: 20px;
+}
+.img {
+  width: 50%;
+  background-color: #ffffff;
+  margin: 50px 0px;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+    box-shadow: rgba(0, 0, 0, 0.418) -8px 1px 10px 2px;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  justify-content: center;
+}
+.logo{
+  font-family: Rubik Doodle Shadow;
+  font-size: 100px;
 }
 </style>

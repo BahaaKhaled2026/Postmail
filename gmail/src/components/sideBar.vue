@@ -2,6 +2,11 @@
   <section class="flex-column">
     <ul class="nav flex-column">
       <li class="nav-item">
+        <div class="user">
+          <i class="fa-solid fa-user"></i>
+          <h4>{{userEmail}}</h4>
+        </div>
+        <br>
         
           <div class="sendBtn">
             <button @click="reload" class="bt">
@@ -211,6 +216,21 @@
           </div>
         </router-link>
       </li>
+      <li class="nav-item">
+        <router-link to="/contacts" class="nav-link active">
+          <div class="row">
+            <div class="col-3">
+              <i class="fa-solid fa-address-book"></i>
+            </div>
+            <div class="col-6">Contacts</div>
+            <div class="col-3">
+              <div class="col-3">
+                
+              </div>
+            </div>
+          </div>
+        </router-link>
+      </li>
       <li class="nav-item2">
         <div class="row">
           <div class="col-12">
@@ -265,7 +285,7 @@
             </label>
           </form>
         </div>
-        <router-link to="/contacts" class="linktocont">Contacts</router-link>
+        
       </li>
 
       <li class="nav-item2">
@@ -309,9 +329,11 @@ export default {
       showfolders: false,
       folders: $store.state.currUser.folders,
       isChecked: [],
+      userEmail:""
     };
   },
   mounted() {
+    this.userEmail=$store.state.currUser.email;
     for (let i = 0; i < this.folders.length; i++) {
       this.isChecked.push(false);
     }
@@ -365,6 +387,9 @@ export default {
     }
   },
   methods: {
+    reload(){
+      location.reload();
+    },
     handleDocumentClick(event) {
       const isInputOrButton =
         event.target.classList.contains("inp") ||
@@ -909,7 +934,7 @@ export default {
 .nav-item2 {
   padding: 10px;
   padding-top: 15px;
-  padding-bottom: 15px;
+  padding-bottom: 0px;
 }
 .button {
   height: 50px;
@@ -922,7 +947,7 @@ export default {
   transition: all 0.5s ease-in-out;
 }
 .flex-column {
-  height: 100vh;
+  height: 100%;
 }
 
 .button:hover {
@@ -1601,5 +1626,18 @@ input:hover {
   align-items: center;
   color: #fff;
   font-weight: 600;
+}
+.user{
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+}
+.bt{
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  background-color: rgba(255, 0, 0, 0.582);
 }
 </style>
