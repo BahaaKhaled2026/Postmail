@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,7 +24,7 @@ public class Control {
 //7ngls'path:"D:\\vue\\Gmail\\backGmail\\usersData.json"
     //bahaa's path: "E:\\programming\\Project\\Gmail\\backGmail\\usersData.json"
     //pola's path: D:\\Visual Studio Code\\connect 4\\Gmail\\backGmail\\usersData.json"
-    private static final String JSON_FILE_PATH = "D:\\vue\\Gmail\\backGmail\\usersData.json";
+    private static final String JSON_FILE_NAME = "usersData.json";
     public ArrayList<UserData> usersData;
     public void cleanTrash(ArrayList<mail>x){
         for(int i=0;i<x.size();i++){
@@ -51,23 +52,32 @@ public class Control {
 
     public ArrayList<UserData> getUsersData() {
         try {
-            File jsonFile = new File(JSON_FILE_PATH);
+            // Get the file path in the working directory
+            Path filePath = Path.of(JSON_FILE_NAME);
+
+            // Load the file from the path
+            File jsonFile = filePath.toFile();
+
             if (!jsonFile.exists() || jsonFile.length() == 0) {
-                return new ArrayList<>(); // Return an empty list for an empty file
+                return new ArrayList<>();
             }
+
             return objectMapper.readValue(jsonFile, new TypeReference<ArrayList<UserData>>() {});
         } catch (IOException e) {
             e.printStackTrace();
-            return new ArrayList<>(); // Handle the error case
+            return new ArrayList<>();
         }
     }
 
     public void writeUsersData(ArrayList<UserData> usersData) {
         try {
-            objectMapper.writeValue(new File(JSON_FILE_PATH), usersData);
+            // Get the file path in the working directory
+            Path filePath = Path.of(JSON_FILE_NAME);
+
+            // Write data to the file
+            objectMapper.writeValue(filePath.toFile(), usersData);
         } catch (IOException e) {
             e.printStackTrace();
-            // Handle the error case for writing data to the file
         }
     }
 
