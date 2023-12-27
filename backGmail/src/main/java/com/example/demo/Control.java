@@ -23,7 +23,7 @@ public class Control {
 //7ngls'path:"D:\\vue\\Gmail\\backGmail\\usersData.json"
     //bahaa's path: "E:\\programming\\Project\\Gmail\\backGmail\\usersData.json"
     //pola's path: D:\\Visual Studio Code\\connect 4\\Gmail\\backGmail\\usersData.json"
-    private static final String JSON_FILE_PATH = "D:\\vue\\Gmail\\backGmail\\usersData.json";
+    private static final String JSON_FILE_PATH = "D:\\Visual Studio Code\\connect 4\\Gmail\\backGmail\\usersData.json";
     public ArrayList<UserData> usersData;
     public void cleanTrash(ArrayList<mail>x){
         for(int i=0;i<x.size();i++){
