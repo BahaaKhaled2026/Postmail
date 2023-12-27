@@ -42,6 +42,27 @@ public class mail {
         this.id = id;
     }
 
+    public mail clone(mail x){
+        mail res=new mail(x.isRead,x.sentToMails,x.date,x.title,x.sender,x.message,x.attachments,0,x.delDate,x.priorityLvl);
+
+        return res;
+    }
+    public mail(){
+
+    }
+    public mail(boolean isRead, ArrayList<String> sentToMails, String date, String title, String sender, String message, ArrayList<attachment> attachments, int id, String delDate, int priorityLvl) {
+        this.isRead = isRead;
+        this.sentToMails = sentToMails;
+        this.date = date;
+        this.title = title;
+        this.sender = sender;
+        this.message = message;
+        this.attachments = attachments;
+        this.id = id;
+        this.delDate = delDate;
+        this.priorityLvl = priorityLvl;
+    }
+
     @Override
     public String toString() {
         return "mail{" +

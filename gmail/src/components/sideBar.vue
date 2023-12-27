@@ -2,8 +2,12 @@
   <section class="flex-column">
     <ul class="nav flex-column">
       <li class="nav-item">
-        <router-link class="nav-link" to="/send">
+        
           <div class="sendBtn">
+            <button @click="reload" class="bt">
+              <span class="span">↻</span>
+            </button>
+            <router-link class="nav-link" to="/send">
             <button class="animated-button">
               <svg
                 viewBox="0 0 24 24"
@@ -26,8 +30,8 @@
                 ></path>
               </svg>
             </button>
+          </router-link>
           </div>
-        </router-link>
       </li>
       <div class="bts">
         <li>

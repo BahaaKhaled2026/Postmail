@@ -30,9 +30,15 @@ public class services {
         ArrayList<UserData>usersData=userDataService.getUsersData();
         UserData userData=userDataService.getUserByEmail(email);
         ArrayList<mail>all=new ArrayList<>();
-        all.addAll(userData.getInbox());
-        all.addAll(userData.getTrash());
-        all.addAll(userData.getSent());
+        if(userData.getInbox()!=null){
+            all.addAll(userData.getInbox());
+        }
+        if(userData.getTrash()!=null){
+            all.addAll(userData.getTrash());
+        }
+        if(userData.getSent()!=null){
+            all.addAll(userData.getSent());
+        }
         return all.get(userDataService.getMsgIndByID(all,id));
     }
 
@@ -112,17 +118,18 @@ public class services {
                 index.add(userDataService.getUserByEmail(sentTo.get(i)).getIndex());
                 System.out.println(i);
             }
+            System.out.println("yo");
             System.out.println(index.size());
             for(int i=0;i<index.size();i++){
                 int id=usersData.get(index.get(i)).getMsgId()+1;
-                mail temp=mailObject;
+                mail temp=mailObject.clone(mailObject);
                 temp.setId(id);
                 usersData.get(index.get(i)).addMailInbox(temp);
                 usersData.get(index.get(i)).setMsgId(id);
                 System.out.println((usersData.get(index.get(i)).getContacts().contains(sender.getEmail())));
             }
             int idSender=userDataService.getUserByEmail(mailObject.getSender()).getMsgId()+1;
-            mail temp=mailObject;
+            mail temp=mailObject.clone(mailObject);
             temp.setId(idSender);
             usersData.get(sender.getIndex()).addMailSent(temp);
             usersData.get(sender.getIndex()).setMsgId(idSender);

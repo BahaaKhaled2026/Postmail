@@ -51,10 +51,14 @@ public class Control {
 
     public ArrayList<UserData> getUsersData() {
         try {
-            return objectMapper.readValue(new File(JSON_FILE_PATH), new TypeReference<ArrayList<UserData>>() {});
+            File jsonFile = new File(JSON_FILE_PATH);
+            if (!jsonFile.exists() || jsonFile.length() == 0) {
+                return new ArrayList<>(); // Return an empty list for an empty file
+            }
+            return objectMapper.readValue(jsonFile, new TypeReference<ArrayList<UserData>>() {});
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            return new ArrayList<>(); // Handle the error case
         }
     }
 
@@ -63,14 +67,17 @@ public class Control {
             objectMapper.writeValue(new File(JSON_FILE_PATH), usersData);
         } catch (IOException e) {
             e.printStackTrace();
+            // Handle the error case for writing data to the file
         }
     }
 
     public UserData getUserByEmail(String email) {
         ArrayList<UserData> usersData = getUsersData();
-        for(UserData x:usersData){
-            if(x.getEmail().equals(email)){
-                return x;
+        if (usersData != null) {
+            for (UserData x : usersData) {
+                if (x.getEmail().equals(email)) {
+                    return x;
+                }
             }
         }
         return null;

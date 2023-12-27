@@ -291,25 +291,29 @@ export default {
       };
       console.log(mailObject);
       fetch(`http://localhost:8080/sendMail`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(mailObject),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to send mail");
-          }
-          this.$router.push({ name: "inbox" });
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Server response:", data);
-        })
-        .catch((error) => {
-          console.error("Error:", error.message);
-        });
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(mailObject),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to send mail");
+      }
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        return response.json();
+      } else {
+        return { message: "Mail sent successfully" };
+      }
+    })
+    .then((data) => {
+      console.log("Server response:", data.message);
+    })
+    .catch((error) => {
+      console.error("Error:", error.message);
+    });
       console.log($store.state.selectedMsg);
       if ($store.state.selectedMsg > 0) {
         let x = $store.state.selectedMsg;
@@ -327,7 +331,7 @@ export default {
               throw new Error("Failed to send mail");
             }
             this.$router.push({ name: "inbox" });
-            return response.json();
+            // return response.json();
           })
           .then((data) => {
             console.log("Server response:", data);
@@ -339,6 +343,7 @@ export default {
       $store.commit("setSendClicked", true);
       $store.commit("setSelectedMsg", -1);
       console.log($store.state.selectedMsg);
+      this.$router.push({ name: "inbox" });
     },
     addToDraft() {
       let emails = [];
@@ -376,7 +381,7 @@ export default {
           if (!response.ok) {
             throw new Error("Failed to send mail");
           }
-          return response.json();
+          // return response.json();
         })
         .then((data) => {
           console.log("Server response:", data);
