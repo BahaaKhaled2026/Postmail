@@ -1,11 +1,5 @@
 <template>
   <div class="all">
-    <!-- <div
-      class="overlay"
-      v-show="isChecked & termsDisplay"
-      @click="termsDisplay = !termsDisplay"
-    ></div> -->
-    <!--for popup-->
     <section class="d-flex">
       <div class="img">
         
@@ -181,118 +175,6 @@
               <option class="selectOpt" value="female">female</option>
             </select>
           </div>
-          <!-- <div class="row">
-            <div class="check">
-              <input
-                type="checkbox"
-                id="myCheckbox"
-                v-model="isChecked"
-                @click="termsDisplay = true"
-              />
-              <label for="myCheckbox">Check terms and conditions</label>
-              <div class="popup" v-show="isChecked & termsDisplay">
-                <button @click="this.termsDisplay = false">X</button>
-                <div id="terms-and-conditions">
-                  <h1>Potatoes and Conditions</h1>
-                  <br />
-                  <ol>
-                    <li>
-                      <strong>Acceptance of Terms</strong>
-                      <ul>
-                        <li>
-                          By accessing or using Rotten Potatoes, you agree to
-                          comply with and be bound by these Terms and Conditions
-                          of Use. If you do not agree with any part of these
-                          terms, you may not access the website.
-                        </li>
-                      </ul>
-                    </li>
-
-                    <li>
-                      <strong>User Accounts</strong>
-                      <ul>
-                        <li>
-                          Users may be required to create an account to access
-                          certain features of the website. You are responsible
-                          for maintaining the confidentiality of your account
-                          and password.
-                        </li>
-                        <li>
-                          You agree to provide accurate, current, and complete
-                          information during the registration process.
-                        </li>
-                      </ul>
-                    </li>
-
-                    <li>
-                      <strong>Content and Intellectual Property</strong>
-                      <ul>
-                        <li>
-                          Rotten Potatoes contains text, images, videos, and
-                          other content protected by intellectual property laws.
-                          You may not modify, publish, transmit, distribute,
-                          perform, or create derivative works from any content.
-                        </li>
-                        <li>
-                          Users are encouraged to submit content (e.g., reviews,
-                          comments) but grant [Your Website] a non-exclusive,
-                          worldwide, royalty-free license to use, reproduce,
-                          modify, publish, and distribute such content.
-                        </li>
-                      </ul>
-                    </li>
-
-                    <li>
-                      <strong>Privacy</strong>
-                      <ul>
-                        <li>
-                          Rotten Potatoes values user privacy. Our Privacy
-                          Policy outlines the types of information collected,
-                          how it is used, and how it is protected. By using the
-                          website, you consent to the terms of the Privacy
-                          Policy.
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <strong>User Conduct</strong>
-                      <ul>
-                        <li>
-                          Users agree not to engage in any conduct that
-                          restricts or inhibits any other user from using or
-                          enjoying [Your Website].
-                        </li>
-                        <li>
-                          Users may not use the website for any unlawful purpose
-                          or in violation of any applicable laws.
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <strong>Disclaimer of Warranties</strong>
-                      <ul>
-                        <li>
-                          Rotten Potatoes is provided "as is" without any
-                          representations or warranties, express or implied.
-                        </li>
-                        <li>
-                          Rotten Potatoes does not warrant that the website will
-                          be error-free, secure, or continuously available.
-                        </li>
-                      </ul>
-                    </li>
-                  </ol>
-                </div>
-              </div>
-            </div>
-            <div
-              v-show="!isChecked && submitState"
-              class="alert alert-danger"
-              role="alert"
-            >
-              <h5>Accepting terms and conditions is fundamental</h5>
-            </div>
-          </div> -->
             <button class="btn butn">Submit</button>
           <div class="row">
             <router-link to="/login" class="center">
@@ -324,7 +206,7 @@ export default {
       gender: "",
       passwordLength: false,
       passwordCapital: false,
-      passwordNumber: false,//asdsad
+      passwordNumber: false,
       passwordsmall: false,
       passwordValid: false,
       isChecked: false,
@@ -630,37 +512,6 @@ h6 {
   margin-right: 10px;
   width: auto;
   height: auto;
-}
-.popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 700px;
-  height: 600px;
-  font: 13.5px/1.5 Helvetica, Verdana, sans-serif;
-  padding: 20px;
-  padding-left: 30px;
-  background-color: #fff;
-  /* background-image: url("../assets/potatoterms.png"); */
-  background-size: cover;
-  /* filter: blur(20px); */
-  border: 1px solid #ccc;
-  border-radius: 30px;
-  z-index: 2;
-}
-.popup button {
-  position: absolute;
-  top: 10px;
-  right: 14px;
-  font-size: 42px;
-  line-height: 18px;
-  padding: 0;
-  margin: 0;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: #333;
 }
 .overlay {
   position: fixed;
