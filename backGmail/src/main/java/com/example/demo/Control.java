@@ -21,7 +21,7 @@ import java.util.Map;
 @Service
 public class Control {
     private final ObjectMapper objectMapper = new ObjectMapper();
-//7ngls'path:"D:\\vue\\Gmail\\backGmail\\usersData.json"
+    //7ngls'path:"D:\\vue\\Gmail\\backGmail\\usersData.json"
     //bahaa's path: "E:\\programming\\Project\\Gmail\\backGmail\\usersData.json"
     //pola's path: D:\\Visual Studio Code\\connect 4\\Gmail\\backGmail\\usersData.json"
     private static final String JSON_FILE_NAME = "usersData.json";
@@ -52,10 +52,10 @@ public class Control {
 
     public ArrayList<UserData> getUsersData() {
         try {
-            // Get the file path in the working directory
+
             Path filePath = Path.of(JSON_FILE_NAME);
 
-            // Load the file from the path
+
             File jsonFile = filePath.toFile();
 
             if (!jsonFile.exists() || jsonFile.length() == 0) {
@@ -71,10 +71,10 @@ public class Control {
 
     public void writeUsersData(ArrayList<UserData> usersData) {
         try {
-            // Get the file path in the working directory
+
             Path filePath = Path.of(JSON_FILE_NAME);
 
-            // Write data to the file
+
             objectMapper.writeValue(filePath.toFile(), usersData);
         } catch (IOException e) {
             e.printStackTrace();
