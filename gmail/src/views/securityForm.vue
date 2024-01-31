@@ -1,37 +1,41 @@
 <template>
-<div class="all">
-  <div class="container">
-    <section>
-      <div class="img">
-      </div>
-      <div class="form">
-        <router-link to="/login">
-          <h2>
-            <i class="fa-solid fa-arrow-left" style="color: #000000"></i>
-          </h2>
-        </router-link>
-        <form @submit.prevent="changePass">
-          <h3>One More Step!</h3>
-          <div class="row">
-            <div class="col">
-              <label>Question</label>
-              <p>{{ question }}</p>
+  <div class="all">
+    <div class="container">
+      <section>
+        <div class="img">
+          <img
+            src="./cartoon-person-with-text-that-says-forget-password_9206-9476.jpg"
+            alt="sad"
+          />
+        </div>
+        <div class="form">
+          <router-link to="/login">
+            <h2>
+              <i class="fa-solid fa-arrow-left" style="color: #000000"></i>
+            </h2>
+          </router-link>
+          <form @submit.prevent="changePass">
+            <h3>One More Step!</h3>
+            <div class="row">
+              <div class="col">
+                <label>Question</label>
+                <p>{{ question }}</p>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <label>Answer</label>
-              <input type="text" required v-model="Qanswer" />
+            <div class="row">
+              <div class="col">
+                <label>Answer</label>
+                <input type="text" required v-model="Qanswer" />
+              </div>
+              <div v-show="wrongAnswer" class="alert alert-danger" role="alert">
+                <h5>Wrong Answer!</h5>
+              </div>
             </div>
-            <div v-show="wrongAnswer" class="alert alert-danger" role="alert">
-              <h5>Wrong Answer!</h5>
-            </div>
-          </div>
             <button class="butn">Continue</button>
-        </form>
-      </div>
-    </section>
-  </div>
+          </form>
+        </div>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -72,13 +76,12 @@ export default {
 .form {
   padding: 50px;
   width: 50%;
-  background-color: #33455b;
+  background-color: #c84747;
   text-align: start;
   margin: 50px 0px;
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
-    box-shadow: rgba(0, 0, 0, 0.418) 8px 1px 10px 2px;
-
+  box-shadow: rgba(0, 0, 0, 0.418) 8px 1px 10px 2px;
 }
 section {
   display: flex;
@@ -87,35 +90,39 @@ section {
   width: 80%;
   margin: auto;
   border-radius: 50px;
-  height: 700px;
+  height: 600px;
+}
+.container {
+  height: 100vh;
 }
 .img {
   width: 50%;
-  background-color: #53c6ba;
+  background-color: white;
   margin: 50px 0px;
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
-    box-shadow: rgba(0, 0, 0, 0.418) -8px 1px 10px 2px;
-
+  box-shadow: rgba(0, 0, 0, 0.418) -8px 1px 10px 2px;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
 }
 .all {
-  height: 700px;
-  margin-top: -60px;
+  height: 100%;
+  background-image: url("view-white-crumpled-paper.jpg");
   background-color: rgb(203, 220, 247);
 }
 img {
-  height: 100%;
+  height: 300px;
+  width: 300px;
 }
 .butn {
   position: relative;
-  background: linear-gradient(to bottom, white, #53c6ba);
+  background: linear-gradient(to bottom, white, #c84747);
   border-radius: 50px;
   margin-top: 70px;
   padding: 10px 40px;
   left: 25%;
-}
-p{
-  color: rgba(255, 255, 255, 0.623);
 }
 .alert {
   margin-top: 10px;
@@ -140,7 +147,7 @@ select {
   padding: 2px 1px;
   width: 100%;
   border: none;
-  background-color: #33455b;
+  background-color: #c84747;
   border-bottom: 2px solid #ddd;
   transition: all 0.1s ease-in;
   color: rgba(255, 255, 255, 0.623);
@@ -219,13 +226,14 @@ h6 {
   cursor: pointer;
   color: #333;
 }
+
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7); 
+  background: rgba(0, 0, 0, 0.7);
   z-index: 1;
 }
 .alert {
@@ -237,7 +245,7 @@ a {
   text-decoration: none;
 }
 
-a:hover{
+a:hover {
   color: white;
 }
 

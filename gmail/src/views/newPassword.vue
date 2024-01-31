@@ -2,7 +2,12 @@
   <div class="all">
     <div class="container">
       <section>
-        <div class="img"></div>
+        <div class="img">
+          <img
+            src="./cartoon-person-with-text-that-says-forget-password_9206-9476.jpg"
+            alt="sad"
+          />
+        </div>
         <div class="form">
           <h3>Here We Go!</h3>
           <div class="row">
@@ -47,7 +52,7 @@
               </div>
             </div>
           </div>
-            <button @click="changePasss" class="butn">Submit</button>
+          <button @click="changePasss" class="butn">Submit</button>
         </div>
       </section>
     </div>
@@ -155,7 +160,7 @@ export default {
 .form {
   padding: 50px;
   width: 50%;
-  background-color: #33455b;
+  background-color: #c84747;
   text-align: start;
   margin: 50px 0px;
   border-top-right-radius: 30px;
@@ -169,27 +174,35 @@ section {
   width: 80%;
   margin: auto;
   border-radius: 50px;
-  height: 700px;
+  height: 600px;
+}
+.container {
+  height: 100vh;
 }
 .img {
   width: 50%;
-  background-color: #53c6ba;
+  background-color: white;
   margin: 50px 0px;
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
   box-shadow: rgba(0, 0, 0, 0.418) -8px 1px 10px 2px;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
 }
 .all {
-  height: 700px;
-  margin-top: -60px;
+  height: 100%;
+  background-image: url("view-white-crumpled-paper.jpg");
   background-color: rgb(203, 220, 247);
 }
 img {
-  height: 100%;
+  height: 300px;
+  width: 300px;
 }
 .butn {
   position: relative;
-  background: linear-gradient(to bottom, white, #53c6ba);
+  background: linear-gradient(to bottom, white, #c84747);
   border-radius: 50px;
   margin-top: 70px;
   padding: 10px 40px;
@@ -218,7 +231,7 @@ select {
   padding: 2px 1px;
   width: 100%;
   border: none;
-  background-color: #33455b;
+  background-color: #c84747;
   border-bottom: 2px solid #ddd;
   transition: all 0.1s ease-in;
   color: rgba(255, 255, 255, 0.623);
@@ -297,6 +310,7 @@ h6 {
   cursor: pointer;
   color: #333;
 }
+
 .overlay {
   position: fixed;
   top: 0;
